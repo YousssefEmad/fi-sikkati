@@ -1,0 +1,27 @@
+-- Applied to each application database (included from 01-roles-and-databases.sql).
+-- The migrator owns the schema and runs DDL. The app role gets DML on everything the
+-- migrator creates; audit_logs is tightened to INSERT/SELECT in its own migration.
+-- Note: this file has a .psql extension so the entrypoint does not execute it on its own.
+
+-- Extensions require superuser (postgis is not marked trusted in the postgis/postgis image).
+-- Installing them here mirrors production, where the platform/DBA provisions extensions and
+-- the migrator role is not a superuser. Migration 0001 is idempotent with respect to this.
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS citext;
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO fisikkati_migrator;
+GRANT USAGE ON SCHEMA public TO fisikkati_app, fisikkati_readonly;
+
+-- spatial_ref_sys is owned by the superuser; application roles must be able to read it.
+GRANT SELECT ON public.spatial_ref_sys TO fisikkati_app, fisikkati_readonly, fisikkati_migrator;
+
+ALTER DEFAULT PRIVILEGES FOR ROLE fisikkati_migrator IN SCHEMA public
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO fisikkati_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE fisikkati_migrator IN SCHEMA public
+  GRANT USAGE, SELECT ON SEQUENCES TO fisikkati_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE fisikkati_migrator IN SCHEMA public
+  GRANT EXECUTE ON FUNCTIONS TO fisikkati_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE fisikkati_migrator IN SCHEMA public
+  GRANT SELECT ON TABLES TO fisikkati_readonly;

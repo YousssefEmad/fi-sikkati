@@ -1,0 +1,173 @@
+# Fi Sikkati — local development stack (deployment.md §2).
+#
+#   docker compose up -d                 # infrastructure only: postgres, redis, minio, mailpit
+#   docker compose --profile app up      # + api, worker, web built from source (hot reload)
+#
+# Run from the repository root with:  docker compose -f infra/compose/docker-compose.yml ...
+# or use the root scripts (pnpm infra:up / pnpm infra:down).
+
+name: fi-sikkati
+
+x-api-env: &api-env
+  APP_ENV: development
+  LOG_FORMAT: console
+  LOG_LEVEL: DEBUG
+  DATABASE_URL: postgresql+asyncpg://fisikkati_app:fisikkati_app_dev@postgres:5432/fisikkati
+  MIGRATION_DATABASE_URL: postgresql+asyncpg://fisikkati_migrator:fisikkati_migrator_dev@postgres:5432/fisikkati
+  REDIS_URL: redis://redis:6379/0
+  CORS_ORIGINS: http://localhost:3000
+  PUBLIC_WEB_URL: http://localhost:3000
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: fisikkati-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_dev
+      POSTGRES_DB: postgres
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fisikkati"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: fisikkati-redis
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    container_name: fisikkati-minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: minio_dev
+      MINIO_ROOT_PASSWORD: minio_dev_password
+    ports:
+      # Host ports are configurable because 9000 is commonly taken by other tools.
+      - "${MINIO_PORT:-9100}:9000"
+      - "${MINIO_CONSOLE_PORT:-9101}:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: fisikkati-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        mc alias set local http://minio:9000 minio_dev minio_dev_password &&
+        mc mb --ignore-existing local/public-media &&
+        mc mb --ignore-existing local/private-documents &&
+        mc anonymous set download local/public-media &&
+        mc anonymous set none local/private-documents &&
+        echo "buckets ready"
+    restart: "no"
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: fisikkati-mailpit
+    ports:
+      - "${MAILPIT_UI_PORT:-8025}:8025"   # web UI
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"   # SMTP
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+
+  migrate:
+    profiles: ["app"]
+    build:
+      context: ../../apps/api
+      target: dev
+    environment: *api-env
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    profiles: ["app"]
+    build:
+      context: ../../apps/api
+      target: dev
+    container_name: fisikkati-api
+    environment: *api-env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../apps/api/app:/app/app:ro
+      - ../../apps/api/alembic:/app/alembic:ro
+      - ../../apps/api/alembic.ini:/app/alembic.ini:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health/live"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  worker:
+    profiles: ["app"]
+    build:
+      context: ../../apps/api
+      target: dev
+    container_name: fisikkati-worker
+    environment: *api-env
+    command: ["arq", "app.workers.main.WorkerSettings", "--watch", "/app/app"]
+    volumes:
+      - ../../apps/api/app:/app/app:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  web:
+    profiles: ["app"]
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+      target: dev
+    container_name: fisikkati-web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      API_INTERNAL_URL: http://api:8000
+      NEXT_TELEMETRY_DISABLED: "1"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../../apps/web/src:/repo/apps/web/src
+      - ../../apps/web/public:/repo/apps/web/public
+      - ../../apps/web/messages:/repo/apps/web/messages
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  minio-data:
