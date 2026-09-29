@@ -1,0 +1,56 @@
+{
+  "Metadata": {
+    "siteName": "Fi Sikkati",
+    "title": "Fi Sikkati — Find people already going your way",
+    "description": "Community ride-sharing for El Obour City and nearby areas. Drivers publish the trips they already plan to make; passengers find one going their way and request a seat."
+  },
+  "Common": {
+    "skipToContent": "Skip to main content",
+    "language": "Language",
+    "comingSoon": "Coming soon",
+    "backHome": "Back to home"
+  },
+  "Landing": {
+    "eyebrow": "Community ride-sharing · El Obour",
+    "headline": "Find people already going your way.",
+    "subheadline": "Not a taxi. Neighbours share seats on trips they are already making — searchable by route and time instead of buried in a WhatsApp group.",
+    "ctaPassenger": "I'm looking for a ride",
+    "ctaDriver": "I'm driving anyway",
+    "howItWorksTitle": "How it works",
+    "steps": {
+      "publish": {
+        "title": "A driver publishes a trip",
+        "body": "Origin, destination, departure time, free seats."
+      },
+      "discover": {
+        "title": "Passengers find it",
+        "body": "Search by where you are, where you're going and when. Only compatible routes show up."
+      },
+      "join": {
+        "title": "Request, accept, ride",
+        "body": "Ask for a seat, the driver accepts, you talk inside the trip, then rate each other."
+      }
+    },
+    "trustTitle": "Built for a community, not a marketplace",
+    "trustBody": "Verified drivers, verified riders, approximate pickup locations, in-app chat and a real reporting system — the structure the group chat never had.",
+    "statusNote": "Fi Sikkati is under active development. Accounts and trips open with the first release."
+  },
+  "SystemStatus": {
+    "label": "Platform",
+    "connected": "API connected ({environment})",
+    "unavailable": "API unavailable"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist or has moved."
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "body": "We could not complete that action. Please try again.",
+    "retry": "Try again",
+    "reference": "Reference: {id}"
+  },
+  "Footer": {
+    "rights": "© {year} Fi Sikkati. All rights reserved."
+  }
+}

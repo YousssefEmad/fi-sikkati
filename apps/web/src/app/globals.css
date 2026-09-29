@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/*
+ * Fi Sikkati design tokens — own visual identity (MEP §49).
+ * Palette: deep teal ("the road at dusk") as primary, warm sand as surface, amber as accent.
+ * Colours use OKLCH so light/dark variants keep perceptual contrast (WCAG 2.2 AA targets).
+ */
+@theme {
+  --font-sans:
+    "IBM Plex Sans Arabic", "Noto Sans Arabic", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --color-background: oklch(98.5% 0.008 80);
+  --color-foreground: oklch(22% 0.03 230);
+  --color-surface: oklch(100% 0 0);
+  --color-surface-muted: oklch(96% 0.012 80);
+  --color-border: oklch(88% 0.015 80);
+
+  --color-primary: oklch(42% 0.09 200);
+  --color-primary-hover: oklch(36% 0.09 200);
+  --color-primary-foreground: oklch(99% 0 0);
+
+  --color-accent: oklch(78% 0.15 70);
+  --color-accent-foreground: oklch(25% 0.05 70);
+
+  --color-muted-foreground: oklch(48% 0.02 230);
+  --color-success: oklch(55% 0.14 150);
+  --color-danger: oklch(52% 0.19 25);
+  --color-ring: oklch(60% 0.12 200);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  /* Visible focus for keyboard users on every interactive element (NFR-03). */
+  :focus-visible {
+    @apply ring-ring outline-none ring-2 ring-offset-2 ring-offset-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

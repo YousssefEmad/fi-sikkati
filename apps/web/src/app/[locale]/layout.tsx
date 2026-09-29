@@ -1,0 +1,77 @@
+import type { Metadata } from "next";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
+
+import { LOCALE_DIRECTION, routing } from "@/i18n/routing";
+import { clientEnv } from "@/lib/env";
+import { QueryProvider } from "@/lib/query/provider";
+
+import "@/app/globals.css";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const siteUrl = clientEnv.NEXT_PUBLIC_SITE_URL;
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: { default: t("title"), template: `%s · ${t("siteName")}` },
+    description: t("description"),
+    applicationName: t("siteName"),
+    alternates: {
+      canonical: `/${locale}`,
+      languages: Object.fromEntries(routing.locales.map((code) => [code, `/${code}`])),
+    },
+    openGraph: {
+      type: "website",
+      siteName: t("siteName"),
+      title: t("title"),
+      description: t("description"),
+      locale: locale === "ar" ? "ar_EG" : "en_US",
+      url: `/${locale}`,
+    },
+    twitter: { card: "summary_large_image", title: t("title"), description: t("description") },
+    robots: { index: true, follow: true },
+  };
+}
+
+export default async function LocaleLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  const direction = LOCALE_DIRECTION[locale];
+  const t = await getTranslations({ locale, namespace: "Common" });
+
+  return (
+    <html lang={locale} dir={direction}>
+      <body className="flex min-h-dvh flex-col">
+        <a
+          href="#main"
+          className="bg-primary text-primary-foreground sr-only rounded-md px-4 py-2 focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50"
+        >
+          {t("skipToContent")}
+        </a>
+        <NextIntlClientProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
