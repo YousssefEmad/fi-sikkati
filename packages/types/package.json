@@ -1,0 +1,23 @@
+{
+  "name": "@fi-sikkati/types",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TypeScript types and typed fetch client generated from the Fi Sikkati OpenAPI document (ADR-0009)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.d.ts"
+  },
+  "scripts": {
+    "generate": "openapi-typescript ./openapi.json -o ./src/schema.d.ts --alphabetize --root-types",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "@fi-sikkati/config": "workspace:*",
+    "openapi-typescript": "^7.9.0",
+    "typescript": "~5.9.0"
+  }
+}
