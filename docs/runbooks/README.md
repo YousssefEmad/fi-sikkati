@@ -5,8 +5,8 @@ states preconditions, steps, verification and rollback.
 
 | Runbook | Phase | Status |
 | --- | --- | --- |
-| `local-development.md` — start/stop stack, reset DB, seed | 1 | NOT IMPLEMENTED |
-| `run-migrations.md` — apply/rollback Alembic revisions | 1 | NOT IMPLEMENTED |
+| [`local-development.md`](local-development.md) — start/stop stack, reset DB, quality gates | 1 | DONE (seeding arrives with Phase 2) |
+| [`run-migrations.md`](run-migrations.md) — apply/rollback Alembic revisions | 1 | DONE |
 | `bootstrap-admin.md` — create the first admin account | 2 | NOT IMPLEMENTED |
 | `rotate-signing-keys.md` — JWT key rotation | 2 | NOT IMPLEMENTED |
 | `document-purge.md` — retention job, manual purge | 3 | NOT IMPLEMENTED |

@@ -3,8 +3,9 @@
 Community ride-sharing and route-matching platform. Drivers publish trips they are already
 planning to make; passengers find people already going their way and request to join.
 
-> Status: **Phase 0 — Discovery & Architecture** (no application code yet).
-> See [`docs/project-status.md`](docs/project-status.md) for the authoritative phase tracker.
+> Status: **Phase 1 — Foundation complete**; product features start in Phase 2 once the
+> open decisions it depends on are approved. See [`docs/project-status.md`](docs/project-status.md)
+> for the authoritative phase tracker.
 
 ## What this is (and is not)
 
@@ -28,12 +29,11 @@ packages/
 docs/           Product, architecture, security, database, API and operational documentation
 docs/adr/       Architecture Decision Records
 docs/runbooks/  Operational runbooks
-infra/          Docker, Compose and deployment assets
-scripts/        Developer and CI helper scripts
-tests/          Cross-application end-to-end tests (Playwright)
+infra/compose/  Local Docker Compose stack (PostgreSQL/PostGIS, Redis, MinIO, Mailpit, app profile)
+scripts/        Developer helper scripts (dev-setup)
+tests/e2e/      Cross-application end-to-end tests (Playwright)
+.github/        CI workflow
 ```
-
-The `apps/`, `packages/`, `infra/`, `scripts/` and `tests/` directories are created in Phase 1.
 
 ## Documentation map
 
@@ -46,17 +46,35 @@ The `apps/`, `packages/`, `infra/`, `scripts/` and `tests/` directories are crea
 | [`docs/architecture.md`](docs/architecture.md) | Domain model, backend, frontend, real-time, AI, deployment architecture |
 | [`docs/database.md`](docs/database.md) | ERD, entities, constraints, indexes, migrations |
 | [`docs/api.md`](docs/api.md) | API conventions, error format, pagination, endpoint map |
+| [`docs/api-changelog.md`](docs/api-changelog.md) | Consumer-facing API changes per release |
 | [`docs/security.md`](docs/security.md) | Security architecture and controls |
 | [`docs/testing.md`](docs/testing.md) | Testing strategy and quality gates |
 | [`docs/deployment.md`](docs/deployment.md) | Environments, Docker, CI/CD, production topology |
 | [`docs/risk-register.md`](docs/risk-register.md) | Known risks and mitigations |
 | [`docs/open-decisions.md`](docs/open-decisions.md) | Unresolved product/business decisions awaiting approval |
 | [`docs/adr/`](docs/adr/) | Architecture Decision Records |
+| [`docs/runbooks/`](docs/runbooks/) | Operational runbooks (local development, migrations, …) |
 
 ## Running the project
 
-Local setup instructions (Docker Compose, environment variables, seeding, tests) are added in
-Phase 1 — Foundation. Until then there is nothing to run.
+Prerequisites: Node.js 24, pnpm 12 (`npm install -g pnpm`), [uv](https://docs.astral.sh/uv/)
+(Python 3.12 is downloaded by uv), Docker with Compose v2.
+
+```
+pnpm setup                                    # env files, infrastructure, deps, migrations, API client
+cd apps/api && uv run uvicorn app.main:create_app --factory --reload --port 8000
+pnpm dev                                      # in a second terminal → http://localhost:3000/ar
+```
+
+- Swagger UI: http://localhost:8000/api/v1/docs · readiness: http://localhost:8000/health/ready
+- Ports taken by another project? Override in `infra/compose/.env` (`POSTGRES_PORT=5433`, …)
+  and mirror in `apps/api/.env`. URLs use `127.0.0.1` on purpose (IPv6 `localhost` pitfall).
+- Full details, quality-gate commands and troubleshooting:
+  [`docs/runbooks/local-development.md`](docs/runbooks/local-development.md).
+
+Quality gates (`pnpm format && pnpm typecheck && pnpm lint && pnpm test`, `uv run ruff/mypy/
+pytest`, Alembic round-trip, Playwright `pnpm e2e`) run in CI on every PR
+(`.github/workflows/ci.yml`).
 
 ## Contributing conventions
 

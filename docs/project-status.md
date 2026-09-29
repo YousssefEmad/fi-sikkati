@@ -17,8 +17,8 @@ Status vocabulary (used everywhere in this repository):
 | Phase | Name | Status | Gate result | Notes |
 | --- | --- | --- | --- | --- |
 | 0 | Discovery & Architecture | **DONE** | Passed (see §Phase 0 gate) | Documentation package delivered; 30 open decisions recorded |
-| 1 | Foundation | NOT IMPLEMENTED | — | Technical only; no business decision blocks it |
-| 2 | Authentication & Identity | NOT IMPLEMENTED | — | Blocked on OD-004 (primary identifier), OD-002 (identity verification policy), OD-019 (email provider), OD-020 (deletion), OD-021 (age/terms), OD-013 (dual mode UI) |
+| 1 | Foundation | **DONE** | Passed (see §Phase 1 gate) | Monorepo, API skeleton, web skeleton, Compose stack, CI, E2E smoke |
+| 2 | Authentication & Identity | **BLOCKED** | — | Blocked on OD-004 (primary identifier), OD-002 (identity verification policy), OD-019 (email provider), OD-020 (deletion), OD-021 (age/terms), OD-013 (dual mode UI) |
 | 3 | Driver & Vehicle | NOT IMPLEMENTED | — | Blocked on OD-003, OD-024, OD-009 |
 | 4 | Trips | NOT IMPLEMENTED | — | Blocked on OD-005 (map provider), OD-007 (pricing semantics), OD-012, OD-023 |
 | 5 | Search & Route Matching | NOT IMPLEMENTED | — | Blocked on OD-006 (matching thresholds), OD-001 (location privacy), OD-029 |
@@ -52,6 +52,40 @@ Consistency checks performed (all documents cross-referenced by identifier):
 | Every ADR is referenced from at least one design document | Pass |
 | No document contains a business rule not traceable to the master prompt or an OD | Pass |
 
+## Phase 1 gate
+
+Quality gate: *a fresh developer can clone and run; every automated gate is green.* Verified on
+2026-09-29 against the local Compose stack (PostgreSQL 16 + PostGIS 3.4 on host port 5433,
+Redis 7):
+
+| Check | Result |
+| --- | --- |
+| `ruff check` + `ruff format --check` (apps/api) | Pass |
+| `mypy` strict (apps/api) | Pass |
+| `lint-imports` (core ↛ modules; platform module isolated) | Pass |
+| `pytest` — 27 tests (unit, API, integration with `RUN_INTEGRATION=1`) | Pass |
+| Alembic `upgrade head → check → downgrade base → upgrade head` | Pass |
+| `pnpm typecheck` (web, types, e2e) | Pass |
+| `pnpm lint` (ESLint strict type-checked + jsx-a11y; 0 errors, 0 warnings) | Pass |
+| `pnpm test` (Vitest — 4 tests: Button, AR/EN message parity) | Pass |
+| `pnpm --filter @fi-sikkati/web build` (Next.js 16, Turbopack, standalone) | Pass |
+| Playwright smoke — 18 tests (desktop + mobile, `ar` + `en`, axe WCAG 2.2 AA) | Pass |
+| OpenAPI export == committed `packages/types/openapi.json`; generated client compiles | Pass |
+| Manual: landing page in RTL Arabic and LTR English; API status "connected" | Pass |
+| CI workflow (`.github/workflows/ci.yml`) | Authored; **not yet executed** — no GitHub remote exists |
+| Docker images build (`apps/api`, `apps/web`) | **NOT VERIFIED** locally (time budget); covered by the `docker` CI job |
+
+Known technical debt from Phase 1 (tracked here, not hidden in code):
+
+| Item | Status | Plan |
+| --- | --- | --- |
+| Content-Security-Policy header | NOT IMPLEMENTED | Phase 11 hardening, after the map provider (OD-005) fixes the allowed origins |
+| PWA icons | PARTIALLY DONE | Placeholder SVG icon in `manifest.webmanifest`; branded PNG + maskable icons in Phase 11 |
+| Error tracking SDK (Sentry or similar) | NOT IMPLEMENTED | Vendor selection is an approval gate (MEP §96); structured logs with request ids are in place |
+| Rate limiting middleware | NOT IMPLEMENTED | Arrives with authentication endpoints in Phase 2 (`RateLimitedError` already exists) |
+| Development seed data | NOT IMPLEMENTED | Phase 2 (no domain tables yet) |
+| Coverage thresholds in CI | NOT IMPLEMENTED | Enabled when the first domain package (auth) lands in Phase 2 |
+
 ## Feature status (product checklist)
 
 | Capability | Status |
@@ -71,16 +105,16 @@ Consistency checks performed (all documents cross-referenced by identifier):
 | Reports / blocking / moderation | NOT IMPLEMENTED |
 | Admin dashboard | NOT IMPLEMENTED |
 | Audit logs | NOT IMPLEMENTED |
-| Private file storage | NOT IMPLEMENTED |
-| API documentation (OpenAPI) | NOT IMPLEMENTED |
-| Database migrations | NOT IMPLEMENTED |
-| Automated tests / E2E | NOT IMPLEMENTED |
-| CI/CD | NOT IMPLEMENTED |
-| Docker / local environment | NOT IMPLEMENTED |
-| Monitoring / error tracking | NOT IMPLEMENTED |
-| Arabic RTL / English LTR | NOT IMPLEMENTED |
-| SEO public pages | NOT IMPLEMENTED |
-| PWA | NOT IMPLEMENTED |
+| Private file storage | NOT IMPLEMENTED (MinIO buckets `public-media` / `private-documents` provisioned locally; no upload code) |
+| API documentation (OpenAPI) | PARTIALLY DONE — generated from code, served in non-production, exported to `packages/types`; only platform/health endpoints exist |
+| Database migrations | PARTIALLY DONE — Alembic wired (async, migrator role, CI round-trip); one revision (extensions check); no domain tables yet |
+| Automated tests / E2E | PARTIALLY DONE — pytest (27), Vitest (4), Playwright smoke (18) with axe; domain scenarios arrive with their phases |
+| CI/CD | PARTIALLY DONE — GitHub Actions workflow authored (api, web, e2e, gitleaks, docker); not executed yet (no remote); no CD |
+| Docker / local environment | DONE — Compose infrastructure stack + `app` profile; multi-stage Dockerfiles for API and web |
+| Monitoring / error tracking | PARTIALLY DONE — structured JSON logs with request ids and PII scrubbing, health endpoints; no metrics or error-tracking vendor (approval gate) |
+| Arabic RTL / English LTR | DONE for the shell — locale routing, `dir`/`lang`, message parity test, RTL layout, language switcher |
+| SEO public pages | PARTIALLY DONE — metadata, `robots.txt`, `sitemap.xml` with hreflang alternates for the landing page only |
+| PWA | PARTIALLY DONE — web manifest with placeholder icon; no service worker (none planned for transactional features) |
 | AI assistant | NOT IMPLEMENTED |
 | Payments | NOT IMPLEMENTED (intentionally; requires approval — OD-007) |
 
@@ -95,3 +129,7 @@ Consistency checks performed (all documents cross-referenced by identifier):
 | Git | 2.55.0 |
 
 Implications are recorded in ADR-0002 (repository tooling) and ADR-0003 (Python runtime).
+
+Installed during Phase 1: pnpm 12.6.0 (`npm install -g pnpm`), uv 0.12.20 (`pip install --user
+uv`, invoked as `python -m uv`), Docker Desktop started. Host ports 5432 and 9000 were occupied
+by another project's containers, which is why the compose stack supports port overrides.

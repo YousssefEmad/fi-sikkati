@@ -19,17 +19,25 @@ the process refuses to boot with missing or invalid values.
 
 | Service | Image | Notes |
 | --- | --- | --- |
-| `web` | `apps/web` Dockerfile (dev target, hot reload) | port 3000 |
-| `api` | `apps/api` Dockerfile (dev target, `--reload`) | port 8000 |
-| `worker` | same image as `api`, arq entrypoint | — |
-| `postgres` | `postgis/postgis:16-3.4` | port 5432; init script creates roles + extensions |
-| `redis` | `redis:7-alpine` | port 6379 |
-| `minio` | `minio/minio` + `mc` init job creating buckets | ports 9000/9001 |
-| `mailpit` | fake SMTP with web UI | port 8025 (email in dev/test) |
+| `web` (profile `app`) | `apps/web` Dockerfile (dev target, hot reload) | port 3000 |
+| `api` (profile `app`) | `apps/api` Dockerfile (dev target, `--reload`) | port 8000 |
+| `migrate` (profile `app`) | same image as `api`, `alembic upgrade head`, runs before `api` | — |
+| `worker` (profile `app`) | same image as `api`, arq entrypoint | — |
+| `postgres` | `postgis/postgis:16-3.4` | `${POSTGRES_PORT:-5432}`; init scripts create roles, databases and extensions (superuser) |
+| `redis` | `redis:7-alpine` | `${REDIS_PORT:-6379}` |
+| `minio` + `minio-init` | `minio/minio` + `mc` job creating `public-media` (anonymous download) and `private-documents` (private) | `${MINIO_PORT:-9100}` / `${MINIO_CONSOLE_PORT:-9101}` |
+| `mailpit` | fake SMTP with web UI | `${MAILPIT_UI_PORT:-8025}` / `${MAILPIT_SMTP_PORT:-1025}` |
 
-`docker compose up` from a fresh clone must produce a working stack; `scripts/dev-setup`
-copies env examples, runs migrations and seeds. Documented in `README.md` in Phase 1 (gate:
-"fresh developer can clone and run").
+Infrastructure services start with `docker compose up -d` (default profile); the application
+containers are opt-in via `--profile app` so developers can run API/web natively with hot reload.
+Host ports are overridable through `infra/compose/.env` (untracked; template in
+`.env.example`) to coexist with other projects. `scripts/dev-setup.mjs` (`pnpm setup`) copies
+env examples, starts infrastructure, installs dependencies, migrates and regenerates the API
+client; seeding is added in Phase 2. See `docs/runbooks/local-development.md`.
+
+PostgreSQL extensions (`postgis`, `citext`, `btree_gist`) are provisioned by a superuser, never
+by the migrator role: locally via the init script, in managed environments by the platform's
+extension allow-list. Migration `0001` verifies presence and fails with instructions otherwise.
 
 ## 3. Build artefacts
 
