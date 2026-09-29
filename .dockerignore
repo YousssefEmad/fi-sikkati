@@ -1,0 +1,16 @@
+# Root build context is used by apps/web/Dockerfile (pnpm workspace).
+.git
+.github
+docs
+infra
+scripts
+apps/api
+**/node_modules
+**/.next
+**/dist
+**/coverage
+**/test-results
+**/playwright-report
+**/.env
+**/.env.*
+!**/.env.example

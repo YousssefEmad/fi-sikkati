@@ -1,0 +1,13 @@
+packages:
+  - apps/web
+  - packages/*
+  - tests/e2e
+
+# pnpm blocks install-time scripts by default (supply-chain protection). Only these packages,
+# reviewed to need native builds, are allowed to run them.
+allowBuilds:
+  "@parcel/watcher": true
+  "@swc/core": true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true

@@ -1,0 +1,31 @@
+{
+  "name": "fi-sikkati",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Fi Sikkati — community ride-sharing and route-matching platform (monorepo root)",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=12"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @fi-sikkati/web dev",
+    "build": "pnpm -r --if-present build",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "e2e": "pnpm --filter @fi-sikkati/e2e test",
+    "types:generate": "pnpm --filter @fi-sikkati/types generate",
+    "infra:up": "docker compose -f infra/compose/docker-compose.yml up -d",
+    "infra:down": "docker compose -f infra/compose/docker-compose.yml down",
+    "infra:reset": "docker compose -f infra/compose/docker-compose.yml down -v",
+    "stack:up": "docker compose -f infra/compose/docker-compose.yml --profile app up --build",
+    "setup": "node scripts/dev-setup.mjs"
+  },
+  "devDependencies": {
+    "@fi-sikkati/config": "workspace:*",
+    "prettier": "^3.6.0"
+  }
+}

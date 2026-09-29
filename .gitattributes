@@ -1,0 +1,6 @@
+# Normalise line endings so Windows and Linux developers produce identical files.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

@@ -1,0 +1,14 @@
+node_modules
+.next
+dist
+coverage
+pnpm-lock.yaml
+apps/api
+packages/types/openapi.json
+packages/types/src/schema.d.ts
+test-results
+playwright-report
+# Documentation is hand-formatted (wide tables, Arabic text); Prettier would only reflow tables.
+*.md
+# Compose file uses YAML anchors/comments Prettier reorders poorly.
+infra/compose/docker-compose.yml
