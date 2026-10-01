@@ -42,6 +42,7 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 | OD-028 | Multi-community scoping | — | DEFERRED |
 | OD-029 | Search/trip visibility for unauthenticated visitors | 5 | OPEN |
 | OD-030 | Product analytics tooling and consent | 11 | OPEN |
+| OD-031 | Brand wordmark vs product name | 12 (before launch) | OPEN |
 
 ---
 
@@ -288,3 +289,20 @@ table later; no code now.
 
 - **Recommendation**: first-party `analytics_events` only (no third-party script) in MVP;
   consent banner not required for first-party, non-identifying events, but confirm with legal.
+
+### OD-031 — Brand wordmark vs product name
+
+- **Question**: The supplied logo contains the Arabic wordmark **«فالسكة عبور»**, while the
+  product name used across the documentation and the UI is **«في سكتي» / "Fi Sikkati"**. Which
+  one is the public brand name?
+- **Context**: The logo artwork and its colour (`#CCF618`) were approved for use, and the icon
+  set, palette and Open Graph card are now generated from it. The UI currently shows the logo
+  mark next to the wordmark «في سكتي» as live text, so renaming is a copy change, not a redesign.
+- **Options**: (a) keep «في سكتي» as the product name and treat the artwork as a mark only;
+  (b) rename the product to «فالسكة» (and adjust the repository/product docs);
+  (c) regenerate the logo artwork with the «في سكتي» wordmark.
+- **Recommendation**: (a) for now — it is reversible and blocks nothing; decide before the first
+  public release because it affects the domain name (OD-027), app store listing and all copy.
+- **Impact**: `messages/*.json` (`Common.brand`, `Metadata.*`), logo artwork, domain, store
+  listings, `docs/design-system.md`.
+- **Status**: OPEN

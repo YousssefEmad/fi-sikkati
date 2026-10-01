@@ -44,6 +44,7 @@ tests/e2e/      Cross-application end-to-end tests (Playwright)
 | [`docs/business-rules.md`](docs/business-rules.md) | Every enforced rule, state machine and configurable value |
 | [`docs/permission-matrix.md`](docs/permission-matrix.md) | Roles, permissions, server-side enforcement matrix |
 | [`docs/architecture.md`](docs/architecture.md) | Domain model, backend, frontend, real-time, AI, deployment architecture |
+| [`docs/design-system.md`](docs/design-system.md) | Brand assets, colour/typography tokens, UI primitives, accessibility rules |
 | [`docs/database.md`](docs/database.md) | ERD, entities, constraints, indexes, migrations |
 | [`docs/api.md`](docs/api.md) | API conventions, error format, pagination, endpoint map |
 | [`docs/api-changelog.md`](docs/api-changelog.md) | Consumer-facing API changes per release |

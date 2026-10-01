@@ -246,7 +246,9 @@ apps/web/
     components/map/          MapView wrapper (provider-agnostic)
     lib/                     api client (openapi-fetch), query client, auth, format (Intl), utils
     i18n/                    next-intl config, routing, messages/ar.json, messages/en.json
-    styles/                  tailwind, tokens (own visual identity)
+    components/brand/        logo lockup and brand assets
+    lib/fonts.ts             next/font registration (Cairo for ar, Plus Jakarta Sans for en)
+    app/globals.css          Tailwind v4 entry + design tokens (@theme) — see design-system.md
   tests/                     vitest + testing-library component tests
 ```
 
@@ -268,9 +270,9 @@ apps/web/
   route groups for UX; real authorisation is always on the API.
 - **Realtime**: one WebSocket connection per tab managed in a provider; events invalidate or
   patch TanStack Query caches.
-- **Design system**: shadcn/ui + Tailwind with project tokens; mobile-first; bottom sheet and
-  bottom navigation patterns on mobile; every list has an empty state component; every
-  destructive action uses `ConfirmDialog`.
+- **Design system**: shadcn/ui + Tailwind with project tokens derived from the brand logo
+  (see `design-system.md`); mobile-first; bottom sheet and bottom navigation patterns on mobile;
+  every list has an empty state component; every destructive action uses `ConfirmDialog`.
 - **SEO**: metadata API, Open Graph, canonical, `sitemap.ts`, `robots.ts`, JSON-LD on public pages.
 - **PWA**: `manifest.ts`, service worker for app-shell caching only (no transactional offline).
 

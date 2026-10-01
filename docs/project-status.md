@@ -69,9 +69,9 @@ Redis 7):
 | `pnpm lint` (ESLint strict type-checked + jsx-a11y; 0 errors, 0 warnings) | Pass |
 | `pnpm test` (Vitest — 4 tests: Button, AR/EN message parity) | Pass |
 | `pnpm --filter @fi-sikkati/web build` (Next.js 16, Turbopack, standalone) | Pass |
-| Playwright smoke — 18 tests (desktop + mobile, `ar` + `en`, axe WCAG 2.2 AA) | Pass |
+| Playwright smoke — 18 tests (desktop + mobile, `ar` + `en`, axe WCAG 2.2 AA) | Pass (re-verified after the brand redesign) |
 | OpenAPI export == committed `packages/types/openapi.json`; generated client compiles | Pass |
-| Manual: landing page in RTL Arabic and LTR English; API status "connected" | Pass |
+| Manual: landing page in RTL Arabic and LTR English, desktop + mobile; API status "connected" | Pass |
 | CI workflow (`.github/workflows/ci.yml`) | Authored; **not yet executed** — no GitHub remote exists |
 | Docker images build (`apps/api`, `apps/web`) | **NOT VERIFIED** locally (time budget); covered by the `docker` CI job |
 
@@ -80,7 +80,7 @@ Known technical debt from Phase 1 (tracked here, not hidden in code):
 | Item | Status | Plan |
 | --- | --- | --- |
 | Content-Security-Policy header | NOT IMPLEMENTED | Phase 11 hardening, after the map provider (OD-005) fixes the allowed origins |
-| PWA icons | PARTIALLY DONE | Placeholder SVG icon in `manifest.webmanifest`; branded PNG + maskable icons in Phase 11 |
+| Brand illustrations / map styling | NOT IMPLEMENTED | Phase 11; icon set and palette are final, illustration work waits for the map provider |
 | Error tracking SDK (Sentry or similar) | NOT IMPLEMENTED | Vendor selection is an approval gate (MEP §96); structured logs with request ids are in place |
 | Rate limiting middleware | NOT IMPLEMENTED | Arrives with authentication endpoints in Phase 2 (`RateLimitedError` already exists) |
 | Development seed data | NOT IMPLEMENTED | Phase 2 (no domain tables yet) |
@@ -112,9 +112,10 @@ Known technical debt from Phase 1 (tracked here, not hidden in code):
 | CI/CD | PARTIALLY DONE — GitHub Actions workflow authored (api, web, e2e, gitleaks, docker); not executed yet (no remote); no CD |
 | Docker / local environment | DONE — Compose infrastructure stack + `app` profile; multi-stage Dockerfiles for API and web |
 | Monitoring / error tracking | PARTIALLY DONE — structured JSON logs with request ids and PII scrubbing, health endpoints; no metrics or error-tracking vendor (approval gate) |
-| Arabic RTL / English LTR | DONE for the shell — locale routing, `dir`/`lang`, message parity test, RTL layout, language switcher |
-| SEO public pages | PARTIALLY DONE — metadata, `robots.txt`, `sitemap.xml` with hreflang alternates for the landing page only |
-| PWA | PARTIALLY DONE — web manifest with placeholder icon; no service worker (none planned for transactional features) |
+| Arabic RTL / English LTR | DONE for the shell — locale routing, `dir`/`lang`, message parity test, RTL layout, language switcher, Cairo/Plus Jakarta typography |
+| Design system | DONE for the shell — brand tokens from the logo (`#CCF618`), Button/Badge/Card/Logo primitives, documented in `design-system.md`; product components follow their phases |
+| SEO public pages | PARTIALLY DONE — metadata, Open Graph/Twitter card image, `robots.txt`, `sitemap.xml` with hreflang alternates for the landing page only |
+| PWA | PARTIALLY DONE — web manifest with real `any` + `maskable` icons, apple touch icon and favicon generated from the logo; no service worker (none planned for transactional features) |
 | AI assistant | NOT IMPLEMENTED |
 | Payments | NOT IMPLEMENTED (intentionally; requires approval — OD-007) |
 
