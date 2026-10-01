@@ -1,14 +1,20 @@
 "use client";
 
+import { Languages } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useId, type ChangeEvent } from "react";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { LOCALE_LABEL, routing, type Locale } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
+
+interface LanguageSwitcherProps {
+  tone?: "default" | "inverse";
+}
 
 /** Accessible language switch (NFR-01): a labelled native select, keyboard-operable by default. */
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ tone = "default" }: LanguageSwitcherProps) {
   const t = useTranslations("Common");
   const locale = useLocale();
   const router = useRouter();
@@ -26,21 +32,31 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <label htmlFor={id} className="inline-flex items-center gap-2 text-sm">
-      <span className="text-muted-foreground">{t("language")}</span>
+    <div
+      className={cn(
+        "inline-flex min-h-11 items-center gap-2 rounded-full border px-3",
+        tone === "inverse"
+          ? "text-inverse-foreground border-white/20 bg-white/5"
+          : "border-border text-foreground bg-surface hover:bg-surface-muted",
+      )}
+    >
+      <Languages aria-hidden="true" className="size-4 opacity-70" />
+      <label htmlFor={id} className="sr-only">
+        {t("language")}
+      </label>
       <select
         id={id}
         data-testid="language-switcher"
         value={locale}
         onChange={onChange}
-        className="border-border bg-surface min-h-11 rounded-md border px-3 text-sm"
+        className="cursor-pointer appearance-none bg-transparent pe-1 text-sm font-semibold outline-none"
       >
         {routing.locales.map((code) => (
-          <option key={code} value={code} lang={code}>
+          <option key={code} value={code} lang={code} className="text-foreground">
             {LOCALE_LABEL[code]}
           </option>
         ))}
       </select>
-    </label>
+    </div>
   );
 }

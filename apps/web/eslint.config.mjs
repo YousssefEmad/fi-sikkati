@@ -27,7 +27,10 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
       "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
       // User-facing strings must come from next-intl messages (NFR-01).
-      "react/jsx-no-literals": ["warn", { noStrings: true, ignoreProps: true }],
+      "react/jsx-no-literals": [
+        "warn",
+        { noStrings: true, ignoreProps: true, allowedStrings: ["404"] },
+      ],
       // Accessibility (NFR-03): eslint-config-next registers jsx-a11y; tighten to strict-level.
       "jsx-a11y/alt-text": "error",
       "jsx-a11y/anchor-has-content": "error",

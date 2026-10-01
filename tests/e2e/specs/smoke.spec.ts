@@ -60,7 +60,8 @@ test.describe("Phase 1 smoke", () => {
 
   test("language switcher changes locale and direction", async ({ page }) => {
     await page.goto("/ar");
-    await page.getByTestId("language-switcher").selectOption("en");
+    // The switcher appears in the header and the footer; drive the header one.
+    await page.getByRole("banner").getByTestId("language-switcher").selectOption("en");
     await expect(page).toHaveURL(/\/en$/);
     await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   });

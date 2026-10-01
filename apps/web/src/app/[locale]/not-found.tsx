@@ -1,5 +1,8 @@
+import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { Logo } from "@/components/brand/logo";
+import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 
 export default async function NotFoundPage() {
@@ -8,11 +11,19 @@ export default async function NotFoundPage() {
   return (
     <main
       id="main"
-      className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center px-4 py-24 text-center"
+      className="hero-glow flex w-full flex-1 flex-col items-center justify-center px-4 py-24 text-center"
     >
-      <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-      <p className="text-muted-foreground mt-4">{t("body")}</p>
-      <Link href="/" className="text-primary mt-8 font-semibold underline-offset-4 hover:underline">
+      <Logo />
+      <Badge variant="soft" size="sm" className="mt-10 font-mono">
+        404
+      </Badge>
+      <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-4xl">{t("title")}</h1>
+      <p className="text-muted-foreground mt-4 max-w-md leading-relaxed">{t("body")}</p>
+      <Link
+        href="/"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-card mt-9 inline-flex min-h-11 items-center gap-2 rounded-full px-6 text-sm font-semibold"
+      >
+        <ArrowLeft aria-hidden="true" className="size-4 rtl:rotate-180" />
         {tCommon("backHome")}
       </Link>
     </main>

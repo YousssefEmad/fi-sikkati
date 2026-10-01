@@ -5,35 +5,93 @@
     "description": "Community ride-sharing for El Obour City and nearby areas. Drivers publish the trips they already plan to make; passengers find one going their way and request a seat."
   },
   "Common": {
+    "brand": "Fi Sikkati",
     "skipToContent": "Skip to main content",
     "language": "Language",
     "comingSoon": "Coming soon",
     "backHome": "Back to home"
   },
   "Landing": {
-    "eyebrow": "Community ride-sharing · El Obour",
+    "eyebrow": "Ride-sharing · El Obour City",
     "headline": "Find people already going your way.",
-    "subheadline": "Not a taxi. Neighbours share seats on trips they are already making — searchable by route and time instead of buried in a WhatsApp group.",
-    "ctaPassenger": "I'm looking for a ride",
-    "ctaDriver": "I'm driving anyway",
+    "subheadline": "Not a taxi, not a car on demand. Neighbours heading the same way publish their trips, and you find the one that fits your route and your timing, then ask for a seat.",
+    "ctaPassenger": "Find a ride",
+    "ctaDriver": "Publish your trip",
+    "statusNote": "The platform is still being built — accounts and trips open with the first release.",
+    "preview": {
+      "label": "Design preview",
+      "driver": "Karim A.",
+      "driverBadge": "Verified driver",
+      "fromLabel": "From",
+      "origin": "El Obour — First district",
+      "toLabel": "To",
+      "destination": "Nasr City — Abbas El Akkad",
+      "departure": "Leaves 8:00 AM",
+      "seats": "3 of 4 seats free",
+      "action": "Request a seat"
+    },
+    "difference": {
+      "title": "Why this is not a taxi app",
+      "body": "Nobody orders a car here. The trip already exists — we give you a safe, structured way to join it.",
+      "points": {
+        "notTaxi": {
+          "title": "The trip exists first",
+          "body": "The driver is going anyway. You share an empty seat instead of summoning a car."
+        },
+        "routeMatch": {
+          "title": "Matched by route",
+          "body": "We compare your way with the trip's route and timing, so you only see drivers actually heading your direction."
+        },
+        "neighbours": {
+          "title": "People from your area",
+          "body": "Verified accounts from the El Obour community, with mutual ratings after every trip."
+        }
+      }
+    },
+    "howItWorksEyebrow": "3 steps",
     "howItWorksTitle": "How it works",
+    "howItWorksBody": "From publishing a trip to rating it, every step happens inside the app.",
     "steps": {
       "publish": {
         "title": "A driver publishes a trip",
-        "body": "Origin, destination, departure time, free seats."
+        "body": "Origin, destination, departure time and the number of free seats."
       },
       "discover": {
         "title": "Passengers find it",
-        "body": "Search by where you are, where you're going and when. Only compatible routes show up."
+        "body": "Search by where you are, where you're going and when; results rank by how close the route is."
       },
       "join": {
         "title": "Request, accept, ride",
         "body": "Ask for a seat, the driver accepts, you talk inside the trip, then rate each other."
       }
     },
+    "trustEyebrow": "Safety & trust",
     "trustTitle": "Built for a community, not a marketplace",
-    "trustBody": "Verified drivers, verified riders, approximate pickup locations, in-app chat and a real reporting system — the structure the group chat never had.",
-    "statusNote": "Fi Sikkati is under active development. Accounts and trips open with the first release."
+    "trustBody": "Trust isn't a slogan here — it's deliberate steps before, during and after every trip.",
+    "trustItems": {
+      "verified": {
+        "title": "Verified identities",
+        "body": "Drivers and riders are checked before their first trip, and the badge shows on the profile."
+      },
+      "pickup": {
+        "title": "Approximate pickup points",
+        "body": "Your exact location stays hidden until your request is accepted."
+      },
+      "chat": {
+        "title": "Chat inside the trip",
+        "body": "Every detail lives in one place tied to the trip, not lost in a group thread."
+      },
+      "report": {
+        "title": "Reporting and blocking",
+        "body": "Bad behaviour can be reported, reviewed by moderators and acted on."
+      }
+    },
+    "closing": {
+      "title": "Let's make the El Obour commute easier",
+      "body": "We are building the platform step by step. The first release opens registration, trip publishing and search.",
+      "cta": "Create an account",
+      "note": "Registration opens with the first release."
+    }
   },
   "SystemStatus": {
     "label": "Platform",
@@ -51,6 +109,9 @@
     "reference": "Reference: {id}"
   },
   "Footer": {
+    "blurb": "Community ride-sharing between residents of El Obour and nearby areas — structure for what used to live in WhatsApp groups.",
+    "location": "El Obour City, Qalyubia — Egypt",
+    "buildNote": "Pre-release build",
     "rights": "© {year} Fi Sikkati. All rights reserved."
   }
 }

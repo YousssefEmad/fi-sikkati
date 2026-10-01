@@ -8,12 +8,14 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Find people already going your way.",
     start_url: "/ar",
     display: "standalone",
-    background_color: "#faf8f4",
-    theme_color: "#1f5f6b",
+    background_color: "#CCF618",
+    theme_color: "#1A1C16",
     dir: "rtl",
     lang: "ar",
-    // Placeholder vector icon until branded PNG/maskable icons are produced (tracked in
-    // docs/project-status.md, Phase 11 polish).
-    icons: [{ src: "/icons/icon.svg", sizes: "any", type: "image/svg+xml" }],
+    icons: [
+      { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+    ],
   };
 }
