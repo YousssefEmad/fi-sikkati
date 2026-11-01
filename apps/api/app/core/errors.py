@@ -65,10 +65,12 @@ class AppError(Exception):
         code: str | None = None,
         status_code: int | None = None,
         title: str | None = None,
+        headers: dict[str, str] | None = None,
     ) -> None:
         super().__init__(detail or self.title)
         self.detail = detail
         self.errors = list(errors) if errors else None
+        self.headers = dict(headers) if headers else None
         if code is not None:
             self.code = code
         if status_code is not None:
@@ -100,10 +102,54 @@ class UnauthenticatedError(AppError):
     title = "Authentication required"
 
 
+class TokenExpiredError(AppError):
+    """The access token was valid but has expired — the client should refresh and retry."""
+
+    status_code = status.HTTP_401_UNAUTHORIZED
+    code = "TOKEN_EXPIRED"
+    title = "Access token expired"
+
+
+class SessionRevokedError(AppError):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    code = "SESSION_REVOKED"
+    title = "Session is no longer valid"
+
+
 class ForbiddenError(AppError):
     status_code = status.HTTP_403_FORBIDDEN
     code = "FORBIDDEN"
     title = "Forbidden"
+
+
+class AccountInactiveError(AppError):
+    """Suspended, deactivated or deleted accounts are rejected before permission evaluation."""
+
+    status_code = status.HTTP_403_FORBIDDEN
+    code = "ACCOUNT_INACTIVE"
+    title = "Account is not active"
+
+
+class CsrfFailedError(AppError):
+    status_code = status.HTTP_403_FORBIDDEN
+    code = "CSRF_FAILED"
+    title = "CSRF validation failed"
+
+
+class EmailNotVerifiedError(AppError):
+    """BR-AUTH-05: some actions require a verified email address."""
+
+    status_code = status.HTTP_403_FORBIDDEN
+    code = "EMAIL_NOT_VERIFIED"
+    title = "Email address is not verified"
+
+
+class PhoneNotVerifiedError(AppError):
+    """Publishing a trip or requesting a seat needs a confirmed mobile number."""
+
+    status_code = status.HTTP_403_FORBIDDEN
+    code = "PHONE_NOT_VERIFIED"
+    title = "Phone number is not verified"
 
 
 class NotFoundError(AppError):
@@ -123,11 +169,144 @@ class RateLimitedError(AppError):
     code = "RATE_LIMITED"
     title = "Too many requests"
 
+    def with_retry_after(self, seconds: int) -> RateLimitedError:
+        """Attach the ``Retry-After`` header required by api.md §1."""
+        self.headers = {**(self.headers or {}), "Retry-After": str(max(seconds, 1))}
+        return self
+
 
 class ServiceUnavailableError(AppError):
     status_code = status.HTTP_503_SERVICE_UNAVAILABLE
     code = "SERVICE_UNAVAILABLE"
     title = "Service unavailable"
+
+
+class InvalidTransitionError(AppError):
+    status_code = status.HTTP_400_BAD_REQUEST
+    code = "INVALID_TRANSITION"
+    title = "Invalid state transition"
+
+
+class FileTooLargeError(AppError):
+    status_code = status.HTTP_413_CONTENT_TOO_LARGE
+    code = "FILE_TOO_LARGE"
+    title = "File is too large"
+
+
+class UnsupportedFileTypeError(AppError):
+    status_code = status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+    code = "UNSUPPORTED_FILE_TYPE"
+    title = "Unsupported file type"
+
+
+class VehicleNotEligibleError(AppError):
+    status_code = status.HTTP_422_UNPROCESSABLE_CONTENT
+    code = "VEHICLE_NOT_ELIGIBLE"
+    title = "Vehicle is not eligible"
+
+
+class VersionConflictError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "VERSION_CONFLICT"
+    title = "The trip was modified by another request"
+
+
+class IdempotencyConflictError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "IDEMPOTENCY_CONFLICT"
+    title = "Idempotency key reused with a different payload"
+
+
+class PreconditionRequiredError(AppError):
+    status_code = status.HTTP_428_PRECONDITION_REQUIRED
+    code = "PRECONDITION_REQUIRED"
+    title = "If-Match header is required"
+
+
+class OverlappingTripError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "OVERLAPPING_TRIP"
+    title = "Another trip overlaps this time window"
+
+
+class MapProviderUnavailableError(AppError):
+    status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    code = "MAP_PROVIDER_UNAVAILABLE"
+    title = "Map provider is unavailable"
+
+
+class SeatUnavailableError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "SEAT_UNAVAILABLE"
+    title = "Not enough seats"
+
+
+class TripNotAcceptingError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "TRIP_NOT_ACCEPTING"
+    title = "Trip is not accepting requests"
+
+
+class RequestNotPendingError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "REQUEST_NOT_PENDING"
+    title = "Request is not pending"
+
+
+class DuplicateRequestError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "DUPLICATE_REQUEST"
+    title = "An active request already exists"
+
+
+class RouteIncompatibleError(AppError):
+    status_code = status.HTTP_422_UNPROCESSABLE_CONTENT
+    code = "ROUTE_INCOMPATIBLE"
+    title = "Pickup and drop-off are not on this route"
+
+
+class IdentityNotVerifiedError(AppError):
+    status_code = status.HTTP_403_FORBIDDEN
+    code = "IDENTITY_NOT_VERIFIED"
+    title = "Identity verification is required"
+
+
+class ConversationReadOnlyError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "CONVERSATION_READ_ONLY"
+    title = "This conversation is closed"
+
+
+class RatingWindowClosedError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "RATING_WINDOW_CLOSED"
+    title = "The rating window for this trip has closed"
+
+
+class AlreadyRatedError(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "ALREADY_RATED"
+    title = "You already rated this person for this trip"
+
+
+class BlockedError(AppError):
+    """Deliberately indistinguishable from a missing resource for the blocked party."""
+
+    status_code = status.HTTP_404_NOT_FOUND
+    code = "NOT_FOUND"
+    title = "Not found"
+
+
+class FeatureDisabledError(AppError):
+    status_code = status.HTTP_403_FORBIDDEN
+    code = "FEATURE_DISABLED"
+    title = "This feature is not enabled"
+
+
+class AiUnavailableError(AppError):
+    status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    code = "AI_UNAVAILABLE"
+    title = "The assistant is temporarily unavailable"
 
 
 _HTTP_STATUS_CODES: dict[int, tuple[str, str]] = {
@@ -168,7 +347,7 @@ def _field_errors_from_pydantic(raw_errors: Sequence[Any]) -> list[FieldError]:
 
 async def _handle_app_error(request: Request, exc: Exception) -> JSONResponse:
     assert isinstance(exc, AppError)  # noqa: S101 — registered only for AppError
-    return _problem_response(exc.to_problem(get_request_id(request)))
+    return _problem_response(exc.to_problem(get_request_id(request)), headers=exc.headers)
 
 
 async def _handle_validation_error(request: Request, exc: Exception) -> JSONResponse:

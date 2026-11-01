@@ -8,6 +8,8 @@ import { LOCALE_DIRECTION, routing } from "@/i18n/routing";
 import { clientEnv } from "@/lib/env";
 import { cairo, jakarta } from "@/lib/fonts";
 import { QueryProvider } from "@/lib/query/provider";
+import { PwaRegister } from "@/components/pwa/register";
+import { SessionProvider } from "@/features/auth/session-provider";
 import { cn } from "@/lib/utils";
 
 import "@/app/globals.css";
@@ -20,6 +22,7 @@ export const viewport: Viewport = {
   // Browser chrome follows the ink surface used by the header on scroll, not the bright brand lime.
   themeColor: "#1A1C16",
   colorScheme: "light",
+  viewportFit: "cover",
 };
 
 export async function generateMetadata({
@@ -56,6 +59,14 @@ export async function generateMetadata({
       images: ["/brand/og.png"],
     },
     robots: { index: true, follow: true },
+    appleWebApp: {
+      capable: true,
+      title: t("siteName"),
+      statusBarStyle: "default",
+    },
+    icons: {
+      apple: "/icons/icon-192.png",
+    },
   };
 }
 
@@ -90,7 +101,12 @@ export default async function LocaleLayout({
           {t("skipToContent")}
         </a>
         <NextIntlClientProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <SessionProvider>
+              <PwaRegister />
+              {children}
+            </SessionProvider>
+          </QueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

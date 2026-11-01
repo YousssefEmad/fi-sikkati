@@ -4,7 +4,16 @@ import { routing } from "@/i18n/routing";
 import { clientEnv } from "@/lib/env";
 
 /** Public page paths (without locale prefix). Authenticated routes are never listed (MEP §54). */
-const PUBLIC_PATHS: readonly string[] = [""];
+const PUBLIC_PATHS: readonly string[] = [
+  "",
+  "/how-it-works",
+  "/safety",
+  "/faq",
+  "/about",
+  "/contact",
+  "/legal/terms",
+  "/legal/privacy",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = clientEnv.NEXT_PUBLIC_SITE_URL;

@@ -14,8 +14,9 @@ import {
 import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 
 const DIFFERENCE = [
   { key: "notTaxi", Icon: CarFront },
@@ -37,7 +38,7 @@ const TRUST = [
 ] as const;
 
 export default async function LandingPage() {
-  const [t, tCommon] = await Promise.all([getTranslations("Landing"), getTranslations("Common")]);
+  const t = await getTranslations("Landing");
 
   return (
     <>
@@ -52,15 +53,22 @@ export default async function LandingPage() {
             <p className="text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed">
               {t("subheadline")}
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" disabled aria-describedby="status-note">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href="/messages" className={buttonVariants({ size: "lg", variant: "brand" })}>
+                <MessageCircle aria-hidden="true" className="size-5" />
+                {t("ctaCommunity")}
+              </Link>
+              <Link href="/search" className={buttonVariants({ size: "lg" })}>
                 <Search aria-hidden="true" className="size-5" />
                 {t("ctaPassenger")}
-              </Button>
-              <Button size="lg" variant="outline" disabled aria-describedby="status-note">
+              </Link>
+              <Link
+                href="/trips/new"
+                className={buttonVariants({ size: "lg", variant: "outline" })}
+              >
                 <CarFront aria-hidden="true" className="size-5" />
                 {t("ctaDriver")}
-              </Button>
+              </Link>
             </div>
             <p id="status-note" className="text-muted-foreground mt-5 max-w-md text-sm">
               {t("statusNote")}
@@ -124,9 +132,9 @@ export default async function LandingPage() {
                 </span>
               </div>
 
-              <Button variant="brand" block disabled className="mt-5">
+              <Link href="/search" className={buttonVariants({ variant: "brand", block: true, className: "mt-5" })}>
                 {t("preview.action")}
-              </Button>
+              </Link>
             </Card>
           </div>
         </div>
@@ -231,9 +239,6 @@ export default async function LandingPage() {
       {/* Closing band — ends on the brand colour */}
       <section aria-labelledby="closing" className="bg-brand text-brand-foreground">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 text-center sm:px-6 lg:py-20">
-          <Badge variant="inverse" size="sm" className="bg-brand-foreground text-brand">
-            {tCommon("comingSoon")}
-          </Badge>
           <h2
             id="closing"
             className="mx-auto mt-5 max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl"
@@ -242,9 +247,12 @@ export default async function LandingPage() {
           </h2>
           <p className="mx-auto mt-4 max-w-xl leading-relaxed opacity-80">{t("closing.body")}</p>
           <div className="mt-8 flex justify-center">
-            <Button size="lg" disabled aria-describedby="closing-note">
+            <Link
+              href="/auth/register"
+              className={buttonVariants({ size: "lg", variant: "inverse" })}
+            >
               {t("closing.cta")}
-            </Button>
+            </Link>
           </div>
           <p id="closing-note" className="mt-4 text-sm opacity-70">
             {t("closing.note")}

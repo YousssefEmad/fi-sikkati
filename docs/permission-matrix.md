@@ -34,8 +34,8 @@ conversation member · `party` only as driver or accepted passenger of that trip
 | `auth:password_reset` | ✅ | ✅ | ✅ | ✅ |
 | `me:read` / `me:update` | ❌ | ✅ | ✅ | ✅ |
 | `me:sessions:list` / `me:sessions:revoke` | ❌ | ✅ | ✅ | ✅ |
-| `me:delete` | ❌ | ✅ (policy ⛔ OD-020) | ✅ | ✅ |
-| `users:read_public_profile` | ⛔ OD-029 | ✅ | ✅ | ✅ |
+| `me:delete` | ❌ | ✅ (BR-ACC-07) | ✅ | ✅ |
+| `users:read_public_profile` | ❌ | ✅ | ✅ | ✅ |
 
 ### 2.2 Verification
 
@@ -70,19 +70,19 @@ vehicle is `APPROVED` (BR-TRIP-01, FR-DRV-06).
 | Permission | Anonymous | PASSENGER | DRIVER | ADMIN |
 | --- | --- | --- | --- | --- |
 | `trips:create` | ❌ | ❌ | ✅ | ❌ |
-| `trips:read` (detail, privacy-filtered) | ⛔ OD-029 | ✅ | ✅ | ✅ |
+| `trips:read` (detail, privacy-filtered) | ❌ | ✅ | ✅ | ✅ |
 | `trips:read_exact_stops` | ❌ | `party` | `own` / `party` | ✅ |
 | `trips:update` | ❌ | ❌ | ✅ own | ❌ |
 | `trips:publish` / `trips:start` / `trips:complete` | ❌ | ❌ | ✅ own | ❌ |
 | `trips:cancel` | ❌ | ❌ | ✅ own | ✅ 🔒 (reason) |
-| `trips:list_own` | ❌ | ❌ | ✅ | — |
+| `trips:list_own` | ❌ | ✅ (`role=passenger`) | ✅ | — |
 | `trips:list_any` (admin search) | ❌ | ❌ | ❌ | ✅ |
 
 ### 2.5 Search
 
 | Permission | Anonymous | PASSENGER | DRIVER | ADMIN |
 | --- | --- | --- | --- | --- |
-| `search:trips` | ⛔ OD-029 | ✅ | ✅ | ✅ |
+| `search:trips` | ❌ | ✅ | ✅ | ✅ |
 
 ### 2.6 Join requests
 

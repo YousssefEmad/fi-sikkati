@@ -4,6 +4,1392 @@
  */
 
 export interface paths {
+    "/api/v1/admin/analytics/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Headline counters */
+        get: operations["admin_analytics_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/analytics/timeseries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Daily counts for a metric */
+        get: operations["admin_analytics_timeseries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/audit-logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read-only audit log */
+        get: operations["admin_audit_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/feature-flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Feature flags */
+        get: operations["admin_flags_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/feature-flags/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Enable or disable a flag */
+        put: operations["admin_flags_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Moderation queue */
+        get: operations["admin_reports_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Report detail */
+        get: operations["admin_reports_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Take a moderation action from a report */
+        post: operations["admin_reports_action"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update report status */
+        post: operations["admin_reports_status"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Editable configuration keys */
+        get: operations["admin_settings_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/settings/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update a configuration value */
+        put: operations["admin_settings_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/trips": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search trips */
+        get: operations["admin_trips_search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search accounts */
+        get: operations["admin_users_search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Account detail without contact PII */
+        get: operations["admin_users_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/contact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reveal email and phone (SUPER_ADMIN, audited) */
+        get: operations["admin_users_contact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Permanently deactivate an account */
+        post: operations["admin_users_deactivate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore a suspended account */
+        post: operations["admin_users_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Replace grantable roles (ADMIN/DRIVER). SUPER_ADMIN is never API-grantable. */
+        put: operations["admin_users_roles"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/suspend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Suspend an account */
+        post: operations["admin_users_suspend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/vehicles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Pending vehicle review queue */
+        get: operations["admin_list_vehicles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/vehicles/{vehicle_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Vehicle detail for review */
+        get: operations["admin_get_vehicle"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/vehicles/{vehicle_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve a vehicle */
+        post: operations["admin_approve_vehicle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/vehicles/{vehicle_id}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Deactivate a vehicle */
+        post: operations["admin_deactivate_vehicle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/vehicles/{vehicle_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reject a vehicle */
+        post: operations["admin_reject_vehicle"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/driver": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Driver verification queue */
+        get: operations["admin_list_driver_verifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/driver/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Driver verification detail */
+        get: operations["admin_get_driver_verification"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/driver/{user_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve a driver application and grant DRIVER */
+        post: operations["admin_approve_driver"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/driver/{user_id}/registration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve a saved vehicle, identity if it is waiting, and grant DRIVER */
+        post: operations["admin_approve_vehicle_registration"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/driver/{user_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reject a driver application */
+        post: operations["admin_reject_driver"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/files/{file_id}/download-url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Issue a short-lived download URL (audited) */
+        get: operations["admin_document_download_url"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/identity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Identity verification queue */
+        get: operations["admin_list_identity_verifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/identity/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Identity verification detail */
+        get: operations["admin_get_identity_verification"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/identity/{user_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve identity verification */
+        post: operations["admin_approve_identity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/verifications/identity/{user_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reject identity verification */
+        post: operations["admin_reject_identity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ai/assistant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask the help and trip-discovery assistant */
+        post: operations["ai_assistant"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/email/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a new confirmation email */
+        post: operations["auth_resend_verification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/email/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm an email address */
+        post: operations["auth_verify_email"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign in */
+        post: operations["auth_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign out of the current session
+         * @description Idempotent (BR-AUTH-09): signing out twice is not an error.
+         */
+        post: operations["auth_logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password/change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Change the password of the signed-in account
+         * @description Keeps the current session and signs every other device out (BR-AUTH-07).
+         */
+        post: operations["auth_change_password"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password/forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start a password reset */
+        post: operations["auth_forgot_password"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Finish a password reset
+         * @description Signs every device out of the account (BR-AUTH-06).
+         */
+        post: operations["auth_reset_password"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rotate the session
+         * @description Browsers send the refresh cookie; other clients send the token in the body. The old token stops working immediately and replaying it ends the whole session family.
+         */
+        post: operations["auth_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create an account
+         * @description Always answers `202 ACCEPTED`, whether or not the address was already registered (BR-AUTH-03). The next step is the link in the email that follows.
+         */
+        post: operations["auth_register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one conversation */
+        get: operations["chat_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Messages in a conversation, newest first */
+        get: operations["chat_list_messages"];
+        put?: never;
+        /** Send a message */
+        post: operations["chat_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark the conversation as read */
+        post: operations["chat_mark_read"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/join-requests/{request_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one join request */
+        get: operations["join_requests_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/join-requests/{request_id}/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accept a pending request and reserve the seats */
+        post: operations["join_requests_accept"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/join-requests/{request_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel the caller's own request */
+        post: operations["join_requests_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/join-requests/{request_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reject a pending request */
+        post: operations["join_requests_reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/maps/autocomplete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Place autocomplete (Egypt) */
+        get: operations["maps_autocomplete"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/maps/geocode": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Geocode a place query */
+        get: operations["maps_geocode"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/maps/route-preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Server-side route preview */
+        post: operations["maps_route_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the signed-in account */
+        get: operations["users_get_me"];
+        put?: never;
+        post?: never;
+        /**
+         * Close the signed-in account
+         * @description BR-ACC-07: the account is closed immediately, every session is revoked, and the data is anonymised after the grace period. Signing in before then cancels the deletion.
+         */
+        delete: operations["users_delete_me"];
+        options?: never;
+        head?: never;
+        /** Update the signed-in account's profile */
+        patch: operations["users_update_me"];
+        trace?: never;
+    };
+    "/api/v1/me/blocks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** People the signed-in user has blocked */
+        get: operations["blocks_list"];
+        put?: never;
+        /** Block a user */
+        post: operations["blocks_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/blocks/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Unblock a user */
+        delete: operations["blocks_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/conversations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Conversations the signed-in user is in */
+        get: operations["chat_list_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/join-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the signed-in passenger's join requests */
+        get: operations["join_requests_list_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/notification-preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Notification preferences per type and channel */
+        get: operations["notification_preferences_get"];
+        /** Update notification preferences */
+        put: operations["notification_preferences_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The signed-in user's notifications, newest first */
+        get: operations["notifications_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/notifications/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark notifications as read */
+        post: operations["notifications_mark_read"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/notifications/unread-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** How many notifications are unread */
+        get: operations["notifications_unread_count"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/phone/challenges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send a confirmation code to a mobile number */
+        post: operations["phone_start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/phone/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm the mobile number with the SMS code */
+        post: operations["phone_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload a profile photo */
+        post: operations["users_upload_photo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/push-subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Register this device for phone alerts */
+        put: operations["push_subscribe"];
+        post?: never;
+        /** Stop phone alerts on this device */
+        delete: operations["push_unsubscribe"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The signed-in user's reports */
+        get: operations["reports_list_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the devices signed in to this account */
+        get: operations["auth_list_sessions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Sign a device out */
+        delete: operations["auth_revoke_session"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/trips": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The signed-in user's trips */
+        get: operations["trips_list_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/vehicles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the signed-in user's vehicles */
+        get: operations["vehicles_list_mine"];
+        put?: never;
+        /** Register a vehicle */
+        post: operations["vehicles_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/vehicles/{vehicle_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read one of the signed-in user's vehicles */
+        get: operations["vehicles_get_mine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update a vehicle that is not yet approved */
+        patch: operations["vehicles_update_mine"];
+        trace?: never;
+    };
+    "/api/v1/me/vehicles/{vehicle_id}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Deactivate a vehicle */
+        post: operations["vehicles_deactivate_mine"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/vehicles/{vehicle_id}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload a vehicle document */
+        post: operations["vehicles_upload_document"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read identity and driver verification status */
+        get: operations["verification_get_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/verification/driver/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload the driving licence for a driver application */
+        post: operations["verification_upload_licence"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/verification/driver/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit a driver application */
+        post: operations["verification_submit_driver"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/verification/identity/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload one identity document */
+        post: operations["verification_upload_identity_document"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/verification/identity/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit identity documents for review */
+        post: operations["verification_submit_identity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/platform/config": {
         parameters: {
             query?: never;
@@ -21,10 +1407,952 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/pricing/estimate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Suggested per-seat contribution for a distance */
+        get: operations["pricing_estimate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** File a report */
+        post: operations["reports_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/search/trips": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Find published trips compatible with a pickup and drop-off */
+        get: operations["search_trips"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a draft trip */
+        post: operations["trips_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Trip detail (privacy-filtered) */
+        get: operations["trips_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Edit a trip */
+        patch: operations["trips_update"];
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/call-contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Phone numbers of the other people on an accepted trip */
+        get: operations["trip_call_contacts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancel the trip */
+        post: operations["trips_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete the trip */
+        post: operations["trips_complete"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/join-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List join requests for a trip the caller drives */
+        get: operations["join_requests_list_for_trip"];
+        put?: never;
+        /** Request a seat on a published trip */
+        post: operations["join_requests_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publish a draft */
+        post: operations["trips_publish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/ratings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rate a person you shared a completed trip with */
+        post: operations["ratings_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/trips/{trip_id}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark the trip in progress */
+        post: operations["trips_start"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/{user_id}/public-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read another user's public profile */
+        get: operations["users_get_public_profile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/{user_id}/ratings/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Public rating summary (hidden until the minimum count) */
+        get: operations["ratings_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AcceptedResponse
+         * @description Deliberately uninformative: used where the answer must not reveal account existence.
+         */
+        AcceptedResponse: {
+            /**
+             * Status
+             * @default ACCEPTED
+             * @constant
+             */
+            status: "ACCEPTED";
+        };
+        /**
+         * AccountResponse
+         * @description ``GET /me`` — the owner's own account. Never returned for another user.
+         */
+        AccountResponse: {
+            /** Bio */
+            bio: string | null;
+            /** City */
+            city: string | null;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Dateofbirth
+             * Format: date
+             */
+            dateOfBirth: string;
+            /** Deletionrequestedat */
+            deletionRequestedAt: string | null;
+            /** Displayname */
+            displayName: string;
+            /** Email */
+            email: string;
+            /** Emailverified */
+            emailVerified: boolean;
+            /** Fullname */
+            fullName: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            identityVerificationStatus: components["schemas"]["IdentityVerificationStatus"];
+            /** Lastloginat */
+            lastLoginAt: string | null;
+            /** Locale */
+            locale: string;
+            /** Phone */
+            phone: string | null;
+            /** Phoneverified */
+            phoneVerified: boolean;
+            /** Photourl */
+            photoUrl: string | null;
+            /** Roles */
+            roles: components["schemas"]["Role"][];
+            /**
+             * Sharephonewithtrippeers
+             * @default false
+             */
+            sharePhoneWithTripPeers: boolean;
+            status: components["schemas"]["AccountStatus"];
+        };
+        /**
+         * AccountStatus
+         * @description BR-ACC-05: only ``ACTIVE`` accounts can authenticate.
+         * @enum {string}
+         */
+        AccountStatus: "ACTIVE" | "SUSPENDED" | "DEACTIVATED" | "DELETED";
+        /** AdminContactResponse */
+        AdminContactResponse: {
+            /** Email */
+            email: string;
+            /** Phone */
+            phone: string | null;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** AdminDriverQueueItem */
+        AdminDriverQueueItem: {
+            /** Displayname */
+            displayName: string;
+            /** Email */
+            email: string;
+            /**
+             * Licenceexpireson
+             * Format: date
+             */
+            licenceExpiresOn: string;
+            /**
+             * Submittedat
+             * Format: date-time
+             */
+            submittedAt: string;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+            /**
+             * Vehicleid
+             * Format: uuid
+             */
+            vehicleId: string;
+            /**
+             * Verificationid
+             * Format: uuid
+             */
+            verificationId: string;
+        };
+        /** AdminDriverQueueResponse */
+        AdminDriverQueueResponse: {
+            /** Items */
+            items: components["schemas"]["AdminDriverQueueItem"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AdminIdentityQueueItem */
+        AdminIdentityQueueItem: {
+            /** Displayname */
+            displayName: string;
+            /** Documentcount */
+            documentCount: number;
+            /** Email */
+            email: string;
+            /**
+             * Submittedat
+             * Format: date-time
+             */
+            submittedAt: string;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** AdminIdentityQueueResponse */
+        AdminIdentityQueueResponse: {
+            /** Items */
+            items: components["schemas"]["AdminIdentityQueueItem"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AdminModerationRequest */
+        AdminModerationRequest: {
+            action: components["schemas"]["ModerationActionType"];
+            /** Reason */
+            reason: string;
+            /**
+             * Targetuserid
+             * Format: uuid
+             */
+            targetUserId: string;
+        };
+        /** AdminReasonRequest */
+        AdminReasonRequest: {
+            /** Reason */
+            reason: string;
+        };
+        /** AdminReportDetailResponse */
+        AdminReportDetailResponse: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Description */
+            description: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Reason */
+            reason: string;
+            /**
+             * Reporterid
+             * Format: uuid
+             */
+            reporterId: string;
+            /** Resolutionnotes */
+            resolutionNotes: string | null;
+            /** Resolvedat */
+            resolvedAt: string | null;
+            /** Resolvedby */
+            resolvedBy: string | null;
+            status: components["schemas"]["ReportStatus"];
+            /**
+             * Targetid
+             * Format: uuid
+             */
+            targetId: string;
+            /** Targettype */
+            targetType: string;
+        };
+        /** AdminReportListItem */
+        AdminReportListItem: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Reason */
+            reason: string;
+            /**
+             * Reporterid
+             * Format: uuid
+             */
+            reporterId: string;
+            status: components["schemas"]["ReportStatus"];
+            /**
+             * Targetid
+             * Format: uuid
+             */
+            targetId: string;
+            /** Targettype */
+            targetType: string;
+        };
+        /** AdminReportListResponse */
+        AdminReportListResponse: {
+            /** Items */
+            items: components["schemas"]["AdminReportListItem"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AdminReportStatusRequest */
+        AdminReportStatusRequest: {
+            /** Notes */
+            notes?: string | null;
+            status: components["schemas"]["ReportStatus"];
+        };
+        /** AdminRolesRequest */
+        AdminRolesRequest: {
+            /** Roles */
+            roles: ("ADMIN" | "DRIVER")[];
+        };
+        /** AdminTripListItem */
+        AdminTripListItem: {
+            /** Availableseats */
+            availableSeats: number;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Departureat
+             * Format: date-time
+             */
+            departureAt: string;
+            /** Destinationlabel */
+            destinationLabel: string;
+            /** Driverdisplayname */
+            driverDisplayName: string;
+            /**
+             * Driverid
+             * Format: uuid
+             */
+            driverId: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Originlabel */
+            originLabel: string;
+            status: components["schemas"]["TripStatus"];
+            /** Totalseats */
+            totalSeats: number;
+        };
+        /** AdminTripListResponse */
+        AdminTripListResponse: {
+            /** Items */
+            items: components["schemas"]["AdminTripListItem"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AdminUserDetailResponse */
+        AdminUserDetailResponse: {
+            /** City */
+            city: string | null;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Displayname */
+            displayName: string;
+            /** Emailverified */
+            emailVerified: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            identityVerificationStatus: components["schemas"]["IdentityVerificationStatus"];
+            /** Lastloginat */
+            lastLoginAt: string | null;
+            /** Locale */
+            locale: string;
+            /**
+             * Membersince
+             * Format: date-time
+             */
+            memberSince: string;
+            /** Roles */
+            roles: components["schemas"]["Role"][];
+            status: components["schemas"]["AccountStatus"];
+        };
+        /** AdminUserListItem */
+        AdminUserListItem: {
+            /** City */
+            city: string | null;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Displayname */
+            displayName: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            identityVerificationStatus: components["schemas"]["IdentityVerificationStatus"];
+            /** Lastloginat */
+            lastLoginAt: string | null;
+            /** Roles */
+            roles: components["schemas"]["Role"][];
+            status: components["schemas"]["AccountStatus"];
+        };
+        /** AdminUserListResponse */
+        AdminUserListResponse: {
+            /** Items */
+            items: components["schemas"]["AdminUserListItem"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AdminVehicleListResponse */
+        AdminVehicleListResponse: {
+            /** Items */
+            items: components["schemas"]["VehicleResponse"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AnalyticsOverviewResponse */
+        AnalyticsOverviewResponse: {
+            /** Drivers */
+            drivers: number;
+            /** Joinrequestsmatched */
+            joinRequestsMatched: number;
+            /** Joinrequeststotal */
+            joinRequestsTotal: number;
+            /** Reportsopen */
+            reportsOpen: number;
+            /** Tripscancelled */
+            tripsCancelled: number;
+            /** Tripscompleted */
+            tripsCompleted: number;
+            /** Tripstotal */
+            tripsTotal: number;
+            /** Usersactive7D */
+            usersActive7D: number;
+            /** Userstotal */
+            usersTotal: number;
+        };
+        /** MarkReadRequest */
+        app__modules__chat__schemas__MarkReadRequest: {
+            /** Messageid */
+            messageId?: string | null;
+        };
+        /**
+         * MarkReadRequest
+         * @description Omit ``ids`` (or send ``null``) to mark everything read.
+         */
+        app__modules__notifications__schemas__MarkReadRequest: {
+            /** Ids */
+            ids?: string[] | null;
+        };
+        /** AppSettingListResponse */
+        AppSettingListResponse: {
+            /** Items */
+            items: components["schemas"]["AppSettingResponse"][];
+        };
+        /** AppSettingResponse */
+        AppSettingResponse: {
+            /** Key */
+            key: string;
+            /**
+             * Updatedat
+             * Format: date-time
+             */
+            updatedAt: string;
+            /** Value */
+            value: {
+                [key: string]: unknown;
+            };
+        };
+        /** AppSettingUpdateRequest */
+        AppSettingUpdateRequest: {
+            /** Value */
+            value: {
+                [key: string]: unknown;
+            };
+        };
+        /** AssistantRequest */
+        AssistantRequest: {
+            /** Conversationid */
+            conversationId?: string | null;
+            /** Message */
+            message: string;
+        };
+        /** AssistantResponse */
+        AssistantResponse: {
+            /** Answer */
+            answer: string;
+            /**
+             * Interactionid
+             * Format: uuid
+             */
+            interactionId: string;
+            /** Provider */
+            provider: string;
+            searchParams?: components["schemas"]["SearchHint"] | null;
+            /** Tripids */
+            tripIds: string[];
+        };
+        /** AuditLogItem */
+        AuditLogItem: {
+            /** Action */
+            action: string;
+            /** Actorid */
+            actorId: string | null;
+            /** Actortype */
+            actorType: string;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Targetid */
+            targetId: string | null;
+            /** Targettype */
+            targetType: string | null;
+        };
+        /** AuditLogListResponse */
+        AuditLogListResponse: {
+            /** Items */
+            items: components["schemas"]["AuditLogItem"][];
+            /** Page */
+            page: number;
+            /** Pagesize */
+            pageSize: number;
+            /** Totalcount */
+            totalCount: number;
+            /** Totalpages */
+            totalPages: number;
+        };
+        /** AutocompleteResponse */
+        AutocompleteResponse: {
+            /** Items */
+            items: components["schemas"]["MapPoint"][];
+        };
+        /** BlockCreate */
+        BlockCreate: {
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** BlockListResponse */
+        BlockListResponse: {
+            /** Items */
+            items: components["schemas"]["BlockResponse"][];
+        };
+        /** BlockResponse */
+        BlockResponse: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Displayname */
+            displayName: string;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** Body_users_upload_photo */
+        Body_users_upload_photo: {
+            /** File */
+            file: string;
+        };
+        /** Body_vehicles_upload_document */
+        Body_vehicles_upload_document: {
+            documentType: components["schemas"]["VehicleDocumentType"];
+            /** File */
+            file: string;
+        };
+        /** Body_verification_upload_identity_document */
+        Body_verification_upload_identity_document: {
+            documentType: components["schemas"]["IdentityDocumentType"];
+            /** File */
+            file: string;
+        };
+        /** Body_verification_upload_licence */
+        Body_verification_upload_licence: {
+            /** File */
+            file: string;
+        };
+        /** CallContactListResponse */
+        CallContactListResponse: {
+            /** Items */
+            items: components["schemas"]["CallContactResponse"][];
+        };
+        /** CallContactResponse */
+        CallContactResponse: {
+            /** Displayname */
+            displayName: string;
+            /** Phone */
+            phone: string;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** ChangePasswordRequest */
+        ChangePasswordRequest: {
+            /** Currentpassword */
+            currentPassword: string;
+            /** Newpassword */
+            newPassword: string;
+        };
+        /** ConversationListResponse */
+        ConversationListResponse: {
+            /** Items */
+            items: components["schemas"]["ConversationResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** ConversationResponse */
+        ConversationResponse: {
+            /** Departureat */
+            departureAt: string | null;
+            /** Destinationlabel */
+            destinationLabel: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Isreadonly */
+            isReadOnly: boolean;
+            lastMessage: components["schemas"]["MessageResponse"] | null;
+            /** Memberids */
+            memberIds: string[];
+            /** Membernames */
+            memberNames: string[];
+            /** Originlabel */
+            originLabel: string | null;
+            /** Tripid */
+            tripId: string | null;
+            /** Unreadcount */
+            unreadCount: number;
+        };
+        /**
+         * DeleteAccountResponse
+         * @description BR-ACC-07: the account closes now and is anonymised after the grace period.
+         */
+        DeleteAccountResponse: {
+            /**
+             * Anonymisedafter
+             * Format: date-time
+             */
+            anonymisedAfter: string;
+            /**
+             * Status
+             * @default DELETED
+             * @constant
+             */
+            status: "DELETED";
+        };
+        /** DriverStatusResponse */
+        DriverStatusResponse: {
+            /** Licenceexpireson */
+            licenceExpiresOn: string | null;
+            /** Licencefileid */
+            licenceFileId: string | null;
+            /** Licenceoriginalname */
+            licenceOriginalName: string | null;
+            /** Rejectionreason */
+            rejectionReason: string | null;
+            status: components["schemas"]["DriverVerificationStatus"] | null;
+            /** Submittedat */
+            submittedAt: string | null;
+            /** Vehicleid */
+            vehicleId: string | null;
+        };
+        /** DriverSubmitRequest */
+        DriverSubmitRequest: {
+            /**
+             * Licenceexpireson
+             * Format: date
+             */
+            licenceExpiresOn: string;
+            /**
+             * Licencefileid
+             * Format: uuid
+             */
+            licenceFileId: string;
+            /**
+             * Vehicleid
+             * Format: uuid
+             */
+            vehicleId: string;
+        };
+        /**
+         * DriverVerificationStatus
+         * @enum {string}
+         */
+        DriverVerificationStatus: "PENDING" | "APPROVED" | "REJECTED" | "REVOKED";
+        /** FeatureFlagListResponse */
+        FeatureFlagListResponse: {
+            /** Items */
+            items: components["schemas"]["FeatureFlagResponse"][];
+        };
+        /** FeatureFlagResponse */
+        FeatureFlagResponse: {
+            /** Description */
+            description: string;
+            /** Enabled */
+            enabled: boolean;
+            /** Key */
+            key: string;
+            /**
+             * Updatedat
+             * Format: date-time
+             */
+            updatedAt: string;
+        };
+        /** FeatureFlagUpdateRequest */
+        FeatureFlagUpdateRequest: {
+            /** Enabled */
+            enabled: boolean;
+        };
         /**
          * FieldError
          * @description A validation problem attached to a specific input field.
@@ -36,6 +2364,348 @@ export interface components {
             field: string;
             /** Message */
             message: string;
+        };
+        /** ForgotPasswordRequest */
+        ForgotPasswordRequest: {
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+        };
+        /** GeocodeResponse */
+        GeocodeResponse: {
+            point: components["schemas"]["MapPoint"] | null;
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** IdentityDocumentResponse */
+        IdentityDocumentResponse: {
+            /** Bytesize */
+            byteSize: number;
+            documentType: components["schemas"]["IdentityDocumentType"];
+            /**
+             * Fileid
+             * Format: uuid
+             */
+            fileId: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Mimetype */
+            mimeType: string;
+            /** Originalname */
+            originalName: string;
+            status: components["schemas"]["ReviewStatus"];
+            /**
+             * Uploadedat
+             * Format: date-time
+             */
+            uploadedAt: string;
+        };
+        /**
+         * IdentityDocumentType
+         * @enum {string}
+         */
+        IdentityDocumentType: "NATIONAL_ID_FRONT" | "NATIONAL_ID_BACK" | "SELFIE";
+        /**
+         * IdentityVerificationStatus
+         * @description BR-VER-01. Denormalised from ``identity_documents`` (created in Phase 3).
+         * @enum {string}
+         */
+        IdentityVerificationStatus: "NOT_SUBMITTED" | "PENDING" | "APPROVED" | "REJECTED";
+        /**
+         * JoinCancelledBy
+         * @enum {string}
+         */
+        JoinCancelledBy: "PASSENGER" | "DRIVER" | "ADMIN" | "SYSTEM";
+        /** JoinPointInput */
+        JoinPointInput: {
+            /** Label */
+            label: string;
+            /** Lat */
+            lat: number;
+            /** Lng */
+            lng: number;
+        };
+        /** JoinRequestCreate */
+        JoinRequestCreate: {
+            dropoff: components["schemas"]["JoinPointInput"];
+            /** Note */
+            note?: string | null;
+            pickup: components["schemas"]["JoinPointInput"];
+            /** Seatsrequested */
+            seatsRequested: number;
+        };
+        /** JoinRequestListResponse */
+        JoinRequestListResponse: {
+            /** Items */
+            items: components["schemas"]["JoinRequestResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** JoinRequestResponse */
+        JoinRequestResponse: {
+            /** Cancelledat */
+            cancelledAt: string | null;
+            cancelledBy: components["schemas"]["JoinCancelledBy"] | null;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Dropofffraction */
+            dropoffFraction: number;
+            /** Dropofflabel */
+            dropoffLabel: string;
+            /** Dropofflat */
+            dropoffLat: number;
+            /** Dropofflng */
+            dropoffLng: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Minutesbeforedepartureatcancel */
+            minutesBeforeDepartureAtCancel: number | null;
+            /** Note */
+            note: string | null;
+            /** Passengercancellationslast90Days */
+            passengerCancellationsLast90Days: number;
+            /** Passengerdisplayname */
+            passengerDisplayName: string;
+            /**
+             * Passengerid
+             * Format: uuid
+             */
+            passengerId: string;
+            /** Passengeridentityverified */
+            passengerIdentityVerified: boolean;
+            /** Pickupfraction */
+            pickupFraction: number;
+            /** Pickuplabel */
+            pickupLabel: string;
+            /** Pickuplat */
+            pickupLat: number;
+            /** Pickuplng */
+            pickupLng: number;
+            /** Respondedat */
+            respondedAt: string | null;
+            /** Seatsrequested */
+            seatsRequested: number;
+            status: components["schemas"]["JoinRequestStatus"];
+            /**
+             * Tripid
+             * Format: uuid
+             */
+            tripId: string;
+        };
+        /**
+         * JoinRequestStatus
+         * @enum {string}
+         */
+        JoinRequestStatus: "PENDING" | "ACCEPTED" | "REJECTED" | "CANCELLED" | "EXPIRED" | "COMPLETED";
+        /** LicenceUploadResponse */
+        LicenceUploadResponse: {
+            /** Bytesize */
+            byteSize: number;
+            /**
+             * Fileid
+             * Format: uuid
+             */
+            fileId: string;
+            /** Mimetype */
+            mimeType: string;
+            /** Originalname */
+            originalName: string;
+        };
+        /** LoginRequest */
+        LoginRequest: {
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+            /** Password */
+            password: string;
+        };
+        /** MapPoint */
+        MapPoint: {
+            /** Label */
+            label: string;
+            /** Lat */
+            lat: number;
+            /** Lng */
+            lng: number;
+        };
+        /** MarkReadResponse */
+        MarkReadResponse: {
+            /** Marked */
+            marked: number;
+        };
+        /**
+         * MatchKind
+         * @enum {string}
+         */
+        MatchKind: "EXACT" | "ON_ROUTE";
+        /** MessageCreate */
+        MessageCreate: {
+            /** Body */
+            body: string;
+            /**
+             * Clientmessageid
+             * Format: uuid
+             */
+            clientMessageId: string;
+        };
+        /**
+         * MessageKind
+         * @enum {string}
+         */
+        MessageKind: "TEXT" | "SYSTEM";
+        /** MessageListResponse */
+        MessageListResponse: {
+            /** Items */
+            items: components["schemas"]["MessageResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** MessageResponse */
+        MessageResponse: {
+            /** Body */
+            body: string;
+            /**
+             * Conversationid
+             * Format: uuid
+             */
+            conversationId: string;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Deleted */
+            deleted: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            kind: components["schemas"]["MessageKind"];
+            /** Senderdisplayname */
+            senderDisplayName: string | null;
+            /** Senderid */
+            senderId: string | null;
+            /** Systemevent */
+            systemEvent: string | null;
+        };
+        /**
+         * ModerationActionType
+         * @enum {string}
+         */
+        ModerationActionType: "WARN" | "REMOVE_CONTENT" | "SUSPEND_USER" | "RESTORE_USER" | "CANCEL_TRIP" | "REVOKE_DRIVER";
+        /**
+         * NotificationChannel
+         * @enum {string}
+         */
+        NotificationChannel: "IN_APP" | "EMAIL";
+        /** NotificationListResponse */
+        NotificationListResponse: {
+            /** Items */
+            items: components["schemas"]["NotificationResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** NotificationResponse */
+        NotificationResponse: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            };
+            /** Readat */
+            readAt: string | null;
+            type: components["schemas"]["NotificationType"];
+        };
+        /**
+         * NotificationType
+         * @enum {string}
+         */
+        NotificationType: "JOIN_REQUEST_RECEIVED" | "JOIN_REQUEST_ACCEPTED" | "JOIN_REQUEST_REJECTED" | "JOIN_REQUEST_CANCELLED" | "TRIP_UPDATED" | "TRIP_STARTED" | "TRIP_CANCELLED" | "TRIP_COMPLETED" | "TRIP_STARTING_SOON" | "TRIP_REMINDER" | "NEW_MESSAGE" | "NEW_MATCHING_TRIP" | "VERIFICATION_STATUS_CHANGED" | "RATING_RECEIVED" | "REPORT_UPDATED" | "ACCOUNT_MODERATED" | "ANNOUNCEMENT" | "REVIEW_REQUESTED";
+        /** PhoneConfirmRequest */
+        PhoneConfirmRequest: {
+            /** Code */
+            code: string;
+        };
+        /** PhoneStartRequest */
+        PhoneStartRequest: {
+            /** Phone */
+            phone: string;
+        };
+        /** PhoneStartResponse */
+        PhoneStartResponse: {
+            /** Devcode */
+            devCode?: string | null;
+            /**
+             * Expiresat
+             * Format: date-time
+             */
+            expiresAt: string;
+        };
+        /** PreferenceChange */
+        PreferenceChange: {
+            channel: components["schemas"]["NotificationChannel"];
+            /** Enabled */
+            enabled: boolean;
+            type: components["schemas"]["NotificationType"];
+        };
+        /** PreferenceItem */
+        PreferenceItem: {
+            channel: components["schemas"]["NotificationChannel"];
+            /** Enabled */
+            enabled: boolean;
+            /**
+             * Locked
+             * @default false
+             */
+            locked: boolean;
+            type: components["schemas"]["NotificationType"];
+        };
+        /** PreferencesResponse */
+        PreferencesResponse: {
+            /** Items */
+            items: components["schemas"]["PreferenceItem"][];
+        };
+        /** PreferencesUpdateRequest */
+        PreferencesUpdateRequest: {
+            /** Items */
+            items: components["schemas"]["PreferenceChange"][];
+        };
+        /** PriceEstimateResponse */
+        PriceEstimateResponse: {
+            /** Currency */
+            currency: string;
+            /** Distancem */
+            distanceM: number;
+            /** Label */
+            label: string;
+            /** Suggestedpriceminor */
+            suggestedPriceMinor: number;
         };
         /**
          * Problem
@@ -67,6 +2737,26 @@ export interface components {
             type: string;
         };
         /**
+         * ProfileUpdateRequest
+         * @description ``PATCH /me``: every field optional; omitted fields are left untouched.
+         */
+        ProfileUpdateRequest: {
+            /** Bio */
+            bio?: string | null;
+            /** City */
+            city?: string | null;
+            /** Displayname */
+            displayName?: string | null;
+            /** Fullname */
+            fullName?: string | null;
+            /** Locale */
+            locale?: ("ar" | "en") | null;
+            /** Phone */
+            phone?: string | null;
+            /** Sharephonewithtrippeers */
+            sharePhoneWithTripPeers?: boolean | null;
+        };
+        /**
          * PublicConfig
          * @description Non-sensitive runtime configuration the web client needs before login.
          */
@@ -77,13 +2767,776 @@ export interface components {
             defaultLocale: string;
             /** Defaulttimezone */
             defaultTimezone: string;
+            /** Deletiongracedays */
+            deletionGraceDays: number;
             /**
              * Environment
              * @enum {string}
              */
             environment: "development" | "test" | "staging" | "production";
+            /** Identitydocumenttypes */
+            identityDocumentTypes: string[];
+            /** Mapboxpublictoken */
+            mapboxPublicToken: string | null;
+            /** Matchingcorridorwidthmeters */
+            matchingCorridorWidthMeters: number;
+            /** Matchingdefaulttimewindowminutes */
+            matchingDefaultTimeWindowMinutes: number;
+            /** Matchingstopproximitymeters */
+            matchingStopProximityMeters: number;
+            /** Maxdocumentbytes */
+            maxDocumentBytes: number;
+            /** Maxpassengerseats */
+            maxPassengerSeats: number;
+            /** Maxvehiclesperdriver */
+            maxVehiclesPerDriver: number;
+            /** Minimumageyears */
+            minimumAgeYears: number;
+            /** Passwordminlength */
+            passwordMinLength: number;
+            /** Privacyversion */
+            privacyVersion: string;
+            /** Reviewslahours */
+            reviewSlaHours: number;
+            /** Suggestedpricelabel */
+            suggestedPriceLabel: string;
             /** Supportedlocales */
             supportedLocales: string[];
+            /** Termsversion */
+            termsVersion: string;
+            /** Vapidpublickey */
+            vapidPublicKey: string | null;
+            /** Vehicledocumenttypes */
+            vehicleDocumentTypes: string[];
+        };
+        /**
+         * PublicProfileResponse
+         * @description ``GET /users/{userId}/public-profile`` — deliberately minimal (security.md §4).
+         *
+         *     No email, no phone, no legal name, no exact location, no licence plate.
+         */
+        PublicProfileResponse: {
+            /** Cancellationslast90Days */
+            cancellationsLast90Days: number;
+            /** City */
+            city: string | null;
+            /** Displayname */
+            displayName: string;
+            /** Identityverified */
+            identityVerified: boolean;
+            /** Isdriver */
+            isDriver: boolean;
+            /**
+             * Membersince
+             * Format: date-time
+             */
+            memberSince: string;
+            /** Photourl */
+            photoUrl: string | null;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** PushSubscriptionRequest */
+        PushSubscriptionRequest: {
+            /** Auth */
+            auth: string;
+            /** Endpoint */
+            endpoint: string;
+            /** P256Dh */
+            p256Dh: string;
+        };
+        /** PushSubscriptionResponse */
+        PushSubscriptionResponse: {
+            /** Enabled */
+            enabled: boolean;
+        };
+        /** RatingCreate */
+        RatingCreate: {
+            /** Comment */
+            comment?: string | null;
+            /** Communication */
+            communication?: number | null;
+            /** Experience */
+            experience?: number | null;
+            /** Overall */
+            overall: number;
+            /** Punctuality */
+            punctuality?: number | null;
+            /**
+             * Rateeid
+             * Format: uuid
+             */
+            rateeId: string;
+        };
+        /** RatingResponse */
+        RatingResponse: {
+            /** Comment */
+            comment: string | null;
+            /** Communication */
+            communication: number | null;
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Experience */
+            experience: number | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Overall */
+            overall: number;
+            /** Punctuality */
+            punctuality: number | null;
+            /**
+             * Rateeid
+             * Format: uuid
+             */
+            rateeId: string;
+            /**
+             * Raterid
+             * Format: uuid
+             */
+            raterId: string;
+            /**
+             * Tripid
+             * Format: uuid
+             */
+            tripId: string;
+        };
+        /** RatingSummaryResponse */
+        RatingSummaryResponse: {
+            /** Average */
+            average: number | null;
+            /** Count */
+            count: number;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+            /** Visible */
+            visible: boolean;
+        };
+        /**
+         * RefreshRequest
+         * @description Non-browser clients send the refresh token here; browsers send the cookie instead.
+         */
+        RefreshRequest: {
+            /** Refreshtoken */
+            refreshToken?: string | null;
+        };
+        /**
+         * RegisterRequest
+         * @description ``POST /auth/register`` (FR-AUTH-01, BR-ACC-08).
+         */
+        RegisterRequest: {
+            /** Acceptedprivacyversion */
+            acceptedPrivacyVersion: string;
+            /** Acceptedtermsversion */
+            acceptedTermsVersion: string;
+            /**
+             * Dateofbirth
+             * Format: date
+             */
+            dateOfBirth: string;
+            /** Displayname */
+            displayName: string;
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+            /** Fullname */
+            fullName: string;
+            /**
+             * Locale
+             * @default ar
+             * @enum {string}
+             */
+            locale: "ar" | "en";
+            /** Password */
+            password: string;
+            /** Phone */
+            phone?: string | null;
+        };
+        /** ReportCreate */
+        ReportCreate: {
+            /** Description */
+            description?: string | null;
+            reason: components["schemas"]["ReportReason"];
+            /**
+             * Targetid
+             * Format: uuid
+             */
+            targetId: string;
+            targetType: components["schemas"]["ReportTargetType"];
+        };
+        /** ReportListResponse */
+        ReportListResponse: {
+            /** Items */
+            items: components["schemas"]["ReportResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /**
+         * ReportReason
+         * @enum {string}
+         */
+        ReportReason: "SAFETY" | "HARASSMENT" | "SPAM" | "NO_SHOW" | "FRAUD" | "OTHER";
+        /** ReportResponse */
+        ReportResponse: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Description */
+            description: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            reason: components["schemas"]["ReportReason"];
+            /**
+             * Reporterid
+             * Format: uuid
+             */
+            reporterId: string;
+            /** Resolvedat */
+            resolvedAt: string | null;
+            status: components["schemas"]["ReportStatus"];
+            /**
+             * Targetid
+             * Format: uuid
+             */
+            targetId: string;
+            targetType: components["schemas"]["ReportTargetType"];
+        };
+        /**
+         * ReportStatus
+         * @enum {string}
+         */
+        ReportStatus: "OPEN" | "UNDER_REVIEW" | "RESOLVED" | "DISMISSED";
+        /**
+         * ReportTargetType
+         * @enum {string}
+         */
+        ReportTargetType: "USER" | "TRIP" | "MESSAGE";
+        /** ResendVerificationRequest */
+        ResendVerificationRequest: {
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+        };
+        /** ResetPasswordRequest */
+        ResetPasswordRequest: {
+            /** Newpassword */
+            newPassword: string;
+            /** Token */
+            token: string;
+        };
+        /** ReviewRejectRequest */
+        ReviewRejectRequest: {
+            /** Reason */
+            reason: string;
+        };
+        /**
+         * ReviewStatus
+         * @enum {string}
+         */
+        ReviewStatus: "PENDING" | "APPROVED" | "REJECTED";
+        /**
+         * Role
+         * @description Roles a user can hold. Stored in ``user_roles``; everything else is code.
+         * @enum {string}
+         */
+        Role: "PASSENGER" | "DRIVER" | "ADMIN" | "SUPER_ADMIN";
+        /** RoutePreviewRequest */
+        RoutePreviewRequest: {
+            /** Stops */
+            stops: components["schemas"]["RouteStopInput"][];
+        };
+        /** RoutePreviewResponse */
+        RoutePreviewResponse: {
+            /** Coordinates */
+            coordinates: number[][];
+            /** Distancem */
+            distanceM: number;
+            /** Durations */
+            durationS: number;
+            /** Provider */
+            provider: string;
+        };
+        /** RouteStopInput */
+        RouteStopInput: {
+            /** Label */
+            label: string;
+            /** Lat */
+            lat: number;
+            /** Lng */
+            lng: number;
+        };
+        /** SearchDriverCard */
+        SearchDriverCard: {
+            /** Displayname */
+            displayName: string;
+            /** Identityverified */
+            identityVerified: boolean;
+            /**
+             * Userid
+             * Format: uuid
+             */
+            userId: string;
+        };
+        /** SearchHint */
+        SearchHint: {
+            /** Date */
+            date?: string | null;
+            /** Destinationquery */
+            destinationQuery?: string | null;
+            /** Originquery */
+            originQuery?: string | null;
+            /** Time */
+            time?: string | null;
+        };
+        /** SearchTripItem */
+        SearchTripItem: {
+            /** Availableseats */
+            availableSeats: number;
+            /** Currency */
+            currency: string;
+            /**
+             * Departureat
+             * Format: date-time
+             */
+            departureAt: string;
+            /** Destinationlabel */
+            destinationLabel: string;
+            /** Destinationlat */
+            destinationLat: number;
+            /** Destinationlng */
+            destinationLng: number;
+            driver: components["schemas"]["SearchDriverCard"];
+            /** Dropoffdistancem */
+            dropoffDistanceM: number;
+            /**
+             * Estimatedarrivalat
+             * Format: date-time
+             */
+            estimatedArrivalAt: string;
+            matchKind: components["schemas"]["MatchKind"];
+            /** Originlabel */
+            originLabel: string;
+            /** Originlat */
+            originLat: number;
+            /** Originlng */
+            originLng: number;
+            /** Pickupdistancem */
+            pickupDistanceM: number;
+            /** Pricelabel */
+            priceLabel: string;
+            /** Priceperseatminor */
+            pricePerSeatMinor: number | null;
+            /** Totalseats */
+            totalSeats: number;
+            /**
+             * Tripid
+             * Format: uuid
+             */
+            tripId: string;
+            /** Vehicletype */
+            vehicleType: string;
+        };
+        /** SearchTripListResponse */
+        SearchTripListResponse: {
+            /** Items */
+            items: components["schemas"]["SearchTripItem"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** SessionListResponse */
+        SessionListResponse: {
+            /** Items */
+            items: components["schemas"]["SessionSummary"][];
+        };
+        /**
+         * SessionResponse
+         * @description Issued credentials.
+         *
+         *     Browsers receive the tokens as cookies and ignore the token fields; they are populated only
+         *     for non-browser clients, which ask for them with ``X-Client-Type: api``.
+         */
+        SessionResponse: {
+            /** Accesstoken */
+            accessToken?: string | null;
+            /**
+             * Accesstokenexpiresat
+             * Format: date-time
+             */
+            accessTokenExpiresAt: string;
+            /** Csrftoken */
+            csrfToken: string;
+            /** Refreshtoken */
+            refreshToken?: string | null;
+            /**
+             * Sessionid
+             * Format: uuid
+             */
+            sessionId: string;
+        };
+        /**
+         * SessionSummary
+         * @description One device in ``GET /me/sessions`` (BR-AUTH-08).
+         */
+        SessionSummary: {
+            /**
+             * Createdat
+             * Format: date-time
+             */
+            createdAt: string;
+            /** Current */
+            current: boolean;
+            /** Device */
+            device: string | null;
+            /**
+             * Expiresat
+             * Format: date-time
+             */
+            expiresAt: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Ipfingerprint */
+            ipFingerprint: string | null;
+            /** Lastusedat */
+            lastUsedAt: string | null;
+        };
+        /** SignedUrlResponse */
+        SignedUrlResponse: {
+            /** Expiresinseconds */
+            expiresInSeconds: number;
+            /** Url */
+            url: string;
+        };
+        /**
+         * StopKind
+         * @enum {string}
+         */
+        StopKind: "ORIGIN" | "WAYPOINT" | "DESTINATION";
+        /** TimeseriesPoint */
+        TimeseriesPoint: {
+            /** Count */
+            count: number;
+            /**
+             * Day
+             * Format: date-time
+             */
+            day: string;
+        };
+        /** TimeseriesResponse */
+        TimeseriesResponse: {
+            /** Items */
+            items: components["schemas"]["TimeseriesPoint"][];
+            /** Metric */
+            metric: string;
+        };
+        /** TripCancelRequest */
+        TripCancelRequest: {
+            /** Reason */
+            reason?: string | null;
+        };
+        /** TripCreateRequest */
+        TripCreateRequest: {
+            /**
+             * Departureat
+             * Format: date-time
+             */
+            departureAt: string;
+            /** Notes */
+            notes?: string | null;
+            /** Stops */
+            stops: components["schemas"]["TripStopInput"][];
+            /** Totalseats */
+            totalSeats: number;
+            /**
+             * Vehicleid
+             * Format: uuid
+             */
+            vehicleId: string;
+        };
+        /** TripListResponse */
+        TripListResponse: {
+            /** Items */
+            items: components["schemas"]["TripResponse"][];
+            /** Nextcursor */
+            nextCursor: string | null;
+        };
+        /** TripResponse */
+        TripResponse: {
+            /** Availableseats */
+            availableSeats: number;
+            /** Currency */
+            currency: string;
+            /**
+             * Departureat
+             * Format: date-time
+             */
+            departureAt: string;
+            /** Destinationlabel */
+            destinationLabel: string;
+            /** Destinationlat */
+            destinationLat: number;
+            /** Destinationlng */
+            destinationLng: number;
+            /** Distancem */
+            distanceM: number | null;
+            /**
+             * Driverid
+             * Format: uuid
+             */
+            driverId: string;
+            /** Durations */
+            durationS: number | null;
+            /**
+             * Estimatedarrivalat
+             * Format: date-time
+             */
+            estimatedArrivalAt: string;
+            /** Exactstops */
+            exactStops: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Notes */
+            notes: string | null;
+            /** Originlabel */
+            originLabel: string;
+            /** Originlat */
+            originLat: number;
+            /** Originlng */
+            originLng: number;
+            /** Pricelabel */
+            priceLabel: string;
+            /** Priceperseatminor */
+            pricePerSeatMinor: number | null;
+            /** Routecoordinates */
+            routeCoordinates: number[][];
+            status: components["schemas"]["TripStatus"];
+            /** Stops */
+            stops: components["schemas"]["TripStopResponse"][];
+            /** Totalseats */
+            totalSeats: number;
+            /**
+             * Vehicleid
+             * Format: uuid
+             */
+            vehicleId: string;
+            /** Version */
+            version: number;
+        };
+        /**
+         * TripStatus
+         * @enum {string}
+         */
+        TripStatus: "DRAFT" | "PUBLISHED" | "FULL" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "EXPIRED";
+        /** TripStopInput */
+        TripStopInput: {
+            /** Label */
+            label: string;
+            /** Lat */
+            lat: number;
+            /** Lng */
+            lng: number;
+        };
+        /** TripStopResponse */
+        TripStopResponse: {
+            kind: components["schemas"]["StopKind"];
+            /** Label */
+            label: string;
+            /** Lat */
+            lat: number;
+            /** Lng */
+            lng: number;
+            /** Routefraction */
+            routeFraction: number;
+            /** Sequence */
+            sequence: number;
+        };
+        /** TripUpdateRequest */
+        TripUpdateRequest: {
+            /** Departureat */
+            departureAt?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Stops */
+            stops?: components["schemas"]["TripStopInput"][] | null;
+            /** Totalseats */
+            totalSeats?: number | null;
+            /** Vehicleid */
+            vehicleId?: string | null;
+        };
+        /** UnreadCountResponse */
+        UnreadCountResponse: {
+            /** Unread */
+            unread: number;
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Context */
+            ctx?: Record<string, never>;
+            /** Input */
+            input?: unknown;
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+        };
+        /** VehicleCreateRequest */
+        VehicleCreateRequest: {
+            /** Color */
+            color: string;
+            /** Make */
+            make: string;
+            /** Model */
+            model: string;
+            /** Platenumber */
+            plateNumber: string;
+            /** Seatcapacity */
+            seatCapacity: number;
+            vehicleType: components["schemas"]["VehicleType"];
+            /** Year */
+            year: number;
+        };
+        /** VehicleDocumentResponse */
+        VehicleDocumentResponse: {
+            /** Bytesize */
+            byteSize: number;
+            documentType: components["schemas"]["VehicleDocumentType"];
+            /**
+             * Fileid
+             * Format: uuid
+             */
+            fileId: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Mimetype */
+            mimeType: string;
+            /** Originalname */
+            originalName: string;
+            status: components["schemas"]["ReviewStatus"];
+            /**
+             * Uploadedat
+             * Format: date-time
+             */
+            uploadedAt: string;
+        };
+        /**
+         * VehicleDocumentType
+         * @enum {string}
+         */
+        VehicleDocumentType: "REGISTRATION_FRONT" | "REGISTRATION_BACK" | "VEHICLE_PHOTO";
+        /** VehicleListResponse */
+        VehicleListResponse: {
+            /** Items */
+            items: components["schemas"]["VehicleResponse"][];
+        };
+        /** VehicleRegistrationRequest */
+        VehicleRegistrationRequest: {
+            /**
+             * Vehicleid
+             * Format: uuid
+             */
+            vehicleId: string;
+        };
+        /** VehicleResponse */
+        VehicleResponse: {
+            /** Color */
+            color: string;
+            /** Documents */
+            documents: components["schemas"]["VehicleDocumentResponse"][];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Make */
+            make: string;
+            /** Model */
+            model: string;
+            /**
+             * Owneruserid
+             * Format: uuid
+             */
+            ownerUserId: string;
+            /** Platenumber */
+            plateNumber: string;
+            /** Seatcapacity */
+            seatCapacity: number;
+            status: components["schemas"]["VehicleStatus"];
+            vehicleType: components["schemas"]["VehicleType"];
+            verificationStatus: components["schemas"]["ReviewStatus"];
+            /** Year */
+            year: number;
+        };
+        /**
+         * VehicleStatus
+         * @enum {string}
+         */
+        VehicleStatus: "ACTIVE" | "INACTIVE";
+        /**
+         * VehicleType
+         * @enum {string}
+         */
+        VehicleType: "SEDAN" | "HATCHBACK" | "SUV" | "VAN" | "MINIBUS" | "OTHER";
+        /** VehicleUpdateRequest */
+        VehicleUpdateRequest: {
+            /** Color */
+            color?: string | null;
+            /** Make */
+            make?: string | null;
+            /** Model */
+            model?: string | null;
+            /** Platenumber */
+            plateNumber?: string | null;
+            /** Seatcapacity */
+            seatCapacity?: number | null;
+            vehicleType?: components["schemas"]["VehicleType"] | null;
+            /** Year */
+            year?: number | null;
+        };
+        /** VerificationStatusResponse */
+        VerificationStatusResponse: {
+            driver: components["schemas"]["DriverStatusResponse"];
+            /** Identitydocuments */
+            identityDocuments: components["schemas"]["IdentityDocumentResponse"][];
+            /** Identityrejectionreason */
+            identityRejectionReason: string | null;
+            identityStatus: components["schemas"]["IdentityVerificationStatus"];
+            /** Reviewslahours */
+            reviewSlaHours: number;
+        };
+        /** VerifyEmailRequest */
+        VerifyEmailRequest: {
+            /** Token */
+            token: string;
         };
     };
     responses: never;
@@ -92,11 +3545,2971 @@ export interface components {
     headers: never;
     pathItems: never;
 }
+export type SchemaAcceptedResponse = components['schemas']['AcceptedResponse'];
+export type SchemaAccountResponse = components['schemas']['AccountResponse'];
+export type SchemaAccountStatus = components['schemas']['AccountStatus'];
+export type SchemaAdminContactResponse = components['schemas']['AdminContactResponse'];
+export type SchemaAdminDriverQueueItem = components['schemas']['AdminDriverQueueItem'];
+export type SchemaAdminDriverQueueResponse = components['schemas']['AdminDriverQueueResponse'];
+export type SchemaAdminIdentityQueueItem = components['schemas']['AdminIdentityQueueItem'];
+export type SchemaAdminIdentityQueueResponse = components['schemas']['AdminIdentityQueueResponse'];
+export type SchemaAdminModerationRequest = components['schemas']['AdminModerationRequest'];
+export type SchemaAdminReasonRequest = components['schemas']['AdminReasonRequest'];
+export type SchemaAdminReportDetailResponse = components['schemas']['AdminReportDetailResponse'];
+export type SchemaAdminReportListItem = components['schemas']['AdminReportListItem'];
+export type SchemaAdminReportListResponse = components['schemas']['AdminReportListResponse'];
+export type SchemaAdminReportStatusRequest = components['schemas']['AdminReportStatusRequest'];
+export type SchemaAdminRolesRequest = components['schemas']['AdminRolesRequest'];
+export type SchemaAdminTripListItem = components['schemas']['AdminTripListItem'];
+export type SchemaAdminTripListResponse = components['schemas']['AdminTripListResponse'];
+export type SchemaAdminUserDetailResponse = components['schemas']['AdminUserDetailResponse'];
+export type SchemaAdminUserListItem = components['schemas']['AdminUserListItem'];
+export type SchemaAdminUserListResponse = components['schemas']['AdminUserListResponse'];
+export type SchemaAdminVehicleListResponse = components['schemas']['AdminVehicleListResponse'];
+export type SchemaAnalyticsOverviewResponse = components['schemas']['AnalyticsOverviewResponse'];
+export type SchemaAppModulesChatSchemasMarkReadRequest = components['schemas']['app__modules__chat__schemas__MarkReadRequest'];
+export type SchemaAppModulesNotificationsSchemasMarkReadRequest = components['schemas']['app__modules__notifications__schemas__MarkReadRequest'];
+export type SchemaAppSettingListResponse = components['schemas']['AppSettingListResponse'];
+export type SchemaAppSettingResponse = components['schemas']['AppSettingResponse'];
+export type SchemaAppSettingUpdateRequest = components['schemas']['AppSettingUpdateRequest'];
+export type SchemaAssistantRequest = components['schemas']['AssistantRequest'];
+export type SchemaAssistantResponse = components['schemas']['AssistantResponse'];
+export type SchemaAuditLogItem = components['schemas']['AuditLogItem'];
+export type SchemaAuditLogListResponse = components['schemas']['AuditLogListResponse'];
+export type SchemaAutocompleteResponse = components['schemas']['AutocompleteResponse'];
+export type SchemaBlockCreate = components['schemas']['BlockCreate'];
+export type SchemaBlockListResponse = components['schemas']['BlockListResponse'];
+export type SchemaBlockResponse = components['schemas']['BlockResponse'];
+export type SchemaBodyUsersUploadPhoto = components['schemas']['Body_users_upload_photo'];
+export type SchemaBodyVehiclesUploadDocument = components['schemas']['Body_vehicles_upload_document'];
+export type SchemaBodyVerificationUploadIdentityDocument = components['schemas']['Body_verification_upload_identity_document'];
+export type SchemaBodyVerificationUploadLicence = components['schemas']['Body_verification_upload_licence'];
+export type SchemaCallContactListResponse = components['schemas']['CallContactListResponse'];
+export type SchemaCallContactResponse = components['schemas']['CallContactResponse'];
+export type SchemaChangePasswordRequest = components['schemas']['ChangePasswordRequest'];
+export type SchemaConversationListResponse = components['schemas']['ConversationListResponse'];
+export type SchemaConversationResponse = components['schemas']['ConversationResponse'];
+export type SchemaDeleteAccountResponse = components['schemas']['DeleteAccountResponse'];
+export type SchemaDriverStatusResponse = components['schemas']['DriverStatusResponse'];
+export type SchemaDriverSubmitRequest = components['schemas']['DriverSubmitRequest'];
+export type SchemaDriverVerificationStatus = components['schemas']['DriverVerificationStatus'];
+export type SchemaFeatureFlagListResponse = components['schemas']['FeatureFlagListResponse'];
+export type SchemaFeatureFlagResponse = components['schemas']['FeatureFlagResponse'];
+export type SchemaFeatureFlagUpdateRequest = components['schemas']['FeatureFlagUpdateRequest'];
 export type SchemaFieldError = components['schemas']['FieldError'];
+export type SchemaForgotPasswordRequest = components['schemas']['ForgotPasswordRequest'];
+export type SchemaGeocodeResponse = components['schemas']['GeocodeResponse'];
+export type SchemaHttpValidationError = components['schemas']['HTTPValidationError'];
+export type SchemaIdentityDocumentResponse = components['schemas']['IdentityDocumentResponse'];
+export type SchemaIdentityDocumentType = components['schemas']['IdentityDocumentType'];
+export type SchemaIdentityVerificationStatus = components['schemas']['IdentityVerificationStatus'];
+export type SchemaJoinCancelledBy = components['schemas']['JoinCancelledBy'];
+export type SchemaJoinPointInput = components['schemas']['JoinPointInput'];
+export type SchemaJoinRequestCreate = components['schemas']['JoinRequestCreate'];
+export type SchemaJoinRequestListResponse = components['schemas']['JoinRequestListResponse'];
+export type SchemaJoinRequestResponse = components['schemas']['JoinRequestResponse'];
+export type SchemaJoinRequestStatus = components['schemas']['JoinRequestStatus'];
+export type SchemaLicenceUploadResponse = components['schemas']['LicenceUploadResponse'];
+export type SchemaLoginRequest = components['schemas']['LoginRequest'];
+export type SchemaMapPoint = components['schemas']['MapPoint'];
+export type SchemaMarkReadResponse = components['schemas']['MarkReadResponse'];
+export type SchemaMatchKind = components['schemas']['MatchKind'];
+export type SchemaMessageCreate = components['schemas']['MessageCreate'];
+export type SchemaMessageKind = components['schemas']['MessageKind'];
+export type SchemaMessageListResponse = components['schemas']['MessageListResponse'];
+export type SchemaMessageResponse = components['schemas']['MessageResponse'];
+export type SchemaModerationActionType = components['schemas']['ModerationActionType'];
+export type SchemaNotificationChannel = components['schemas']['NotificationChannel'];
+export type SchemaNotificationListResponse = components['schemas']['NotificationListResponse'];
+export type SchemaNotificationResponse = components['schemas']['NotificationResponse'];
+export type SchemaNotificationType = components['schemas']['NotificationType'];
+export type SchemaPhoneConfirmRequest = components['schemas']['PhoneConfirmRequest'];
+export type SchemaPhoneStartRequest = components['schemas']['PhoneStartRequest'];
+export type SchemaPhoneStartResponse = components['schemas']['PhoneStartResponse'];
+export type SchemaPreferenceChange = components['schemas']['PreferenceChange'];
+export type SchemaPreferenceItem = components['schemas']['PreferenceItem'];
+export type SchemaPreferencesResponse = components['schemas']['PreferencesResponse'];
+export type SchemaPreferencesUpdateRequest = components['schemas']['PreferencesUpdateRequest'];
+export type SchemaPriceEstimateResponse = components['schemas']['PriceEstimateResponse'];
 export type SchemaProblem = components['schemas']['Problem'];
+export type SchemaProfileUpdateRequest = components['schemas']['ProfileUpdateRequest'];
 export type SchemaPublicConfig = components['schemas']['PublicConfig'];
+export type SchemaPublicProfileResponse = components['schemas']['PublicProfileResponse'];
+export type SchemaPushSubscriptionRequest = components['schemas']['PushSubscriptionRequest'];
+export type SchemaPushSubscriptionResponse = components['schemas']['PushSubscriptionResponse'];
+export type SchemaRatingCreate = components['schemas']['RatingCreate'];
+export type SchemaRatingResponse = components['schemas']['RatingResponse'];
+export type SchemaRatingSummaryResponse = components['schemas']['RatingSummaryResponse'];
+export type SchemaRefreshRequest = components['schemas']['RefreshRequest'];
+export type SchemaRegisterRequest = components['schemas']['RegisterRequest'];
+export type SchemaReportCreate = components['schemas']['ReportCreate'];
+export type SchemaReportListResponse = components['schemas']['ReportListResponse'];
+export type SchemaReportReason = components['schemas']['ReportReason'];
+export type SchemaReportResponse = components['schemas']['ReportResponse'];
+export type SchemaReportStatus = components['schemas']['ReportStatus'];
+export type SchemaReportTargetType = components['schemas']['ReportTargetType'];
+export type SchemaResendVerificationRequest = components['schemas']['ResendVerificationRequest'];
+export type SchemaResetPasswordRequest = components['schemas']['ResetPasswordRequest'];
+export type SchemaReviewRejectRequest = components['schemas']['ReviewRejectRequest'];
+export type SchemaReviewStatus = components['schemas']['ReviewStatus'];
+export type SchemaRole = components['schemas']['Role'];
+export type SchemaRoutePreviewRequest = components['schemas']['RoutePreviewRequest'];
+export type SchemaRoutePreviewResponse = components['schemas']['RoutePreviewResponse'];
+export type SchemaRouteStopInput = components['schemas']['RouteStopInput'];
+export type SchemaSearchDriverCard = components['schemas']['SearchDriverCard'];
+export type SchemaSearchHint = components['schemas']['SearchHint'];
+export type SchemaSearchTripItem = components['schemas']['SearchTripItem'];
+export type SchemaSearchTripListResponse = components['schemas']['SearchTripListResponse'];
+export type SchemaSessionListResponse = components['schemas']['SessionListResponse'];
+export type SchemaSessionResponse = components['schemas']['SessionResponse'];
+export type SchemaSessionSummary = components['schemas']['SessionSummary'];
+export type SchemaSignedUrlResponse = components['schemas']['SignedUrlResponse'];
+export type SchemaStopKind = components['schemas']['StopKind'];
+export type SchemaTimeseriesPoint = components['schemas']['TimeseriesPoint'];
+export type SchemaTimeseriesResponse = components['schemas']['TimeseriesResponse'];
+export type SchemaTripCancelRequest = components['schemas']['TripCancelRequest'];
+export type SchemaTripCreateRequest = components['schemas']['TripCreateRequest'];
+export type SchemaTripListResponse = components['schemas']['TripListResponse'];
+export type SchemaTripResponse = components['schemas']['TripResponse'];
+export type SchemaTripStatus = components['schemas']['TripStatus'];
+export type SchemaTripStopInput = components['schemas']['TripStopInput'];
+export type SchemaTripStopResponse = components['schemas']['TripStopResponse'];
+export type SchemaTripUpdateRequest = components['schemas']['TripUpdateRequest'];
+export type SchemaUnreadCountResponse = components['schemas']['UnreadCountResponse'];
+export type SchemaValidationError = components['schemas']['ValidationError'];
+export type SchemaVehicleCreateRequest = components['schemas']['VehicleCreateRequest'];
+export type SchemaVehicleDocumentResponse = components['schemas']['VehicleDocumentResponse'];
+export type SchemaVehicleDocumentType = components['schemas']['VehicleDocumentType'];
+export type SchemaVehicleListResponse = components['schemas']['VehicleListResponse'];
+export type SchemaVehicleRegistrationRequest = components['schemas']['VehicleRegistrationRequest'];
+export type SchemaVehicleResponse = components['schemas']['VehicleResponse'];
+export type SchemaVehicleStatus = components['schemas']['VehicleStatus'];
+export type SchemaVehicleType = components['schemas']['VehicleType'];
+export type SchemaVehicleUpdateRequest = components['schemas']['VehicleUpdateRequest'];
+export type SchemaVerificationStatusResponse = components['schemas']['VerificationStatusResponse'];
+export type SchemaVerifyEmailRequest = components['schemas']['VerifyEmailRequest'];
 export type $defs = Record<string, never>;
 export interface operations {
+    admin_analytics_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalyticsOverviewResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_analytics_timeseries: {
+        parameters: {
+            query: {
+                from: string;
+                metric: string;
+                to: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TimeseriesResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_audit_list: {
+        parameters: {
+            query?: {
+                action?: string | null;
+                actorId?: string | null;
+                page?: number;
+                page_size?: number;
+                targetType?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLogListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_flags_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureFlagListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_flags_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FeatureFlagUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureFlagResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reports_list: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+                status?: components["schemas"]["ReportStatus"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReportListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reports_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReportDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reports_action: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminModerationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reports_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminReportStatusRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReportDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_settings_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppSettingListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_settings_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppSettingUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppSettingResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_trips_search: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+                q?: string | null;
+                status?: components["schemas"]["TripStatus"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminTripListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_search: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+                q?: string | null;
+                role?: components["schemas"]["Role"] | null;
+                status?: components["schemas"]["AccountStatus"] | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_contact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminContactResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_deactivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminReasonRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminReasonRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_roles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminRolesRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_users_suspend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminReasonRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserDetailResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_list_vehicles: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminVehicleListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_get_vehicle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_approve_vehicle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_deactivate_vehicle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reject_vehicle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewRejectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_list_driver_verifications: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminDriverQueueResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_get_driver_verification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_approve_driver: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_approve_vehicle_registration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VehicleRegistrationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reject_driver: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewRejectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_document_download_url: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignedUrlResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_list_identity_verifications: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminIdentityQueueResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_get_identity_verification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_approve_identity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    admin_reject_identity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewRejectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    ai_assistant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_resend_verification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResendVerificationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptedResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_verify_email: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_change_password: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_forgot_password: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptedResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_reset_password: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["RefreshRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AcceptedResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_list_messages: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_send: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MessageCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_mark_read: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["app__modules__chat__schemas__MarkReadRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_accept: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_reject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    maps_autocomplete: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutocompleteResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    maps_geocode: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeocodeResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    maps_route_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoutePreviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutePreviewResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    users_get_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    users_delete_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeleteAccountResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    users_update_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProfileUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    blocks_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlockListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    blocks_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlockCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    blocks_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_list_mine: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_list_mine: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+                status?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    notification_preferences_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreferencesResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    notification_preferences_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferencesUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreferencesResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    notifications_list: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+                unreadOnly?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    notifications_mark_read: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["app__modules__notifications__schemas__MarkReadRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MarkReadResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    notifications_unread_count: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnreadCountResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    phone_start: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneStartRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PhoneStartResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    phone_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PhoneConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    users_upload_photo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_users_upload_photo"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    push_subscribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PushSubscriptionResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    push_unsubscribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    reports_list_mine: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_list_sessions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    auth_revoke_session: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_list_mine: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+                role?: string;
+                status?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    vehicles_list_mine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    vehicles_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VehicleCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    vehicles_get_mine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    vehicles_update_mine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VehicleUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    vehicles_deactivate_mine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    vehicles_upload_document: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                vehicle_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_vehicles_upload_document"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VehicleResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    verification_get_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    verification_upload_licence: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_verification_upload_licence"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LicenceUploadResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    verification_submit_driver: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DriverSubmitRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    verification_upload_identity_document: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_verification_upload_identity_document"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    verification_submit_identity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VerificationStatusResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     platform_get_public_config: {
         parameters: {
             query?: never;
@@ -113,6 +6526,546 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublicConfig"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    pricing_estimate: {
+        parameters: {
+            query: {
+                distanceM: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PriceEstimateResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    reports_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    search_trips: {
+        parameters: {
+            query: {
+                cursor?: string | null;
+                date: string;
+                dropoffLat: number;
+                dropoffLng: number;
+                limit?: number;
+                minRating?: number | null;
+                pickupLat: number;
+                pickupLng: number;
+                priceMax?: number | null;
+                seats?: number;
+                time?: string | null;
+                timeFrom?: string | null;
+                timeTo?: string | null;
+                vehicleType?: components["schemas"]["VehicleType"] | null;
+                verifiedOnly?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SearchTripListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_create: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TripCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_update: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+            };
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TripUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trip_call_contacts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CallContactListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["TripCancelRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_complete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_list_for_trip: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+                limit?: number;
+                status?: string | null;
+            };
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    join_requests_create: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinRequestCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JoinRequestResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_publish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    ratings_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RatingCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RatingResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_start: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                trip_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    users_get_public_profile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicProfileResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    ratings_summary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RatingSummaryResponse"];
                 };
             };
             /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */

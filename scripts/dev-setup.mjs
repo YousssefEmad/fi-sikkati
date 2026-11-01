@@ -4,14 +4,16 @@
  *
  *  1. Verifies required tooling (node, pnpm, uv, docker).
  *  2. Copies every `.env.example` to its local counterpart when missing (never overwrites).
- *  3. Starts the infrastructure containers (PostgreSQL/PostGIS, Redis, MinIO, Mailpit).
- *  4. Installs API dependencies and applies migrations.
- *  5. Installs web dependencies and regenerates the typed API client.
+ *  3. Generates the local development secrets that `.env.example` deliberately leaves empty.
+ *  4. Starts the infrastructure containers (PostgreSQL/PostGIS, Redis, MinIO, Mailpit).
+ *  5. Installs API dependencies and applies migrations.
+ *  6. Installs web dependencies and regenerates the typed API client.
  *
- * It never touches secrets and never runs against a non-development environment.
+ * It never overwrites an existing value and never runs against a non-development environment.
  */
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, readFileSync } from "node:fs";
+import { randomBytes } from "node:crypto";
+import { copyFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -56,7 +58,13 @@ function readEnv(file) {
       .filter((line) => line && !line.startsWith("#") && line.includes("="))
       .map((line) => {
         const index = line.indexOf("=");
-        return [line.slice(0, index).trim(), line.slice(index + 1).trim()];
+        const key = line.slice(0, index).trim();
+        let value = line.slice(index + 1).trim();
+        // Inline comments in .env.example must not become part of the value.
+        if (!value.startsWith('"') && !value.startsWith("'") && value.includes(" #")) {
+          value = value.slice(0, value.indexOf(" #")).trim();
+        }
+        return [key, value];
       }),
   );
 }
@@ -88,7 +96,8 @@ for (const [example, target] of ENV_FILES) {
   }
 }
 
-const apiEnv = readEnv(resolve(ROOT, "apps/api/.env"));
+const apiEnvPath = resolve(ROOT, "apps/api/.env");
+const apiEnv = readEnv(apiEnvPath);
 if (apiEnv.APP_ENV && apiEnv.APP_ENV !== "development") {
   console.error(
     `apps/api/.env has APP_ENV=${apiEnv.APP_ENV}; dev setup only runs for development.`,
@@ -96,15 +105,46 @@ if (apiEnv.APP_ENV && apiEnv.APP_ENV !== "development") {
   process.exit(1);
 }
 
-// 3. Infrastructure ----------------------------------------------------------------------------
+// 3. Local secrets -----------------------------------------------------------------------------
+// `.env.example` ships these keys empty on purpose: a committed signing key or pepper would be a
+// real secret in version control, even if it is "only for development".
+const GENERATED_SECRETS = {
+  // 32-byte Ed25519 seed for signing access tokens.
+  AUTH_JWT_PRIVATE_KEY: () => randomBytes(32).toString("base64"),
+  AUTH_PASSWORD_PEPPER: () => randomBytes(32).toString("base64"),
+  AUTH_CSRF_SECRET: () => randomBytes(32).toString("base64"),
+  AUTH_HASH_SECRET: () => randomBytes(32).toString("base64"),
+};
+
+function fillEmptySecrets(path) {
+  if (!existsSync(path)) return;
+  const original = readFileSync(path, "utf8");
+  let updated = original;
+  const filled = [];
+  for (const [key, generate] of Object.entries(GENERATED_SECRETS)) {
+    const pattern = new RegExp(`^${key}=[ \\t]*$`, "m");
+    if (pattern.test(updated)) {
+      updated = updated.replace(pattern, `${key}=${generate()}`);
+      filled.push(key);
+    }
+  }
+  if (filled.length > 0) {
+    writeFileSync(path, updated);
+    log(`generated local values for ${filled.join(", ")}`);
+  }
+}
+
+fillEmptySecrets(apiEnvPath);
+
+// 4. Infrastructure ----------------------------------------------------------------------------
 run("docker", ["compose", "-f", "infra/compose/docker-compose.yml", "up", "-d", "--wait"]);
 
-// 4. API ---------------------------------------------------------------------------------------
+// 5. API ---------------------------------------------------------------------------------------
 const [uvBin, ...uvPrefix] = uvCommand;
 run(uvBin, [...uvPrefix, "sync", "--frozen"], { cwd: "apps/api" });
 run(uvBin, [...uvPrefix, "run", "alembic", "upgrade", "head"], { cwd: "apps/api" });
 
-// 5. Web ---------------------------------------------------------------------------------------
+// 6. Web ---------------------------------------------------------------------------------------
 run("pnpm", ["install", "--frozen-lockfile"]);
 run("pnpm", ["types:generate"]);
 

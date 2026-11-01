@@ -1,7 +1,8 @@
 # Runbook — Local development
 
-Status: **DONE** (Phase 1). Covers starting/stopping the local stack, resetting the database and
-running every quality gate locally. Seeding is added in Phase 2 (no domain data exists yet).
+Status: **DONE** (Phase 1, updated Phase 2). Covers starting/stopping the local stack, resetting
+the database and running every quality gate locally. There is no trip seed in Phase 2: create an
+account through the web UI; Mailpit captures verification and reset emails.
 
 ## Preconditions
 

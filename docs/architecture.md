@@ -195,10 +195,10 @@ generated object keys (`<bucket>/<owner-uuid>/<uuid7>.<ext>`), no path from clie
 
 `maps.MapProvider` protocol: `geocode`, `autocomplete`, `reverse_geocode`, `route(stops) →
 RouteResult(geometry, distance_m, duration_s, provider_ref)`. Domain code depends only on the
-protocol. Provider implementation is selected by configuration once ⛔ OD-005 is approved; a
-deterministic `FakeMapProvider` exists for tests. Results are cached in Redis with provider-terms-
-compliant TTLs. The frontend uses the same provider family via a `MapView` component wrapper so
-the provider can be swapped in one place on each side.
+protocol. Provider implementation is Mapbox (OD-005 approved); a deterministic `FakeMapProvider`
+exists for tests and for local development without a token. Results are cached in Redis with
+provider-terms-compliant TTLs. The frontend uses the same provider family via a `MapView`
+component wrapper so the provider can be swapped in one place on each side.
 
 ### 3.8 AI module
 

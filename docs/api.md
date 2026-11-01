@@ -100,11 +100,12 @@ Each row maps to a backend module (`architecture.md` §2.1) and a permission
 | `POST /auth/refresh` | rotate refresh session |
 | `POST /auth/logout` | revoke current session |
 | `POST /auth/password/forgot`, `POST /auth/password/reset` | reset flow |
-| `POST /auth/email/verify`, `POST /auth/email/resend` | identifier verification (⛔ OD-004 may add `/auth/phone/*`) |
+| `POST /auth/email/verify`, `POST /auth/email/resend` | email verification (OD-004 approved: email is the identifier; `/auth/phone/*` only if SMS is approved later) |
+| `POST /auth/password/change` | authenticated password change; revokes other sessions (BR-AUTH-07) |
 | `GET /me`, `PATCH /me` | own account + profile |
 | `POST /me/photo` | upload profile photo (public bucket) |
 | `GET /me/sessions`, `DELETE /me/sessions/{sessionId}` | session management |
-| `DELETE /me` | account deletion — **BLOCKED** ⛔ OD-020 |
+| `DELETE /me` | account deletion per BR-ACC-07 (OD-020 approved): `409 DELETE_BLOCKED` while active trips or accepted requests exist |
 | `GET /users/{userId}/public-profile` | badges, display name, photo, rating summary, completed trips, member since |
 | `PUT /me/blocks/{userId}`, `DELETE /me/blocks/{userId}`, `GET /me/blocks` | blocking |
 
@@ -113,33 +114,41 @@ Each row maps to a backend module (`architecture.md` §2.1) and a permission
 | Method & path | Purpose |
 | --- | --- |
 | `GET /me/verification` | identity + driver verification status |
-| `POST /me/verification/identity/documents` | multipart upload → private bucket (⛔ OD-002 types) |
+| `POST /me/verification/identity/documents` | multipart upload → private bucket; types `NATIONAL_ID_FRONT`, `NATIONAL_ID_BACK`, `SELFIE` (OD-002 approved) |
 | `POST /me/verification/identity/submit` | submit for review |
-| `POST /me/verification/driver/submit` | submit driver application (licence + vehicle refs) |
+| `POST /me/verification/driver/documents` | multipart upload of the driving licence → private bucket |
+| `POST /me/verification/driver/submit` | submit driver application (licence file id + vehicle id + expiry) |
 
 ### 4.4 Vehicles (Phase 3) — module `vehicles`
 
 `GET /me/vehicles`, `POST /me/vehicles`, `GET /me/vehicles/{id}`, `PATCH /me/vehicles/{id}`,
-`POST /me/vehicles/{id}/deactivate`, `POST /me/vehicles/{id}/documents` (⛔ OD-024 types).
+`POST /me/vehicles/{id}/deactivate`, `POST /me/vehicles/{id}/documents` (types: `REGISTRATION_FRONT`, `REGISTRATION_BACK`, `VEHICLE_PHOTO`).
 
 ### 4.5 Trips (Phase 4) — module `trips`, `maps`, `pricing`
 
 | Method & path | Purpose |
 | --- | --- |
-| `GET /maps/autocomplete?q=`, `GET /maps/geocode`, `POST /maps/route-preview` | provider-abstracted map helpers (⛔ OD-005) |
-| `POST /trips` | create `DRAFT` (stops, departure, seats, vehicle, notes); server computes route + price |
+| `GET /maps/autocomplete?q=`, `GET /maps/geocode`, `POST /maps/route-preview` | provider-abstracted map helpers (OD-005 approved: Mapbox / fake) |
+| `POST /trips` | create `DRAFT` (stops, departure, seats, vehicle, notes); `Idempotency-Key` required; server computes route + price |
 | `GET /trips/{tripId}` | detail; privacy-filtered by relationship (BR-TRIP-10) |
-| `PATCH /trips/{tripId}` | edit (rules BR-TRIP-07, ⛔ OD-023); `If-Match: <version>` |
+| `PATCH /trips/{tripId}` | edit (BR-TRIP-07, OD-023); `If-Match: <version>` required |
 | `POST /trips/{tripId}/publish` / `/start` / `/complete` / `/cancel` | transitions (§3 state machine) |
 | `GET /me/trips?role=driver&status=` | driver's trips (cursor) |
-| `GET /me/trips?role=passenger&status=` | passenger's trips via accepted requests (cursor) |
-| `GET /pricing/estimate?distanceM=` | server-side price estimate from the active rule |
+| `GET /me/trips?role=passenger&status=` | passenger's trips via accepted requests (cursor); empty until Phase 6 |
+| `GET /pricing/estimate?distanceM=` | server-side suggested contribution from the active rule |
 
 ### 4.6 Search (Phase 5) — module `search`
 
-`GET /search/trips?pickupLat&pickupLng&dropoffLat&dropoffLng&date&timeFrom&timeTo&seats&verifiedOnly&minRating&vehicleType&priceMax&cursor`
-→ items with `matchKind: EXACT | ON_ROUTE`, `pickupDistanceM`, `dropoffDistanceM`, blurred
-points, driver card. Ordering per BR-MATCH-06. Auth per ⛔ OD-029.
+`GET /search/trips?pickupLat&pickupLng&dropoffLat&dropoffLng&date&time&timeFrom&timeTo&seats&verifiedOnly&minRating&vehicleType&priceMax&cursor`
+
+Required: pickup and drop-off coordinates, `date` (Africa/Cairo calendar date). Time window:
+`timeFrom`+`timeTo`, or `time` ± `matching.default_time_window_minutes`, or the whole local day
+if neither is sent. `seats` defaults to 1. `priceMax` is integer piastres. `minRating` has no
+ratings to join until Phase 8 — any provided value yields an empty list.
+
+Response items: `matchKind: EXACT | ON_ROUTE`, `pickupDistanceM`, `dropoffDistanceM`, blurred
+area points (never exact stops), driver card (display name, identity-verified, no plate).
+Ordering per BR-MATCH-06. Auth: signed-in (OD-029). Rate limit 60 / min per user.
 
 ### 4.7 Join requests (Phase 6) — module `bookings`
 

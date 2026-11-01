@@ -74,18 +74,23 @@ Types abbreviated: `uuid`, `text`, `citext`, `bool`, `int`, `bigint`, `tstz` (ti
 | Column | Type | Constraints |
 | --- | --- | --- |
 | id | uuid | PK |
-| email | citext | UNIQUE, NULL allowed only if ⛔ OD-004 makes phone primary |
-| phone_e164 | text | UNIQUE, NULL allowed (OD-004); CHECK E.164 format |
+| email | citext | NOT NULL, UNIQUE — the primary identifier (OD-004 approved) |
+| phone_e164 | text | UNIQUE, NULL allowed; CHECK E.164 format; never verified in the MVP |
 | password_hash | text | NOT NULL (argon2id) |
 | status | enum | `ACTIVE, SUSPENDED, DEACTIVATED, DELETED` |
 | email_verified_at | tstz | NULL |
-| phone_verified_at | tstz | NULL |
+| phone_verified_at | tstz | NULL — stays NULL until an SMS provider is approved |
 | identity_verification_status | enum | `NOT_SUBMITTED, PENDING, APPROVED, REJECTED` (denormalised from `identity_documents`) |
+| date_of_birth | date | NOT NULL; age ≥ `accounts.minimum_age_years` enforced in the service (OD-021) |
+| terms_version / privacy_version | text | NOT NULL — versions accepted at registration (OD-021) |
+| legal_accepted_at | tstz | NOT NULL |
 | locale | text | `ar`/`en`, default `ar` |
 | last_login_at | tstz | |
-| deleted_at / anonymised_at | tstz | for OD-020 workflow |
+| deletion_requested_at | tstz | NULL; start of the `accounts.deletion_grace_days` window (OD-020) |
+| deleted_at / anonymised_at | tstz | for the OD-020 workflow |
 
-Indexes: `UNIQUE(email)`, `UNIQUE(phone_e164)`, `(status)`.
+Indexes: `UNIQUE(email)`, `UNIQUE(phone_e164)`, `(status)`,
+`(deletion_requested_at) WHERE deletion_requested_at IS NOT NULL` for the anonymisation job.
 
 **user_profiles** (1:1)
 
@@ -120,12 +125,14 @@ blocked_id)`, CHECK `blocker_id <> blocked_id`, index `(blocked_id)`.
 | user_id | uuid | FK users CASCADE |
 | refresh_token_hash | text | UNIQUE (SHA-256 of opaque token) |
 | family_id | uuid | rotation family for reuse detection |
-| user_agent, ip_hash | text | |
-| expires_at | tstz | NOT NULL |
+| user_agent, ip_hash | text | user agent truncated; IP stored only as a keyed hash |
+| expires_at | tstz | NOT NULL — sliding window, extended on rotation |
+| absolute_expires_at | tstz | NOT NULL — hard cap for the family (`auth.refresh_absolute_ttl_days`) |
 | revoked_at | tstz | NULL |
+| revoked_reason | enum | NULL; `LOGOUT, ROTATED, REUSE_DETECTED, PASSWORD_CHANGED, PASSWORD_RESET, USER_REVOKED, ACCOUNT_CLOSED` |
 | last_used_at | tstz | |
 
-Indexes: `(user_id) WHERE revoked_at IS NULL`, `(expires_at)`.
+Indexes: `(user_id) WHERE revoked_at IS NULL`, `(expires_at)`, `(family_id)`.
 
 **password_reset_tokens** / **email_verification_tokens**: `id`, `user_id` FK CASCADE,
 `token_hash` UNIQUE, `expires_at`, `used_at`. Index `(user_id)`.
@@ -143,7 +150,7 @@ Indexes: `(user_id) WHERE revoked_at IS NULL`, `(expires_at)`.
 | mime_type, byte_size, sha256 | text/bigint/text | validated at upload |
 | original_name | text | sanitised, display only |
 | scan_status | enum | `NOT_SCANNED, CLEAN, INFECTED, SCAN_UNAVAILABLE` (see security.md §3) |
-| purge_after | tstz | NULL; set per retention policy (⛔ OD-009) |
+| purge_after | tstz | NULL; set to decision time + `verification.document_retention_days` (OD-009 approved) |
 | purged_at | tstz | |
 
 **identity_documents**
@@ -152,7 +159,7 @@ Indexes: `(user_id) WHERE revoked_at IS NULL`, `(expires_at)`.
 | --- | --- | --- |
 | id | uuid | PK |
 | user_id | uuid | FK users CASCADE |
-| document_type | enum | values ⛔ OD-002 (e.g. `NATIONAL_ID_FRONT, NATIONAL_ID_BACK, SELFIE`) |
+| document_type | enum | `NATIONAL_ID_FRONT, NATIONAL_ID_BACK, SELFIE` (OD-002 approved) |
 | file_id | uuid | FK stored_files RESTRICT |
 | status | enum | `PENDING, APPROVED, REJECTED` |
 | reviewed_by | uuid | FK users SET NULL |
@@ -185,13 +192,13 @@ Partial unique: `(user_id) WHERE status IN ('PENDING','APPROVED')`.
 | color | text | NOT NULL |
 | vehicle_type | enum | `SEDAN, HATCHBACK, SUV, VAN, MINIBUS, OTHER` |
 | seat_capacity | int | CHECK 2 ≤ seat_capacity ≤ 20 (incl. driver) |
-| plate_number | text | NOT NULL, normalised; visibility ⛔ OD-022 |
+| plate_number | text | NOT NULL, normalised; visibility BR-VEH-02 (OD-022 approved) |
 | status | enum | `ACTIVE, INACTIVE` |
 | verification_status | enum | `PENDING, APPROVED, REJECTED` |
 
 Indexes: `(owner_user_id)`, `(verification_status) WHERE verification_status = 'PENDING'`.
 
-**vehicle_documents**: `id`, `vehicle_id` FK CASCADE, `document_type` enum (⛔ OD-024),
+**vehicle_documents**: `id`, `vehicle_id` FK CASCADE, `document_type` enum (`REGISTRATION_FRONT`, `REGISTRATION_BACK`, `VEHICLE_PHOTO`; OD-024 approved),
 `file_id` FK stored_files RESTRICT, `status`, review columns. Index `(vehicle_id)`.
 
 ### 2.3 Trips
@@ -437,12 +444,12 @@ The corridor is precomputed at publish so the GiST index on `corridor` does the 
 | Relationship | Behaviour | Why |
 | --- | --- | --- |
 | user → sessions, tokens, roles, blocks, profile, preferences, notifications | CASCADE | pure ownership, no history value |
-| user → trips, join_requests, ratings, reports, moderation_actions, audit_logs | RESTRICT | history must survive; users are anonymised, not deleted (⛔ OD-020) |
+| user → trips, join_requests, ratings, reports, moderation_actions, audit_logs | RESTRICT | history must survive; users are anonymised, not deleted (BR-ACC-07) |
 | trip → routes, stops, conversation | CASCADE | trips are never hard-deleted in practice (status is terminal); cascade keeps test cleanup simple |
 | stored_files ← documents | RESTRICT | files are purged by the retention job after the referencing row is handled |
 | reviewed_by / granted_by / sender_id | SET NULL | attribution may disappear, record must not |
 
-## 7. Anonymisation design (mechanism only; policy ⛔ OD-020)
+## 7. Anonymisation design (mechanism; policy approved — BR-ACC-07)
 
 `users.status = DELETED`, `anonymised_at` set, `email`/`phone_e164`/`password_hash` replaced by
 irreversible placeholders, `user_profiles` display name → "Deleted user", photo unlinked,

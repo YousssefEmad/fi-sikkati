@@ -16,6 +16,13 @@ _EXPORT_ENV = {
     "DATABASE_URL": "postgresql+asyncpg://export:export@localhost:5432/export",
     "REDIS_URL": "redis://localhost:6379/0",
     "PUBLIC_WEB_URL": "http://localhost:3000",
+    "AUTH_JWT_ACTIVE_KID": "export-1",
+    "AUTH_JWT_PRIVATE_KEY": "ZXhwb3J0LWVkMjU1MTktc2VlZC0zMi1ieXRlcSE=",
+    "AUTH_PASSWORD_PEPPER": "export-pepper-" + "p" * 24,
+    "AUTH_CSRF_SECRET": "export-csrf-" + "c" * 24,
+    "AUTH_HASH_SECRET": "export-hash-" + "h" * 24,
+    "EMAIL_FROM_ADDRESS": "no-reply@fisikkati.app",
+    "SMTP_HOST": "127.0.0.1",
 }
 
 

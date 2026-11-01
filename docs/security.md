@@ -21,7 +21,7 @@ fake trips). Controls below map to MEP §9, §22, §38, §39, §73, §74.
 | Session listing | users see and revoke devices (FR-AUTH-05) |
 | Account enumeration | register/forgot-password respond identically whether or not the identifier exists; timing normalised; login error is generic |
 | Brute force | rate limits §7 + progressive delay per identifier; lockout is *not* used (DoS vector) |
-| Email verification | single-use hashed token, 24 h TTL; unverified accounts limited per ⛔ OD-004 |
+| Email verification | single-use hashed token, 24 h TTL; unverified accounts may sign in and manage their profile but cannot publish trips or request seats (BR-AUTH-05) |
 
 ## 2. Authorization
 
@@ -39,7 +39,7 @@ database. WebSocket subscriptions re-check membership.
 | Access | only through `GET /admin/verifications/…/download-url` → presigned GET, TTL 120 s, `Content-Disposition: attachment`; every issuance writes `DOCUMENT_VIEWED` to `audit_logs` |
 | Users' own documents | never downloadable; metadata only |
 | Upload validation | size ≤ 10 MiB; extension allow-list `jpg jpeg png pdf`; MIME sniffed from bytes (`python-magic`), must agree with extension; images re-encoded (strips EXIF/GPS, defuses polyglots); PDFs checked for JavaScript/embedded files and rejected if present; AV scan (ClamAV sidecar) where infrastructure allows — recorded in `stored_files.scan_status` |
-| Retention | `purge_after` set on decision per ⛔ OD-009; nightly purge job deletes object + marks row |
+| Retention | `purge_after` set on decision to now + `verification.document_retention_days` (30, OD-009 approved); nightly purge job deletes the object and sets `purged_at` |
 | Never | in PostgreSQL, in logs, in public bucket, in error messages, in analytics |
 
 Profile photos go to `public-media` after the same validation + re-encoding + resizing.
@@ -54,7 +54,7 @@ Profile photos go to `public-media` after the same validation + re-encoding + re
 | Home address | never stored as such; users pick pickup points, which are still blurred for non-parties |
 | Email | never public |
 | Full legal name | private; `display_name` is public |
-| Licence plate | ⛔ OD-022 |
+| Licence plate | owner + ADMIN + accepted trip parties only (OD-022 approved; BR-VEH-02) |
 | Moderation data, reports, strikes | never shown to other users |
 
 Users are informed in the privacy policy page (FR-PUB-02) how data is used; the analytics event
@@ -87,7 +87,7 @@ no wildcard.
 | verification uploads | 20 / day per user |
 | `POST …/messages` | 30 / min per user (`chat.rate_limit_per_minute`) |
 | `POST /reports` | 10 / day per user |
-| `GET /search/trips` | 60 / min per user (120 per IP if ⛔ OD-029 allows anonymous) |
+| `GET /search/trips` | 60 / min per user |
 | `POST /ai/assistant` | 30 / hour per user |
 | `POST /trips/{id}/join-requests` | 20 / hour per user |
 | global | 600 / min per user, 300 / min per IP anonymous |

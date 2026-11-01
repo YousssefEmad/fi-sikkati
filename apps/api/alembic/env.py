@@ -17,6 +17,24 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.core.config import get_settings
 from app.core.database import Base
 
+# Importing every module's models registers their tables on ``Base.metadata``, which is what
+# autogenerate and ``alembic check`` compare the database against.
+from app.modules.admin import models as admin_models  # noqa: F401
+from app.modules.ai import models as ai_models  # noqa: F401
+from app.modules.audit import models as audit_models  # noqa: F401
+from app.modules.auth import models as auth_models  # noqa: F401
+from app.modules.bookings import models as bookings_models  # noqa: F401
+from app.modules.chat import models as chat_models  # noqa: F401
+from app.modules.files import models as files_models  # noqa: F401
+from app.modules.maps import fake as maps_fake  # noqa: F401
+from app.modules.notifications import models as notifications_models  # noqa: F401
+from app.modules.pricing import models as pricing_models  # noqa: F401
+from app.modules.safety import models as safety_models  # noqa: F401
+from app.modules.trips import models as trips_models  # noqa: F401
+from app.modules.users import models as users_models  # noqa: F401
+from app.modules.vehicles import models as vehicles_models  # noqa: F401
+from app.modules.verification import models as verification_models  # noqa: F401
+
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

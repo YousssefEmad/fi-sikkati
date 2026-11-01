@@ -1,0 +1,88 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Field, FormError, TextInput } from "@/components/ui/field";
+import { ApiRequestError, signIn } from "@/features/auth/api";
+import { onValidSubmit } from "@/features/auth/form-submit";
+import { useSession } from "@/features/auth/session-provider";
+import { Link, useRouter } from "@/i18n/navigation";
+
+export function SignInForm() {
+  const t = useTranslations("Auth");
+  const router = useRouter();
+  const { refreshAccount } = useSession();
+  const [formError, setFormError] = useState<string | undefined>();
+
+  const schema = z.object({
+    email: z.email(t("errors.email")),
+    password: z.string().min(1, t("errors.required")),
+  });
+  type Values = z.infer<typeof schema>;
+
+  const form = useForm<Values>({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  async function onSubmit(values: Values) {
+    setFormError(undefined);
+    try {
+      await signIn(values.email, values.password);
+      await refreshAccount();
+      router.replace("/me");
+    } catch (error) {
+      setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+    }
+  }
+
+  return (
+    <form
+      className="flex flex-col gap-5"
+      method="post"
+      onSubmit={onValidSubmit(form.handleSubmit, onSubmit)}
+      noValidate
+    >
+      <Field id="email" label={t("email")} error={form.formState.errors.email?.message}>
+        <TextInput id="email" type="email" autoComplete="email" {...form.register("email")} />
+      </Field>
+      <Field id="password" label={t("password")} error={form.formState.errors.password?.message}>
+        <TextInput
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          {...form.register("password")}
+        />
+      </Field>
+      <p className="text-sm">
+        <Link
+          href="/auth/forgot-password"
+          className="text-primary font-semibold underline-offset-4 hover:underline"
+        >
+          {t("forgotLink")}
+        </Link>
+      </p>
+      <FormError message={formError} />
+      <Button type="submit" block disabled={form.formState.isSubmitting}>
+        {form.formState.isSubmitting ? t("submitting") : t("signInSubmit")}
+      </Button>
+      <p className="text-muted-foreground text-center text-sm">
+        {t.rich("needAccount", {
+          link: (chunks) => (
+            <Link
+              href="/auth/register"
+              className="text-primary font-semibold underline-offset-4 hover:underline"
+            >
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
+    </form>
+  );
+}

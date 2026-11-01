@@ -74,20 +74,20 @@ DRIVER PUBLISHES TRIP → PASSENGERS DISCOVER TRIP → PASSENGER REQUESTS TO JOI
 
 | ID | Requirement | Dependency |
 | --- | --- | --- |
-| FR-AUTH-01 | Users register with full name, password, phone number, and email; city/general location optional. Only required data is collected. | OD-004 decides which identifier (email or phone) is primary/verified |
+| FR-AUTH-01 | Users register with full name, password, phone number, and email; city/general location optional. Only required data is collected. | OD-004 **APPROVED**: email is the identifier; phone is optional and unverified |
 | FR-AUTH-02 | Users log in and out; sessions use short-lived access tokens and rotating refresh sessions (ADR-0004). | — |
-| FR-AUTH-03 | Users can request a password reset and set a new password via a single-use, expiring link. | OD-019 (email provider) |
-| FR-AUTH-04 | Users can view/edit their profile: display name, profile photo, city, preferred language. | — |
+| FR-AUTH-03 | Users can request a password reset and set a new password via a single-use, expiring link. | OD-019 **APPROVED** (SMTP port; production vendor still a later approval) |
+| FR-AUTH-04 | Users can view/edit their profile: display name, city, preferred language, bio, phone. Profile photo waits for the files module (Phase 3). | — |
 | FR-AUTH-05 | Users can list and revoke their active sessions/devices. | — |
 | FR-AUTH-06 | Account statuses: `ACTIVE`, `SUSPENDED`, `DEACTIVATED`, `DELETED`. Suspended/deactivated users cannot authenticate. | — |
 | FR-AUTH-07 | Registration, login and reset endpoints are rate-limited and resistant to account enumeration. | — |
-| FR-AUTH-08 | Account deletion workflow exists and follows the approved policy. | **BLOCKED** OD-020 |
+| FR-AUTH-08 | Account deletion workflow exists and follows the approved policy. | OD-020 **APPROVED** (BR-ACC-07) |
 
 ### 3.2 Identity verification (Phase 2 basic workflow, Phase 3 documents)
 
 | ID | Requirement | Dependency |
 | --- | --- | --- |
-| FR-VER-01 | Users can submit identity verification (document type + private file upload). Status: `NOT_SUBMITTED`, `PENDING`, `APPROVED`, `REJECTED`. | OD-002 (which documents; when mandatory) |
+| FR-VER-01 | Users can submit identity verification (document type + private file upload). Status: `NOT_SUBMITTED`, `PENDING`, `APPROVED`, `REJECTED`. Status is stored on the account in Phase 2; document upload is Phase 3 (`files` + private bucket). | OD-002 **APPROVED**: required before the first join request |
 | FR-VER-02 | Admins review pending submissions, approve or reject with a reason; user is notified. | — |
 | FR-VER-03 | Identity documents are private: never public URLs, access is audited, retention is enforced. | OD-009 (retention period) |
 | FR-VER-04 | Verified identity is shown as a badge; the underlying data is never shown to other users. | — |

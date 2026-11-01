@@ -16,11 +16,17 @@ export type PublicConfig = Schemas["PublicConfig"];
 export type Problem = Schemas["Problem"];
 
 export const REQUEST_ID_HEADER = "X-Request-Id";
+export const CSRF_HEADER_NAME = "X-CSRF-Token";
 
 export interface CreateApiClientOptions extends Omit<ClientOptions, "baseUrl"> {
   baseUrl: string;
   /** Called with the `X-Request-Id` of every response — useful for support tooling and logs. */
   onRequestId?: (requestId: string) => void;
+  /**
+   * Cookie-authenticated mutations need the double-submit CSRF token (ADR-0004). Browsers read
+   * it from the last session response; bearer clients leave this unset.
+   */
+  getCsrfToken?: () => string | null | undefined;
 }
 
 /**
@@ -28,19 +34,26 @@ export interface CreateApiClientOptions extends Omit<ClientOptions, "baseUrl"> {
  * browser client works with the cookie-based session (ADR-0004).
  */
 export function createApiClient(options: CreateApiClientOptions) {
-  const { onRequestId, ...clientOptions } = options;
+  const { onRequestId, getCsrfToken, ...clientOptions } = options;
   const client = createClient<paths>({ credentials: "include", ...clientOptions });
 
-  if (onRequestId) {
-    const requestIdMiddleware: Middleware = {
-      onResponse({ response }) {
+  const middleware: Middleware = {
+    onRequest({ request }) {
+      const csrf = getCsrfToken?.();
+      if (csrf) {
+        request.headers.set(CSRF_HEADER_NAME, csrf);
+      }
+      return request;
+    },
+    onResponse({ response }) {
+      if (onRequestId) {
         const id = response.headers.get(REQUEST_ID_HEADER);
         if (id) onRequestId(id);
-        return response;
-      },
-    };
-    client.use(requestIdMiddleware);
-  }
+      }
+      return response;
+    },
+  };
+  client.use(middleware);
 
   return client;
 }

@@ -3,9 +3,8 @@
 Community ride-sharing and route-matching platform. Drivers publish trips they are already
 planning to make; passengers find people already going their way and request to join.
 
-> Status: **Phase 1 — Foundation complete**; product features start in Phase 2 once the
-> open decisions it depends on are approved. See [`docs/project-status.md`](docs/project-status.md)
-> for the authoritative phase tracker.
+> Status: **Phase 6 — Join Requests & Seat Management complete**.
+> See [`docs/project-status.md`](docs/project-status.md) for the authoritative phase tracker.
 
 ## What this is (and is not)
 

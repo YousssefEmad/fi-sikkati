@@ -9,7 +9,25 @@
     "skipToContent": "Skip to main content",
     "language": "Language",
     "comingSoon": "Coming soon",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "register": "Create account",
+    "myTrips": "My trips",
+    "findRide": "Find a ride",
+    "loading": "Loading…",
+    "messages": "Messages",
+    "communityChat": "Community chat",
+    "account": "Account",
+    "suggestEmpty": "No matches. Try another spelling."
+  },
+  "Nav": {
+    "app": "App",
+    "findRide": "Search",
+    "myTrips": "Trips",
+    "messages": "Chat",
+    "account": "Account",
+    "notifications": "Notifications"
   },
   "Landing": {
     "eyebrow": "Ride-sharing · El Obour City",
@@ -17,7 +35,8 @@
     "subheadline": "Not a taxi, not a car on demand. Neighbours heading the same way publish their trips, and you find the one that fits your route and your timing, then ask for a seat.",
     "ctaPassenger": "Find a ride",
     "ctaDriver": "Publish your trip",
-    "statusNote": "The platform is still being built — accounts and trips open with the first release.",
+    "ctaCommunity": "Community chat",
+    "statusNote": "Search, request a seat, chat with the driver, and rate the trip — all inside the app.",
     "preview": {
       "label": "Design preview",
       "driver": "Karim A.",
@@ -88,9 +107,9 @@
     },
     "closing": {
       "title": "Let's make the El Obour commute easier",
-      "body": "We are building the platform step by step. The first release opens registration, trip publishing and search.",
+      "body": "Create an account, confirm your email and mobile, then search for a trip or publish your own.",
       "cta": "Create an account",
-      "note": "Registration opens with the first release."
+      "note": "This is a trial build. Search, publishing and chat work after you sign in."
     }
   },
   "SystemStatus": {
@@ -112,6 +131,589 @@
     "blurb": "Community ride-sharing between residents of El Obour and nearby areas — structure for what used to live in WhatsApp groups.",
     "location": "El Obour City, Qalyubia — Egypt",
     "buildNote": "Pre-release build",
-    "rights": "© {year} Fi Sikkati. All rights reserved."
+    "rights": "© {year} Fi Sikkati. All rights reserved.",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "how": "How it works",
+    "safety": "Safety",
+    "faq": "FAQ",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "Auth": {
+    "loading": "Checking your session…",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least {min} characters.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "displayName": "Display name",
+    "fullName": "Full name",
+    "dateOfBirth": "Date of birth",
+    "ageHint": "You must be {age} or older.",
+    "phone": "Mobile number",
+    "phoneHint": "For example 01012345678.",
+    "registerTitle": "Create your account",
+    "registerBody": "One account works as passenger, and as a driver later if you are approved.",
+    "registerSubmit": "Create account",
+    "signInTitle": "Sign in",
+    "signInBody": "Welcome back. Use the email you registered with.",
+    "signInSubmit": "Sign in",
+    "forgotTitle": "Forgot your password?",
+    "forgotBody": "If an account exists for that address, we send a reset link. The response is the same either way.",
+    "forgotSubmit": "Send reset link",
+    "forgotSent": "If that address has an account, a reset email is on its way.",
+    "forgotLink": "Forgot password?",
+    "resetTitle": "Choose a new password",
+    "resetBody": "This link works once and expires shortly.",
+    "resetSubmit": "Save password",
+    "verifyTitle": "Confirm your email",
+    "verifyBody": "We are confirming the address attached to this link.",
+    "verifying": "Confirming…",
+    "verifyOk": "Your email is confirmed. You can sign in.",
+    "checkEmailTitle": "Check your email",
+    "checkEmailBody": "If that address can be used, a confirmation message is on its way. Confirm it before you expect a fully set-up account.",
+    "checkEmailDevHint": "On this development machine, open Mailpit at http://localhost:8025 to read the message.",
+    "acceptLegal": "I accept the <terms>terms of use</terms> and the <privacy>privacy notice</privacy>.",
+    "haveAccount": "Already have an account? <link>Sign in</link>",
+    "needAccount": "New here? <link>Create an account</link>",
+    "backToSignIn": "Back to sign in",
+    "submitting": "Please wait…",
+    "missingToken": "This link is missing its token. Request a new email.",
+    "errors": {
+      "email": "Enter a valid email address.",
+      "required": "This field is required.",
+      "passwordMin": "Use at least {min} characters.",
+      "passwordMatch": "The two passwords do not match.",
+      "displayName": "Display name must be at least 2 characters.",
+      "displayNameTaken": "That name is already used, or too close to another account. Choose a different one.",
+      "fullName": "Full name must be at least 2 characters.",
+      "tooYoung": "You must be at least {age} years old.",
+      "phone": "Enter an Egyptian mobile number such as 01012345678.",
+      "legal": "You need to accept the terms and the privacy notice.",
+      "generic": "Something went wrong. Try again."
+    }
+  },
+  "Account": {
+    "title": "Your account",
+    "loading": "Loading…",
+    "verifyBanner": "Confirm your email from the message we sent. You can still use the account in the meantime.",
+    "verificationLabel": "Identity verification",
+    "verificationStatusLine": "Identity verification: {status}",
+    "verificationStatus": {
+      "NOT_SUBMITTED": "Not submitted. You will need this before requesting a seat.",
+      "PENDING": "Under review.",
+      "APPROVED": "Verified.",
+      "REJECTED": "Needs a new submission."
+    },
+    "navProfile": "Profile",
+    "navSessions": "Devices",
+    "navSecurity": "Security",
+    "navVerification": "Identity",
+    "navDrive": "Drive",
+    "navTrips": "My trips",
+    "navRequests": "My requests",
+    "navSearch": "Find a ride",
+    "navMessages": "Messages",
+    "navNotifications": "Notifications",
+    "navSafety": "Safety",
+    "navAssistant": "Assistant",
+    "navAdmin": "Reviews",
+    "photo": "Profile photo",
+    "photoHint": "JPEG or PNG, up to 10 MB.",
+    "photoSave": "Upload photo",
+    "photoUploading": "Uploading…",
+    "displayName": "Display name",
+    "fullName": "Full name",
+    "city": "City",
+    "phone": "Phone",
+    "phoneHint": "International format, for example +2010xxxxxxx",
+    "phoneTitle": "Mobile number",
+    "phoneBody": "Confirm your number so the driver and passengers can call each other after a seat is accepted. Nobody else sees it.",
+    "phoneSend": "Send confirmation code",
+    "phoneCode": "Confirmation code",
+    "phoneConfirm": "Confirm number",
+    "phoneOn": "{phone} is confirmed.",
+    "phoneDev": "No SMS provider is connected on this machine. The code is {code}.",
+    "phoneError": "The number could not be confirmed. Try again.",
+    "bio": "Bio",
+    "locale": "Language",
+    "localeAr": "Arabic",
+    "localeEn": "English",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "sessionsTitle": "Signed-in devices",
+    "sessionsBody": "End a session if you no longer recognise the device.",
+    "thisDevice": "This device",
+    "unknownDevice": "Unknown device",
+    "lastUsed": "Last used: {time}",
+    "never": "never",
+    "revokeSession": "Sign out",
+    "backToAccount": "Back to account",
+    "securityTitle": "Security",
+    "changePassword": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "savePassword": "Update password",
+    "passwordChanged": "Password updated. Other devices were signed out.",
+    "deleteTitle": "Close this account",
+    "deleteBody": "The account closes immediately. Personal data is anonymised after {days} days, unless you sign in again during that window.",
+    "deleteConfirm": "Type your email to confirm",
+    "deleteSubmit": "Close account",
+    "deleteMismatch": "That does not match the account email.",
+    "errors": {
+      "generic": "Something went wrong. Try again.",
+      "displayNameTaken": "That name is already used, or too close to another account. Choose a different one.",
+      "passwordMin": "Use at least {min} characters.",
+      "passwordMatch": "The two passwords do not match."
+    }
+  },
+  "Legal": {
+    "termsTitle": "Terms of use",
+    "privacyTitle": "Privacy notice",
+    "version": "Version {version}",
+    "termsP1": "Fi Sikkati is a community route-matching service, not a taxi or ride-hailing marketplace. Drivers publish trips they already plan to make; passengers request seats. Nobody is dispatched a car.",
+    "termsP2": "You must be 18 or older. You are responsible for the information you provide, for how you behave on trips, and for any cash arrangement you make off the platform. The service does not take payments in this version.",
+    "termsP3": "We may suspend or close accounts that abuse the community. These terms are the version you accept at registration; a lawyer-reviewed production text will replace them before public launch.",
+    "privacyP1": "We collect the account data you submit (name, email, date of birth, optional phone and city) to operate the service. Email is the sign-in identifier. Phone numbers are stored unverified until an SMS provider is separately approved.",
+    "privacyP2": "Passwords are stored as Argon2id hashes. Session cookies are HttpOnly. Identity and vehicle documents are stored in a private bucket, visible only to administrators through short-lived audited links, and purged 30 days after a decision.",
+    "privacyP3": "You can close your account from settings. After a grace period the profile is anonymised; security audit records are kept. This notice is the version you accept at registration."
+  },
+  "Verification": {
+    "title": "Identity verification",
+    "intro": "National ID front and back plus a selfie. Required before you request a seat, and before you apply to drive.",
+    "sla": "Reviews usually take up to {hours} hours.",
+    "status": "Status: {status}",
+    "rejection": "Reason: {reason}",
+    "front": "National ID — front",
+    "back": "National ID — back",
+    "selfie": "Selfie",
+    "uploaded": "Uploaded: {name}",
+    "choose": "Choose file",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "submit": "Submit for review",
+    "submitting": "Submitting…",
+    "submitted": "Submitted. We will email you when it is reviewed.",
+    "locked": "Documents are locked while this application is under review or already approved.",
+    "errors": {
+      "generic": "Could not upload that file.",
+      "submit": "Could not submit the application."
+    }
+  },
+  "Drive": {
+    "title": "Drive with Fi Sikkati",
+    "intro": "Add a vehicle, upload the registration, then send your driving licence. Identity must already be verified.",
+    "licence": "Driving licence",
+    "licenceExpiry": "Licence expiry date",
+    "uploadLicence": "Upload licence",
+    "submit": "Apply to drive",
+    "submitting": "Submitting…",
+    "submitted": "Application submitted.",
+    "needIdentity": "Verify your identity first.",
+    "needVehicle": "Register a vehicle and upload both sides of the registration first.",
+    "publishTrip": "Publish a trip",
+    "status": "Driver status: {status}",
+    "none": "Not applied",
+    "PENDING": "Under review",
+    "APPROVED": "Approved",
+    "REJECTED": "Needs a new application",
+    "REVOKED": "Revoked",
+    "errors": {
+      "generic": "Could not submit the driver application."
+    }
+  },
+  "Vehicles": {
+    "title": "Your vehicles",
+    "add": "Add vehicle",
+    "make": "Make",
+    "model": "Model",
+    "year": "Year",
+    "color": "Colour",
+    "type": "Type",
+    "seats": "Seats (including driver)",
+    "plate": "Licence plate",
+    "plateHint": "Visible to you, administrators, and accepted passengers only.",
+    "save": "Save vehicle",
+    "saving": "Saving…",
+    "documents": "Registration documents",
+    "front": "Registration — front",
+    "back": "Registration — back",
+    "photo": "Vehicle photo (optional)",
+    "deactivate": "Deactivate",
+    "empty": "No vehicles yet.",
+    "status": "{status}",
+    "summary": "{make} {model} · {plate}",
+    "types": {
+      "SEDAN": "Sedan",
+      "HATCHBACK": "Hatchback",
+      "SUV": "SUV",
+      "VAN": "Van",
+      "MINIBUS": "Minibus",
+      "OTHER": "Other"
+    },
+    "errors": {
+      "generic": "Could not save the vehicle."
+    }
+  },
+  "Admin": {
+    "title": "Verification queue",
+    "identity": "Identity",
+    "driver": "Drivers",
+    "empty": "Nothing waiting.",
+    "staffOnly": "Reviewing requests is for admins and the super admin.",
+    "reviewHint": "Read the documents first. Accept or reject after that.",
+    "vehicleSummary": "{make} {model} · {year} · {color} · {plate}",
+    "documentLabel": "{type} · {name}",
+    "applicant": "{name} · {email}",
+    "approve": "Approve",
+    "reject": "Reject",
+    "reason": "Rejection reason",
+    "openFile": "Open document",
+    "back": "Back to queue",
+    "errors": {
+      "generic": "Could not complete that review."
+    }
+  },
+  "Trips": {
+    "createTitle": "Publish a trip",
+    "createIntro": "This is a trip you are already making. We compute the route and the suggested contribution on the server.",
+    "listTitle": "My trips",
+    "empty": "No trips yet.",
+    "ridingTitle": "Trips I'm riding",
+    "ridingEmpty": "No accepted seats yet.",
+    "needDriver": "Only approved drivers can publish a trip.",
+    "vehicle": "Vehicle",
+    "chooseVehicle": "Choose an approved vehicle",
+    "vehicleLabel": "{make} {model}",
+    "origin": "Origin",
+    "destination": "Destination",
+    "searchPlace": "Search place",
+    "departure": "Departure",
+    "seats": "Passenger seats",
+    "notes": "Notes for passengers",
+    "preview": "Preview route",
+    "saveDraft": "Save draft",
+    "saving": "Saving…",
+    "loading": "Loading…",
+    "publish": "Publish",
+    "start": "Start trip",
+    "complete": "Complete trip",
+    "cancel": "Cancel trip",
+    "saveNotes": "Save notes",
+    "price": "Suggested contribution: {amount} EGP ({km} km)",
+    "seatsLeft": "{available} of {total} seats free",
+    "seatsFilled": "{filled} taken · {available} of {total} free",
+    "tripChat": "Open trip chat",
+    "needPhone": "Confirm your mobile number before publishing this trip or calling passengers.",
+    "callTitle": "Call",
+    "callBody": "After a seat is accepted, you can call the driver or the other passengers on their confirmed numbers.",
+    "callButton": "Call",
+    "callEmpty": "Nobody else on this trip has a confirmed number yet.",
+    "summary": "{origin} → {destination}",
+    "routeSketch": "Route sketch",
+    "approximateLocation": "Pickup and drop-off points are approximate until a request is accepted.",
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published",
+      "FULL": "Full",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired"
+    },
+    "errors": {
+      "generic": "Could not update the trip."
+    }
+  },
+  "Search": {
+    "title": "Find a ride",
+    "intro": "Search published trips already going your way, then request a seat from the trip.",
+    "pickup": "Pickup",
+    "dropoff": "Drop-off",
+    "searchPlace": "Search place",
+    "date": "Date",
+    "time": "Time (optional)",
+    "seats": "Seats",
+    "submit": "Search trips",
+    "empty": "No published trips match this pickup, drop-off and time.",
+    "viewTrip": "View trip",
+    "driverLine": "{kind} · {name}",
+    "summary": "{origin} → {destination}",
+    "seatsLeft": "{available} of {total} seats free",
+    "price": "Suggested contribution: {amount} EGP",
+    "loading": "Searching…",
+    "match": {
+      "EXACT": "Stops near your points",
+      "ON_ROUTE": "On the way"
+    },
+    "errors": {
+      "generic": "Could not search trips."
+    }
+  },
+  "Bookings": {
+    "requestTitle": "Request a seat",
+    "incomingTitle": "Join requests",
+    "mineTitle": "My requests",
+    "empty": "No requests yet.",
+    "pickup": "Pickup",
+    "dropoff": "Drop-off",
+    "searchPlace": "Search place",
+    "seats": "Seats",
+    "note": "Note for the driver",
+    "submit": "Request seat",
+    "sending": "Sending…",
+    "accept": "Accept",
+    "reject": "Decline",
+    "cancel": "Cancel request",
+    "needEmail": "Confirm your email before requesting a seat.",
+    "needPhone": "Confirm your mobile number before requesting a seat or calling anyone on the trip.",
+    "phoneLink": "Confirm number",
+    "needIdentity": "Verify your identity before requesting a seat.",
+    "verifyLink": "Open identity verification",
+    "verified": "Identity verified",
+    "unverified": "Identity not verified",
+    "cancellations": "{count} cancellations in the last 90 days",
+    "metaLine": "{verification} · {cancellations}",
+    "requestLine": "{seats} seat(s) · {status} · {pickup} → {dropoff}",
+    "status": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Declined",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired",
+      "COMPLETED": "Completed"
+    },
+    "errors": {
+      "generic": "Could not update the request."
+    }
+  },
+  "Chat": {
+    "title": "Trip chat",
+    "body": "Messages stay with the trip. After a cancel they become read-only.",
+    "emptyTitle": "No conversations yet",
+    "emptyBody": "Chat opens when a driver publishes a trip or accepts your request. Community chat is open to everyone.",
+    "community": "Community chat",
+    "system": "System",
+    "unknownSender": "Member",
+    "communityHint": "Any member of Fi Sikkati can write here.",
+    "members": "Driver and passengers",
+    "untitled": "Trip chat",
+    "noMessages": "No messages yet",
+    "removed": "Message removed",
+    "missing": "This conversation is not available.",
+    "back": "All conversations",
+    "readOnly": "This chat is read-only.",
+    "composer": "Message",
+    "send": "Send"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "intro": "Anything that needs a decision shows up here. Open it, review the details, then accept or reject.",
+    "phoneTitle": "Phone alerts",
+    "phoneBody": "Turn these on so a trip or chat alert reaches your phone even when Fi Sikkati is closed. On iPhone, add Fi Sikkati to the Home Screen first.",
+    "phoneEnable": "Turn on phone alerts",
+    "phoneOn": "Phone alerts are on for this device.",
+    "phoneDenied": "The browser is blocking alerts. Allow notifications for this site, then come back.",
+    "phoneUnsupported": "This browser cannot deliver phone alerts. Open Fi Sikkati in Chrome on Android, or install it on the iPhone Home Screen.",
+    "markAll": "Mark all read",
+    "empty": "You are up to date.",
+    "openAll": "All notifications",
+    "loading": "Loading notifications…",
+    "loadError": "Could not load notifications. Refresh the page if the session ended.",
+    "open": "Open",
+    "fallbackTitle": "New notification",
+    "fallbackBody": "Open it to see the details.",
+    "items": {
+      "JOIN_REQUEST_RECEIVED": {
+        "title": "Someone wants a seat",
+        "body": "A passenger asked to ride with you. Check who they are and the pickup before you accept or reject.",
+        "action": "Review and decide"
+      },
+      "JOIN_REQUEST_ACCEPTED": {
+        "title": "Your seat was accepted",
+        "body": "The driver accepted you. The full trip details are available now.",
+        "action": "Open the trip"
+      },
+      "JOIN_REQUEST_REJECTED": {
+        "title": "Your request was not accepted",
+        "body": "The driver did not accept this time. You can look for another ride.",
+        "action": "Find a ride"
+      },
+      "JOIN_REQUEST_CANCELLED": {
+        "title": "A passenger cancelled",
+        "body": "The seat on your trip is free again.",
+        "action": "Open the trip"
+      },
+      "TRIP_UPDATED": {
+        "title": "Your trip changed",
+        "body": "The driver updated a trip you joined.",
+        "action": "See the change"
+      },
+      "TRIP_STARTED": {
+        "title": "The trip has started",
+        "body": "The driver started the trip. The meeting point is in the chat.",
+        "action": "Open chat"
+      },
+      "TRIP_CANCELLED": {
+        "title": "Trip cancelled",
+        "body": "A trip you joined was cancelled. You can look for another one.",
+        "action": "Find another ride"
+      },
+      "TRIP_COMPLETED": {
+        "title": "Trip completed",
+        "body": "You arrived. You can rate your travel companion.",
+        "action": "Rate the trip"
+      },
+      "TRIP_STARTING_SOON": {
+        "title": "Your trip is soon",
+        "body": "The trip starts in about two hours. Confirm the meeting point.",
+        "action": "Open the trip"
+      },
+      "TRIP_REMINDER": {
+        "title": "Trip reminder",
+        "body": "You have a trip tomorrow. Confirm you are still going, or cancel early.",
+        "action": "Open the trip"
+      },
+      "NEW_MESSAGE": {
+        "title": "New message",
+        "body": "There is a new message in a trip chat.",
+        "action": "Open chat"
+      },
+      "NEW_MATCHING_TRIP": {
+        "title": "A trip on your route",
+        "body": "A trip close to a route you saved was published.",
+        "action": "See the trip"
+      },
+      "VERIFICATION_STATUS_CHANGED": {
+        "title": "Update on your application",
+        "body": "The review team finished looking at your verification.",
+        "action": "See the result"
+      },
+      "RATING_RECEIVED": {
+        "title": "New rating",
+        "body": "A travel companion rated you after a completed trip.",
+        "action": "Open the trip"
+      },
+      "REPORT_UPDATED": {
+        "title": "Update on your report",
+        "body": "The community team reviewed your report and changed its status.",
+        "action": "See the report"
+      },
+      "ACCOUNT_MODERATED": {
+        "title": "Action on your account",
+        "body": "The community team took an action on your account. Read the details.",
+        "action": "Open account"
+      },
+      "ANNOUNCEMENT": {
+        "title": "Announcement from Fi Sikkati",
+        "body": "The community team published a new announcement.",
+        "action": "Read it"
+      },
+      "REVIEW_IDENTITY": {
+        "title": "Identity application",
+        "body": "Someone is waiting for account approval. Open the documents and review them before you accept or reject.",
+        "action": "Review and decide"
+      },
+      "REVIEW_DRIVER": {
+        "title": "Driver and vehicle application",
+        "body": "Someone registered a vehicle and is waiting for approval before they can publish a trip. Review the details before you accept or reject.",
+        "action": "Review and decide"
+      },
+      "REVIEW_REPORT": {
+        "title": "New report",
+        "body": "Someone filed a report that needs your review.",
+        "action": "Review the report"
+      }
+    }
+  },
+  "Safety": {
+    "title": "Safety centre",
+    "body": "Report a problem, review your reports, and manage people you have blocked. We do not provide emergency services.",
+    "reportTitle": "File a report",
+    "targetId": "User id",
+    "reason": "Reason",
+    "description": "What happened",
+    "submitReport": "Submit report",
+    "myReports": "Your reports",
+    "noReports": "No reports yet",
+    "blocks": "Blocked people",
+    "noBlocks": "You have not blocked anyone",
+    "unblock": "Unblock"
+  },
+  "AdminDash": {
+    "title": "Community operations",
+    "body": "WhatsApp-group admins review people and trips. The platform owner sees contact details, roles, settings and the audit log.",
+    "forbidden": "You do not have access to this console.",
+    "navVerifications": "Verifications",
+    "navUsers": "Users",
+    "navTrips": "Trips",
+    "navReports": "Reports",
+    "usersTotal": "Accounts",
+    "usersActive7d": "Active (7 days)",
+    "drivers": "Drivers",
+    "tripsTotal": "Trips",
+    "tripsCompleted": "Completed",
+    "reportsOpen": "Open reports",
+    "count": "{n} rows",
+    "empty": "Nothing here yet"
+  },
+  "HowItWorks": {
+    "eyebrow": "How it works",
+    "title": "The trip exists first.",
+    "paragraphs": [
+      "A driver who is already going from A to B publishes the trip: time, seats, and the route.",
+      "Passengers search by pickup, drop-off and time. Results rank by how well the route fits.",
+      "Ask for a seat. When the driver accepts, you chat in the trip thread and share the ride.",
+      "After the trip completes, you can rate each other. Nobody orders a car here."
+    ]
+  },
+  "PublicSafety": {
+    "eyebrow": "Safety",
+    "title": "Trust steps, not a guarantee.",
+    "paragraphs": [
+      "Identity and driver documents are reviewed before the first shared ride.",
+      "You can report a user, a trip or a message, and block someone silently.",
+      "Exact home addresses stay hidden. Pickup points are shown only to accepted parties.",
+      "Fi Sikkati is not an emergency service and never claims guaranteed physical safety."
+    ]
+  },
+  "Faq": {
+    "eyebrow": "FAQ",
+    "title": "Common questions",
+    "paragraphs": [
+      "Is this a taxi app? No. Drivers publish trips they already plan to make.",
+      "How do I pay? The amount is a suggested contribution. No money moves through the app.",
+      "Who can see my phone? Only if you opt in to share it with accepted trip peers.",
+      "How do I become a driver? Verify identity, add a vehicle and licence, then wait for review."
+    ]
+  },
+  "About": {
+    "eyebrow": "About",
+    "title": "Built for the El Obour community",
+    "paragraphs": [
+      "Fi Sikkati started because WhatsApp groups bury the useful trip messages.",
+      "We give neighbours a structured way to publish, find, join and remember rides.",
+      "The product is community ride-sharing and route matching — not ride-hailing."
+    ]
+  },
+  "Assistant": {
+    "title": "Ask Fi Sikkati",
+    "body": "I can explain the product or help you phrase a search. I never book a seat.",
+    "prompt": "Your question",
+    "send": "Ask",
+    "openSearch": "Open search",
+    "unavailable": "The assistant is off or busy. Try again later."
+  },
+  "Contact": {
+    "eyebrow": "Contact",
+    "title": "Talk to the operators",
+    "paragraphs": [
+      "For account or trip problems, use the in-app report flow so there is an audit trail.",
+      "Community admins — the original WhatsApp group owners — review verifications and reports.",
+      "Email for legal notices is published in the privacy policy."
+    ]
   }
 }

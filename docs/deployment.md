@@ -71,7 +71,8 @@ Internet ─▶ DNS (⛔ OD-027) ─▶ TLS reverse proxy / load balancer (Caddy
               PostgreSQL 16 + PostGIS (managed or single primary + streaming replica), daily base backup + WAL (PITR), 30-day retention
               Redis 7 (managed or single node; persistence not required — no source-of-truth data)
               S3-compatible object storage: buckets public-media (CDN-fronted), private-documents (private, SSE)
-              SMTP/email API (⛔ OD-019), map provider (⛔ OD-005), LLM provider (⛔ OD-025)
+              SMTP/email API (any provider behind `EmailSender`, OD-019 approved), map provider
+              (⛔ OD-005), LLM provider (⛔ OD-025)
 ```
 
 Sizing for the initial 2,000-user community is small: 2× api, 1× worker, 1× web, one managed

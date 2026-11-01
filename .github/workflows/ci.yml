@@ -38,6 +38,16 @@ jobs:
       CORS_ORIGINS: http://localhost:3000
       PUBLIC_WEB_URL: http://localhost:3000
       RUN_INTEGRATION: "1"
+      AUTH_JWT_ACTIVE_KID: test-1
+      AUTH_JWT_PRIVATE_KEY: Zmktc2lra2F0aS10ZXN0LWVkMjU1MTktc2VlZC0zMmI=
+      AUTH_PASSWORD_PEPPER: test-pepper-pppppppppppppppppppppppp
+      AUTH_CSRF_SECRET: test-csrf-cccccccccccccccccccccccc
+      AUTH_HASH_SECRET: test-hash-hhhhhhhhhhhhhhhhhhhhhhhh
+      EMAIL_FROM_ADDRESS: no-reply@fisikkati.app
+      SMTP_HOST: 127.0.0.1
+      SMTP_PORT: "1025"
+      LEGAL_TERMS_VERSION: 2026-10-01
+      LEGAL_PRIVACY_VERSION: 2026-10-01
     steps:
       - uses: actions/checkout@v4
 
@@ -159,12 +169,31 @@ jobs:
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       WEB_BASE_URL: http://localhost:3000
       API_BASE_URL: http://localhost:8000
+      AUTH_JWT_ACTIVE_KID: test-1
+      AUTH_JWT_PRIVATE_KEY: Zmktc2lra2F0aS10ZXN0LWVkMjU1MTktc2VlZC0zMmI=
+      AUTH_PASSWORD_PEPPER: test-pepper-pppppppppppppppppppppppp
+      AUTH_CSRF_SECRET: test-csrf-cccccccccccccccccccccccc
+      AUTH_HASH_SECRET: test-hash-hhhhhhhhhhhhhhhhhhhhhhhh
+      EMAIL_FROM_ADDRESS: no-reply@fisikkati.app
+      SMTP_HOST: 127.0.0.1
+      SMTP_PORT: "1025"
+      AUTH_REGISTER_RATE_LIMIT: 100/60
+      AUTH_LOGIN_RATE_LIMIT_PER_IP: 100/60
+      AUTH_LOGIN_RATE_LIMIT_PER_IDENTIFIER: 100/60
+      AUTH_FORGOT_RATE_LIMIT_PER_IDENTIFIER: 100/60
+      AUTH_FORGOT_RATE_LIMIT_PER_IP: 100/60
+      AUTH_EMAIL_RESEND_RATE_LIMIT: 100/60
+      ARGON2_TIME_COST: "1"
+      ARGON2_MEMORY_COST_KIB: "8192"
+      ARGON2_PARALLELISM: "1"
+      LEGAL_TERMS_VERSION: 2026-10-01
+      LEGAL_PRIVACY_VERSION: 2026-10-01
     steps:
       - uses: actions/checkout@v4
 
-      - name: Start PostgreSQL/PostGIS and Redis
+      - name: Start PostgreSQL/PostGIS, Redis and Mailpit
         working-directory: infra/compose
-        run: docker compose up -d --wait postgres redis
+        run: docker compose up -d --wait postgres redis mailpit
 
       - uses: astral-sh/setup-uv@v6
         with:

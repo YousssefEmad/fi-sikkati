@@ -12,37 +12,37 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 
 | ID | Question | Blocks | Status |
 | --- | --- | --- | --- |
-| OD-001 | Location privacy: blur radius and exact-location visibility | 5 | OPEN |
-| OD-002 | Passenger identity verification policy | 2 | OPEN |
-| OD-003 | Driver verification policy | 3 | OPEN |
-| OD-004 | Primary account identifier and phone verification (SMS) | 2 | OPEN |
-| OD-005 | Mapping provider | 4 | OPEN |
-| OD-006 | Route-matching thresholds | 5 | OPEN |
-| OD-007 | Meaning of price in MVP and driver override | 4 | OPEN |
-| OD-008 | Cancellation windows and consequences | 6 | OPEN |
-| OD-009 | Sensitive document retention period | 3 | OPEN |
-| OD-010 | Moderation policy (strikes, escalation) | 8 | OPEN |
-| OD-011 | Phone number sharing after acceptance | 7 | OPEN |
-| OD-012 | Maximum passenger seats per trip | 4 | OPEN |
-| OD-013 | Dual-mode accounts in UI | 2 | OPEN |
-| OD-014 | Pending join-request expiry | 6 | OPEN |
-| OD-015 | Community chat in MVP | 7 | OPEN |
-| OD-016 | Rating dimensions and visibility | 8 | OPEN |
-| OD-017 | Trip start/complete semantics | 4 | OPEN |
+| OD-001 | Location privacy: blur radius and exact-location visibility | 5 | APPROVED 2026-10-02 |
+| OD-002 | Passenger identity verification policy | 2 | APPROVED 2026-10-01 |
+| OD-003 | Driver verification policy | 3 | APPROVED 2026-10-02 |
+| OD-004 | Primary account identifier and phone verification (SMS) | 2 | APPROVED 2026-10-01 |
+| OD-005 | Mapping provider | 4 | APPROVED 2026-10-02 |
+| OD-006 | Route-matching thresholds | 5 | APPROVED 2026-10-02 |
+| OD-007 | Meaning of price in MVP and driver override | 4 | APPROVED 2026-10-02 |
+| OD-008 | Cancellation windows and consequences | 6 | APPROVED 2026-10-15 |
+| OD-009 | Sensitive document retention period | 3 | APPROVED 2026-10-02 |
+| OD-010 | Moderation policy (strikes, escalation) | 8 | APPROVED 2026-10-19 |
+| OD-011 | Phone number sharing after acceptance | 7 | APPROVED 2026-10-19 |
+| OD-012 | Maximum passenger seats per trip | 4 | APPROVED 2026-10-02 |
+| OD-013 | Dual-mode accounts in UI | 2 | APPROVED 2026-10-01 |
+| OD-014 | Pending join-request expiry | 6 | APPROVED 2026-10-15 |
+| OD-015 | Community chat in MVP | 7 | APPROVED 2026-10-19 (defer community rooms) |
+| OD-016 | Rating dimensions and visibility | 8 | APPROVED 2026-10-19 |
+| OD-017 | Trip start/complete semantics | 4 | APPROVED 2026-10-02 |
 | OD-018 | Recurring trips | — | DEFERRED |
-| OD-019 | Transactional email provider | 2 | OPEN |
-| OD-020 | Account deletion policy | 2 (delete endpoint) / 8 | OPEN |
-| OD-021 | Minimum age and legal acceptance | 2 | OPEN |
-| OD-022 | Licence plate visibility | 3 | OPEN |
-| OD-023 | Trip editing after acceptances | 4 | OPEN |
-| OD-024 | Required vehicle documents | 3 | OPEN |
-| OD-025 | AI provider and behaviour policy | 10 | OPEN |
+| OD-019 | Transactional email provider | 2 | APPROVED 2026-10-01 |
+| OD-020 | Account deletion policy | 2 (delete endpoint) / 8 | APPROVED 2026-10-01 |
+| OD-021 | Minimum age and legal acceptance | 2 | APPROVED 2026-10-01 |
+| OD-022 | Licence plate visibility | 3 | APPROVED 2026-10-02 |
+| OD-023 | Trip editing after acceptances | 4 | APPROVED 2026-10-02 |
+| OD-024 | Required vehicle documents | 3 | APPROVED 2026-10-02 |
+| OD-025 | AI provider and behaviour policy | 10 | APPROVED 2026-10-19 |
 | OD-026 | Production hosting provider | 12 | OPEN |
 | OD-027 | Domain name | 12 | OPEN |
 | OD-028 | Multi-community scoping | — | DEFERRED |
-| OD-029 | Search/trip visibility for unauthenticated visitors | 5 | OPEN |
-| OD-030 | Product analytics tooling and consent | 11 | OPEN |
-| OD-031 | Brand wordmark vs product name | 12 (before launch) | OPEN |
+| OD-029 | Search/trip visibility for unauthenticated visitors | 5 | APPROVED 2026-10-02 |
+| OD-030 | Product analytics tooling and consent | 11 | APPROVED 2026-10-19 (first-party counters only) |
+| OD-031 | Brand wordmark vs product name | 12 (before launch) | APPROVED 2026-10-01 |
 
 ---
 
@@ -57,6 +57,10 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: (b) with `privacy.location_blur_meters = 500` and area label; exact stop
   coordinates only to accepted parties. Deterministic per-trip jitter prevents averaging attacks.
 - **Impact**: search UI, trip detail privacy filtering, `trips.origin_area_point` computation.
+- **Decision**: APPROVED (option b, 500 m) by the product owner on 2026-10-02. Configuration key
+  `privacy.location_blur_meters = 500`. Exact stop coordinates are shown only to the driver,
+  `ADMIN`, and accepted trip parties (Phase 6). Everyone else sees the deterministic per-trip
+  jittered area point. Recorded as BR-TRIP-10.
 
 ### OD-002 — Passenger identity verification policy
 
@@ -68,6 +72,9 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: (b) — trust before sharing a car, but frictionless browsing. Documents:
   national ID front + back + selfie. Rationale: minimal set that lets an admin confirm identity.
 - **Impact**: BR-JOIN-01, onboarding flow, admin queue volume, retention (OD-009).
+- **Decision**: APPROVED (option b) by the product owner on 2026-10-01. Recorded as BR-VER-05 and
+  BR-JOIN-01; configuration key `verification.identity_required_before_join = true`; document
+  types `NATIONAL_ID_FRONT`, `NATIONAL_ID_BACK`, `SELFIE`.
 
 ### OD-003 — Driver verification policy
 
@@ -78,6 +85,12 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: licence + ID + registration; ADMIN reviews; 48 h target; expiry
   notifications. Re-verification on document expiry.
 - **Impact**: `driver_verifications` document types, admin UI, notification types.
+- **Decision**: APPROVED (recommended option) by the product owner on 2026-10-02. Reviewer is
+  `ADMIN` only in MVP; review SLA shown to the applicant is
+  `verification.review_sla_hours = 48`. Driving licence is mandatory; identity must already be
+  `APPROVED` (BR-VER-05); vehicle registration follows OD-024. Licence expiry is collected and
+  the driver is notified 30 days before (`verification.licence_expiry_notice_days = 30`).
+  Recorded as BR-VER-02 and BR-VER-07.
 
 ### OD-004 — Primary account identifier and phone verification
 
@@ -91,6 +104,10 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: (c). Email is free to verify (OD-019) and unblocks Phase 2 immediately;
   schema already allows either to be primary; SMS can be enabled later without migration.
 - **Impact**: registration form, `users.email` nullability, verification flows, rate limits.
+- **Decision**: APPROVED (option c) by the product owner on 2026-10-01. `users.email` is
+  `NOT NULL UNIQUE`; a phone number may be stored but is never verified and never used to
+  authenticate until an SMS provider is separately approved. Recorded as BR-ACC-01 and
+  BR-AUTH-01…BR-AUTH-09.
 
 ### OD-005 — Mapping provider
 
@@ -105,6 +122,10 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
   abstraction; evaluate Google if autocomplete quality is insufficient in El Obour. Fake
   provider for tests regardless.
 - **Impact**: Phase 4/5, API keys, CSP origins, cost.
+- **Decision**: APPROVED (Mapbox behind `MapProvider`) by the product owner on 2026-10-02.
+  Tests and local development without a token use `FakeMapProvider` (deterministic El Obour /
+  Cairo fixtures and geodesic routes). A Mapbox token is required before production traffic.
+  Clients never submit geometry (BR-TRIP-05).
 
 ### OD-006 — Route-matching thresholds
 
@@ -116,6 +137,10 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
   in MVP. Urban Cairo roads are dense; 1 km catches parallel arterials without matching
   different districts. Revisit with real data.
 - **Impact**: `trip_routes.corridor` buffer, BR-MATCH-02/03, search UX.
+- **Decision**: APPROVED (recommended values) by the product owner on 2026-10-02. Corridor
+  width `matching.corridor_width_meters = 1000` is buffered onto `trip_routes.corridor` at
+  publish (needed in Phase 4 so Phase 5 can match). Stop proximity 500 m, default time window
+  ±60 min, no detour. Recorded as BR-MATCH-02/03/05.
 
 ### OD-007 — Meaning of price in MVP
 
@@ -129,6 +154,9 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: (a) — deterministic, avoids price competition turning the community into a
   taxi market, keeps the pricing engine server-side and configurable.
 - **Impact**: BR-TRIP-09, BR-PRICE-05, trip form and cards, landing copy.
+- **Decision**: APPROVED (option a) by the product owner on 2026-10-02. The server-computed
+  amount is a **suggested contribution**, paid in cash off-platform. Drivers cannot override it.
+  No payments, wallets or payouts (BR-PRICE-06). Recorded as BR-TRIP-09 and BR-PRICE-05.
 
 ### OD-008 — Cancellation windows and consequences
 
@@ -139,6 +167,11 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: (a) for MVP; the data model already records timing so (b)/(c) can be
   applied later. Late = < 2 h before departure.
 - **Impact**: BR-JOIN-10, profile UI, trust indicators.
+- **Decision**: APPROVED (option a) by the product owner on 2026-10-15. Every cancellation stores
+  actor, timestamp and `minutes_before_departure_at_cancel`. Late means fewer than
+  `bookings.late_cancel_minutes` (120) before departure. Public profiles show
+  `cancellationsLast90Days` (`bookings.cancellation_window_days` = 90): passenger-cancelled
+  join requests plus trips the user cancelled as driver. No automatic warning or suspension.
 
 ### OD-009 — Sensitive document retention
 
@@ -149,6 +182,10 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
   decision record and reviewer kept indefinitely. Legal counsel should confirm against Egyptian
   data-protection law (PDPL 151/2020).
 - **Impact**: `stored_files.purge_after`, purge job, privacy policy text.
+- **Decision**: APPROVED (30 days) by the product owner on 2026-10-02. Configuration key
+  `verification.document_retention_days = 30`. Object bytes are deleted; the decision row and
+  reviewer identity stay. Legal counsel still reviews the privacy notice before public launch
+  (R-14). Recorded as BR-VER-06.
 
 ### OD-010 — Moderation policy
 
@@ -171,6 +208,9 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Question**: Hard cap for `total_seats` (`trips.max_passenger_seats`)?
 - **Recommendation**: 7 (covers vans/minibuses) while still bounded by `vehicle.seat_capacity − 1`.
 - **Impact**: BR-TRIP-02, forms.
+- **Decision**: APPROVED (7) by the product owner on 2026-10-02. Configuration key
+  `trips.max_passenger_seats = 7`. Still bounded by `vehicle.seat_capacity − 1`. Recorded as
+  BR-TRIP-02.
 
 ### OD-013 — Dual-mode accounts in UI
 
@@ -178,6 +218,7 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: Yes; the driver area (`/drive`) is available once `DRIVER` is held.
   Backend already supports both roles on one user.
 - **Impact**: navigation, onboarding, landing copy.
+- **Decision**: APPROVED by the product owner on 2026-10-01. Recorded as BR-ACC-04.
 
 ### OD-014 — Pending join-request expiry
 
@@ -186,6 +227,9 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
 - **Recommendation**: at `departure_at` (a request for a trip that has departed is moot) and
   the driver is reminded 24 h and 2 h before departure of unanswered requests.
 - **Impact**: BR-JOIN-09, expiry job, notifications.
+- **Decision**: APPROVED by the product owner on 2026-10-15. A pending request expires at
+  `trips.departure_at` via an idempotent worker job. The 24 h and 2 h driver reminders are
+  notification events and ship with Phase 7.
 
 ### OD-015 — Community chat in MVP
 
@@ -210,6 +254,11 @@ Blocks-phase column shows the first phase that cannot be *completed* without the
   `estimated_arrival_at + 6 h` and auto-expires `PUBLISHED` trips not started by
   `departure_at + 60 min`. Ratings open on `COMPLETED`.
 - **Impact**: BR-TRIP transitions, jobs, rating availability.
+- **Decision**: APPROVED (recommended) by the product owner on 2026-10-02. Driver Start is
+  allowed from `trips.start_window_minutes = 30` before `departure_at`. Driver Complete is
+  manual. The worker auto-completes `IN_PROGRESS` at `estimated_arrival_at +
+  trips.auto_complete_hours` (6) and expires `PUBLISHED`/`FULL` not started by
+  `departure_at + trips.expire_grace_minutes` (60). Ratings remain Phase 8.
 
 ### OD-018 — Recurring trips — DEFERRED
 
@@ -222,6 +271,10 @@ metrics; design note: a `trip_templates` table generating trips N days ahead.
 - **Recommendation**: any SMTP-compatible provider behind an `EmailSender` protocol; Mailpit in
   dev. Vendor choice needs approval (cost, deliverability in Egypt).
 - **Impact**: Phase 2 email verification, Phase 7 notifications.
+- **Decision**: APPROVED by the product owner on 2026-10-01 for the *abstraction*: all sending
+  goes through an `EmailSender` protocol with an SMTP implementation, Mailpit in development.
+  Selecting and paying for a production provider remains a separate approval before Phase 12
+  (`email.from_address`, `email.from_name` are configuration).
 
 ### OD-020 — Account deletion policy
 
@@ -231,16 +284,27 @@ metrics; design note: a `trip_templates` table generating trips N days ahead.
   trips and no `ACCEPTED` requests; anonymise per `database.md` §7; keep audit logs; 14-day
   grace period before anonymisation with login cancelling it. Legal review recommended.
 - **Impact**: `DELETE /me`, jobs, privacy policy.
+- **Decision**: APPROVED by the product owner on 2026-10-01. Recorded as BR-ACC-07 with
+  `accounts.deletion_grace_days = 14`. Legal review of the privacy policy wording is still
+  outstanding and is tracked for Phase 12.
 
 ### OD-021 — Minimum age and legal acceptance
 
 - **Recommendation**: 18+, explicit acceptance of terms/privacy at registration with versioned
   documents. Requires legal confirmation.
+- **Decision**: APPROVED by the product owner on 2026-10-01. Recorded as BR-ACC-08 with
+  `accounts.minimum_age_years = 18`, `legal.terms_version` and `legal.privacy_version`; the
+  accepted versions and timestamp are stored on the user row. The legal documents themselves are
+  still to be drafted (Phase 12).
 
 ### OD-022 — Licence plate visibility
 
 - **Options**: never shown; shown to accepted passengers only; public.
 - **Recommendation**: accepted passengers only (helps identify the car on pickup day).
+- **Decision**: APPROVED (accepted passengers only) by the product owner on 2026-10-02. The
+  owner and `ADMIN` may always see the plate. Search, public profiles and anyone who is not an
+  accepted party of the trip never see it. Recorded as BR-VEH-02; trip-party disclosure is
+  enforced when join requests land in Phase 6.
 
 ### OD-023 — Trip editing after acceptances
 
@@ -248,11 +312,20 @@ metrics; design note: a `trip_templates` table generating trips N days ahead.
   passenger notification and passenger right to cancel without consequence.
 - **Recommendation**: allow notes and seat increase freely; changing departure time by > 15 min
   or changing route requires cancelling and republishing.
+- **Decision**: APPROVED (recommended) by the product owner on 2026-10-02. After at least one
+  `ACCEPTED` request: notes and increasing `total_seats` are free; a departure shift of more
+  than `trips.edit_departure_tolerance_minutes` (15) or a route/stop change is rejected
+  (`INVALID_TRANSITION`) — cancel and republish instead. With no acceptances, BR-TRIP-07 still
+  applies (all fields, seats cannot drop below reserved). Recorded as BR-TRIP-07.
 
 ### OD-024 — Required vehicle documents
 
 - **Recommendation**: vehicle registration (licence) front + back; vehicle photo optional.
   Insurance not required in MVP.
+- **Decision**: APPROVED (recommended option) by the product owner on 2026-10-02. Required
+  types: `REGISTRATION_FRONT`, `REGISTRATION_BACK`. Optional: `VEHICLE_PHOTO`. Insurance is not
+  collected. Recorded as BR-VER-02 and BR-VEH-01; configuration key
+  `vehicles.required_document_types`.
 
 ### OD-025 — AI provider and behaviour policy
 
@@ -284,6 +357,8 @@ table later; no code now.
 - **Recommendation**: login required to search and view trips in MVP (privacy of a small
   community); public pages remain informational. Revisit for growth.
 - **Impact**: permission matrix rows, SEO scope, rate limits.
+- **Decision**: APPROVED (login required) by the product owner on 2026-10-02. Search and trip
+  detail require a session. Public marketing pages stay informational. Recorded as BR-MATCH-09.
 
 ### OD-030 — Product analytics tooling and consent
 
@@ -305,4 +380,6 @@ table later; no code now.
   public release because it affects the domain name (OD-027), app store listing and all copy.
 - **Impact**: `messages/*.json` (`Common.brand`, `Metadata.*`), logo artwork, domain, store
   listings, `docs/design-system.md`.
-- **Status**: OPEN
+- **Decision**: APPROVED (option a) by the product owner on 2026-10-01 — «في سكتي» stays the
+  product name and the supplied artwork is used as a mark only. Revisit before the first public
+  release together with OD-027 (domain name).
