@@ -37,7 +37,9 @@ export function JoinPanel({
   emailVerified: boolean;
   phoneVerified: boolean;
 }) {
-  if (isDriver) return <DriverRequests tripId={tripId} focusRequestId={focusRequestId} />;
+  if (isDriver) {
+    return <DriverRequests tripId={tripId} focusRequestId={focusRequestId ?? null} />;
+  }
   return (
     <PassengerRequest
       tripId={tripId}

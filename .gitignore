@@ -41,3 +41,6 @@ Thumbs.db
 
 # Local data volumes
 infra/**/data/
+
+# Vercel link metadata
+.vercel

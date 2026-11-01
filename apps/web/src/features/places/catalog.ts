@@ -121,7 +121,7 @@ export function placesFor(locale: string): PlaceOption[] {
     label: arabic ? place.ar : place.en,
     keywords: `${place.ar} ${place.en}`,
     hint: arabic ? GOVERNORATE[place.gov].ar : GOVERNORATE[place.gov].en,
-    pinned: place.pinned,
+    pinned: place.pinned === true,
     lat: place.lat,
     lng: place.lng,
   }));
