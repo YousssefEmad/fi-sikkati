@@ -11,7 +11,9 @@ export function SiteHeader() {
         <Logo className="min-w-0 shrink" />
         <div className="flex shrink-0 items-center gap-1 sm:gap-3">
           <NotificationBell />
-          <LanguageSwitcher />
+          <div className="hidden sm:block">
+            <LanguageSwitcher />
+          </div>
           <AuthNav />
         </div>
       </div>

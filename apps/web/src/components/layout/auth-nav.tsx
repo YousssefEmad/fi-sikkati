@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
+import { LogOut, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -18,7 +18,7 @@ export function AuthNav() {
 
   if (status === "authenticated" && account) {
     return (
-      <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
+      <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
         <Link
           href="/messages"
           className={cn(buttonVariants({ variant: "brand", size: "sm" }), "hidden md:inline-flex")}
@@ -40,19 +40,22 @@ export function AuthNav() {
         </Link>
         <Link
           href="/me"
-          className="max-w-[5.5rem] truncate text-sm font-semibold underline-offset-4 hover:underline sm:max-w-28"
+          className="max-w-[6.5rem] truncate text-sm font-semibold underline-offset-4 hover:underline sm:max-w-28"
         >
           {account.displayName}
         </Link>
         <button
           type="button"
           data-testid="sign-out"
-          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0 px-2.5 sm:px-3")}
+          aria-label={t("signOut")}
+          title={t("signOut")}
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0 px-2 sm:px-3")}
           onClick={() => {
             void signOut();
           }}
         >
-          {t("signOut")}
+          <LogOut aria-hidden="true" className="size-4 sm:hidden" />
+          <span className="hidden sm:inline">{t("signOut")}</span>
         </button>
       </div>
     );
