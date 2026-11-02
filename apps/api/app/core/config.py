@@ -54,7 +54,8 @@ class Settings(BaseSettings):
 
     database_url: PostgresDsn = Field(alias="DATABASE_URL")
     migration_database_url: PostgresDsn | None = Field(default=None, alias="MIGRATION_DATABASE_URL")
-    database_pool_size: int = Field(default=10, ge=1, le=100, alias="DATABASE_POOL_SIZE")
+    # ~2000 concurrent riders/drivers share this pool across API replicas.
+    database_pool_size: int = Field(default=20, ge=1, le=100, alias="DATABASE_POOL_SIZE")
     database_echo: bool = Field(default=False, alias="DATABASE_ECHO")
 
     redis_url: RedisDsn = Field(alias="REDIS_URL")
@@ -212,6 +213,8 @@ class Settings(BaseSettings):
     trips_edit_departure_tolerance_minutes: int = Field(
         default=15, ge=0, le=180, alias="TRIPS_EDIT_DEPARTURE_TOLERANCE_MINUTES"
     )
+    # Finished trips (and their trip chat) older than today's Cairo midnight are removed daily.
+    trips_daily_purge_enabled: bool = Field(default=True, alias="TRIPS_DAILY_PURGE_ENABLED")
     matching_corridor_width_meters: int = Field(
         default=1000, ge=100, le=5000, alias="MATCHING_CORRIDOR_WIDTH_METERS"
     )

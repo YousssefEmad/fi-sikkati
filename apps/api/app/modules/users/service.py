@@ -29,7 +29,7 @@ from app.modules.users.models import (
     IdentityVerificationStatus,
     User,
 )
-from app.modules.users.names import display_name_key
+from app.modules.users.names import display_name_key, display_names_conflict
 from app.modules.users.repository import UserRepository
 
 
@@ -346,9 +346,11 @@ class UserService:
                     )
                 ],
             )
-        owner = await self._repository.get_by_display_name_key(key)
-        if owner is not None and owner.id != user_id:
-            raise _display_name_taken()
+        for owner_id, existing in await self._repository.list_display_name_keys():
+            if user_id is not None and owner_id == user_id:
+                continue
+            if display_names_conflict(key, existing):
+                raise _display_name_taken()
         return key
 
     # --- mutations -----------------------------------------------------------------------

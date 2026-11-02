@@ -92,6 +92,28 @@ async def expire_and_complete_trips(ctx: dict[str, Any]) -> dict[str, int]:
     return {"expired": expired, "completed": completed, "joinExpired": join_expired}
 
 
+async def purge_yesterdays_trips(ctx: dict[str, Any]) -> int:
+    """Drop finished trips from before today (Cairo) and their trip chat."""
+    del ctx
+    settings = get_settings()
+    database = Database(settings)
+    purged = 0
+    try:
+        async with database.session_factory() as session:
+            service = TripService(
+                TripRepository(session),
+                FakeMapProvider(),
+                PricingService(PricingRepository(session)),
+                settings,
+            )
+            purged = await service.purge_yesterdays_finished()
+            await session.commit()
+    finally:
+        await database.dispose()
+    log.info("trips_purged", count=purged)
+    return purged
+
+
 async def dispatch_notification_emails(ctx: dict[str, Any]) -> int:
     del ctx
     settings = get_settings()
@@ -144,12 +166,15 @@ class WorkerSettings:
     functions: list[Any] = [
         purge_expired_documents,
         expire_and_complete_trips,
+        purge_yesterdays_trips,
         dispatch_notification_emails,
         trip_reminders_and_chat_close,
     ]
     cron_jobs = [
         cron(heartbeat, second={0, 30}, run_at_startup=True),
         cron(purge_expired_documents, hour={3}, minute={15}),
+        # 00:20 Africa/Cairo ≈ 22:20 UTC (winter). Finished trips from prior days go away.
+        cron(purge_yesterdays_trips, hour={22}, minute={20}),
         cron(expire_and_complete_trips, minute={0, 15, 30, 45}),
         cron(dispatch_notification_emails, minute={2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57}),
         cron(trip_reminders_and_chat_close, minute={5, 20, 35, 50}),

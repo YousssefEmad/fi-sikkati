@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from uuid import UUID
+from zoneinfo import ZoneInfo
 
 from app.core.config import Settings
 from app.core.errors import (
@@ -408,6 +409,16 @@ class TripService:
             )
             count += 1
         return count
+
+    async def purge_yesterdays_finished(self, now: datetime | None = None) -> int:
+        """Drop finished trips from before today's Cairo midnight, with their trip chat."""
+        if not self._settings.trips_daily_purge_enabled:
+            return 0
+        moment = now or datetime.now(UTC)
+        cairo = ZoneInfo("Africa/Cairo")
+        local = moment.astimezone(cairo)
+        start_of_today = datetime(local.year, local.month, local.day, tzinfo=cairo).astimezone(UTC)
+        return await self._repository.purge_finished_before(start_of_today)
 
     async def _passenger_ids(
         self, trip_id: UUID, *, include_pending: bool = False

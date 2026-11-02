@@ -46,6 +46,11 @@ class UserRepository:
         )
         return result.unique().scalar_one_or_none()
 
+    async def list_display_name_keys(self) -> list[tuple[UUID, str]]:
+        """All public name keys. Fine up to a few thousand accounts."""
+        result = await self._db.execute(select(UserProfile.user_id, UserProfile.display_name_key))
+        return [(row.user_id, row.display_name_key) for row in result.all()]
+
     async def get_by_phone(self, phone_e164: str) -> User | None:
         result = await self._db.execute(select(User).where(User.phone_e164 == phone_e164))
         return result.unique().scalar_one_or_none()

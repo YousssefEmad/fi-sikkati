@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import func, or_, select, text
+from sqlalchemy import bindparam, func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -361,6 +361,53 @@ class TripRepository:
             )
         )
         return list(result.scalars())
+
+    async def purge_finished_before(self, cutoff: datetime) -> int:
+        """Hard-delete finished/draft trips before ``cutoff`` and their trip chats.
+
+        Join requests and ratings must go first (RESTRICT). Conversation rows cascade
+        from ``trips``. Community chat is never touched. Raw SQL keeps this repository
+        below the bookings/safety layers.
+        """
+        trip_ids = list(
+            (
+                await self._db.execute(
+                    select(Trip.id).where(
+                        Trip.status.in_(
+                            (
+                                TripStatus.COMPLETED,
+                                TripStatus.CANCELLED,
+                                TripStatus.EXPIRED,
+                                TripStatus.DRAFT,
+                            )
+                        ),
+                        Trip.departure_at < cutoff,
+                    )
+                )
+            )
+            .scalars()
+            .all()
+        )
+        if not trip_ids:
+            return 0
+        ids_param = bindparam("ids", expanding=True)
+        await self._db.execute(
+            text("DELETE FROM ratings WHERE trip_id IN :ids").bindparams(ids_param),
+            {"ids": trip_ids},
+        )
+        await self._db.execute(
+            text("DELETE FROM trip_join_requests WHERE trip_id IN :ids").bindparams(
+                bindparam("ids", expanding=True)
+            ),
+            {"ids": trip_ids},
+        )
+        result = await self._db.execute(
+            text("DELETE FROM trips WHERE id IN :ids").bindparams(
+                bindparam("ids", expanding=True)
+            ),
+            {"ids": trip_ids},
+        )
+        return int(result.rowcount or 0)
 
     async def lock(self, trip_id: UUID) -> Trip | None:
         """Serialise seat changes and trip cancellation on one row (BR-JOIN-06)."""
