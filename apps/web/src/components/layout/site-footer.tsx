@@ -23,7 +23,7 @@ export async function SiteFooter() {
           </div>
           <div className="flex flex-col items-start gap-4">
             <LanguageSwitcher tone="inverse" />
-            <nav className="flex flex-wrap gap-4 text-sm">
+            <nav className="grid w-full grid-cols-2 gap-x-4 gap-y-3 text-sm sm:flex sm:flex-wrap sm:gap-4">
               <Link href="/how-it-works" className="text-white/70 underline-offset-4 hover:underline">
                 {tFooter("how")}
               </Link>

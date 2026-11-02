@@ -27,45 +27,45 @@ export function AccountHome() {
           status: t(`verificationStatus.${account.identityVerificationStatus}`),
         })}
       </p>
-      <nav className="mt-6 flex flex-wrap gap-4 text-sm font-semibold">
-        <Link href="/me" className="text-primary underline-offset-4 hover:underline">
+      <nav className="border-border mt-6 grid grid-cols-2 gap-2 rounded-2xl border p-3 text-sm font-semibold sm:grid-cols-3 md:flex md:flex-wrap md:gap-4 md:border-0 md:p-0">
+        <Link href="/me" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navProfile")}
         </Link>
-        <Link href="/me/sessions" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/sessions" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navSessions")}
         </Link>
-        <Link href="/me/security" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/security" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navSecurity")}
         </Link>
-        <Link href="/me/verification" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/verification" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navVerification")}
         </Link>
-        <Link href="/drive" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/drive" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navDrive")}
         </Link>
-        <Link href="/me/trips" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/trips" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navTrips")}
         </Link>
-        <Link href="/me/requests" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/requests" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navRequests")}
         </Link>
-        <Link href="/search" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/search" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navSearch")}
         </Link>
-        <Link href="/messages" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/messages" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navMessages")}
         </Link>
-        <Link href="/me/notifications" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/notifications" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navNotifications")}
         </Link>
-        <Link href="/me/safety" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/me/safety" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navSafety")}
         </Link>
-        <Link href="/assistant" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/assistant" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
           {t("navAssistant")}
         </Link>
         {account.roles.some((role) => role === "ADMIN" || role === "SUPER_ADMIN") ? (
-          <Link href="/admin" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/admin" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">
             {t("navAdmin")}
           </Link>
         ) : null}

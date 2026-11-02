@@ -23,7 +23,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label={t("app")}
-      className="border-border bg-background/95 supports-backdrop-filter:backdrop-blur-md sticky bottom-0 z-30 border-t pb-[env(safe-area-inset-bottom)] md:hidden"
+      className="border-border bg-background/95 supports-backdrop-filter:backdrop-blur-md fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="mx-auto grid max-w-lg grid-cols-4">
         {ITEMS.map(({ href, key, Icon }) => {

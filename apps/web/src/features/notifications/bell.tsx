@@ -83,7 +83,7 @@ export function NotificationBell() {
     <div ref={rootRef} className="relative">
       <button
         type="button"
-        className="hover:bg-surface-muted relative inline-flex size-11 items-center justify-center rounded-full"
+        className="hover:bg-surface-muted relative inline-flex size-9 items-center justify-center rounded-full sm:size-11"
         aria-label={nav("notifications")}
         aria-expanded={open}
         aria-controls={panelId}

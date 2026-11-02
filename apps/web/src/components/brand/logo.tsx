@@ -23,7 +23,7 @@ export function Logo({ tone = "default", className }: LogoProps) {
     <Link
       href="/"
       className={cn(
-        "group inline-flex items-center gap-2.5 rounded-full text-lg font-extrabold tracking-tight",
+        "group inline-flex min-w-0 items-center gap-2 rounded-full text-base font-extrabold tracking-tight sm:gap-2.5 sm:text-lg",
         tone === "inverse" ? "text-inverse-foreground" : "text-foreground",
         className,
       )}
@@ -36,9 +36,9 @@ export function Logo({ tone = "default", className }: LogoProps) {
         height={40}
         priority
         sizes="40px"
-        className="size-10 rounded-full transition-transform group-hover:scale-105"
+        className="size-8 shrink-0 rounded-full transition-transform group-hover:scale-105 sm:size-10"
       />
-      <span>{t("brand")}</span>
+      <span className="truncate">{t("brand")}</span>
     </Link>
   );
 }
