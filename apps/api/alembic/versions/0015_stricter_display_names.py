@@ -15,8 +15,8 @@ from alembic import op
 
 from app.modules.users.names import display_name_key
 
-revision: str = "0015_stricter_display_names"
-down_revision: Union[str, None] = "0014_phone_verification"
+revision: str = "0015"
+down_revision: Union[str, None] = "0014"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
