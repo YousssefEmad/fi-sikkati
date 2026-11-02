@@ -29,6 +29,32 @@
     "account": "Account",
     "notifications": "Notifications"
   },
+  "Intro": {
+    "skip": "Skip",
+    "previous": "Previous",
+    "next": "Next",
+    "signIn": "Sign in",
+    "register": "Create an account",
+    "progress": "Page {current} of {total}",
+    "slides": {
+      "welcome": {
+        "title": "Find people already going your way",
+        "body": "Fi Sikkati is not a taxi. Neighbours publish the trip they are already taking, and you ask for a seat in the same direction."
+      },
+      "passenger": {
+        "title": "If you are riding",
+        "body": "Search by where you are, where you are going, and when. Ask for a seat and wait for the driver to accept. After that you can chat and call."
+      },
+      "driver": {
+        "title": "If you are driving",
+        "body": "Confirm your identity and your car, publish the trip and the empty seats, and accept passengers who are already on your route."
+      },
+      "start": {
+        "title": "One account for both",
+        "body": "Sign in as a passenger or a driver. It is the same account, and after approval you can drive and publish trips."
+      }
+    }
+  },
   "Landing": {
     "eyebrow": "Ride-sharing · El Obour City",
     "headline": "Find people already going your way.",
