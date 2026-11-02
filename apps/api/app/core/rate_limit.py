@@ -14,10 +14,14 @@ import time
 from dataclasses import dataclass
 from typing import Final
 
+import structlog
 from fastapi import Request
 from redis.asyncio import Redis
+from redis.exceptions import RedisError
 
 from app.core.errors import RateLimitedError
+
+log = structlog.get_logger("app.rate_limit")
 
 KEY_PREFIX: Final = "rl"
 
@@ -82,10 +86,15 @@ class RateLimiter:
         now_ms = int(time.time() * 1000)
         window_ms = limit.window_seconds * 1000
         key = f"{KEY_PREFIX}:{limit.name}:{subject}"
-        raw = await self._script(
-            keys=[key],
-            args=[now_ms, window_ms, limit.limit, f"{now_ms}-{time.perf_counter_ns()}"],
-        )
+        try:
+            raw = await self._script(
+                keys=[key],
+                args=[now_ms, window_ms, limit.limit, f"{now_ms}-{time.perf_counter_ns()}"],
+            )
+        except RedisError as exc:
+            # Auth must stay available when Redis is cold/stopped on trial hosts.
+            log.warning("rate_limit_redis_unavailable", limit=limit.name, error=type(exc).__name__)
+            return RateLimitResult(allowed=True, remaining=limit.limit, retry_after_seconds=0)
         allowed, count, oldest_ms = (int(part) for part in raw)
         if allowed:
             return RateLimitResult(
