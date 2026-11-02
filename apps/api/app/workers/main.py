@@ -15,7 +15,7 @@ from arq.connections import RedisSettings
 
 from app.core.config import get_settings
 from app.core.database import Database
-from app.core.email import SmtpEmailSender
+from app.core.email import LoggingEmailSender, SmtpEmailSender
 from app.core.events import EventPublisher
 from app.core.logging import configure_logging
 from app.main import build_event_dispatcher
@@ -122,7 +122,10 @@ async def dispatch_notification_emails(ctx: dict[str, Any]) -> int:
     try:
         async with database.session_factory() as session:
             service = notification_service_for(session, settings)
-            sent = await service.dispatch_pending_emails(SmtpEmailSender(settings))
+            sender = (
+                SmtpEmailSender(settings) if settings.smtp_configured else LoggingEmailSender()
+            )
+            sent = await service.dispatch_pending_emails(sender)
             await session.commit()
     finally:
         await database.dispose()

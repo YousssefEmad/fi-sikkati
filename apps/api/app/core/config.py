@@ -348,6 +348,9 @@ class Settings(BaseSettings):
         if self.app_env == "production" and not self.sms_configured:
             msg = "TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN and SMS_FROM are required in production"
             raise ValueError(msg)
+        if self.app_env == "production" and not self.smtp_configured:
+            msg = "SMTP_HOST must point at a real mail server in production (not localhost)"
+            raise ValueError(msg)
         return self
 
     @property
@@ -355,6 +358,12 @@ class Settings(BaseSettings):
         return bool(
             self.twilio_account_sid and self.twilio_auth_token.get_secret_value() and self.sms_from
         )
+
+    @property
+    def smtp_configured(self) -> bool:
+        """False for loopback Mailpit-style hosts that are unreachable on Fly staging."""
+        host = (self.smtp_host or "").strip().lower()
+        return bool(host) and host not in {"127.0.0.1", "localhost", "::1"}
 
     @property
     def is_production(self) -> bool:

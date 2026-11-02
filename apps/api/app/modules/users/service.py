@@ -148,8 +148,27 @@ def _display_name_taken() -> ConflictError:
     )
 
 
+def _phone_taken() -> ConflictError:
+    return ConflictError(
+        "That phone number is already in use.",
+        code="PHONE_TAKEN",
+        errors=[
+            FieldError(
+                field="phone",
+                code="PHONE_TAKEN",
+                message="That phone number is already in use.",
+            )
+        ],
+    )
+
+
 def _is_display_name_conflict(exc: IntegrityError) -> bool:
     return "display_name_key" in str(exc.orig)
+
+
+def _is_phone_conflict(exc: IntegrityError) -> bool:
+    text = str(exc.orig)
+    return "phone_e164" in text or "ix_users_phone_e164" in text
 
 
 def age_in_years(date_of_birth: date, today: date) -> int:
@@ -268,6 +287,11 @@ class UserService:
                 locale=existing.locale,
             )
 
+        if phone_e164 is not None:
+            owner = await self._repository.get_by_phone(phone_e164)
+            if owner is not None:
+                raise _phone_taken()
+
         name_key = await self._reserve_display_name(display_name)
         try:
             user = await self._repository.create(
@@ -287,9 +311,11 @@ class UserService:
                 roles=frozenset({Role.PASSENGER}),
             )
         except IntegrityError as exc:
-            if not _is_display_name_conflict(exc):
-                raise
-            raise _display_name_taken() from exc
+            if _is_display_name_conflict(exc):
+                raise _display_name_taken() from exc
+            if _is_phone_conflict(exc):
+                raise _phone_taken() from exc
+            raise
         return RegistrationOutcome(
             created=True,
             user_id=user.id,

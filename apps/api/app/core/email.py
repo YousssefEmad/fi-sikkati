@@ -39,6 +39,17 @@ class EmailSender(Protocol):
     async def send(self, message: EmailMessage) -> None: ...
 
 
+class LoggingEmailSender:
+    """Used when no outbound SMTP is configured (local/staging without a provider).
+
+    Registration and password-reset still create tokens; only delivery is skipped so the
+    request does not 500. The body is never logged (security.md §10).
+    """
+
+    async def send(self, message: EmailMessage) -> None:
+        log.info("email_skipped_no_smtp", subject=message.subject)
+
+
 def _build_mime(message: EmailMessage, *, from_address: str, from_name: str) -> MimeMessage:
     mime = MimeMessage()
     mime["From"] = f"{from_name} <{from_address}>"

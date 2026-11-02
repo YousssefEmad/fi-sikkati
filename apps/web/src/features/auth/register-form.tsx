@@ -83,6 +83,10 @@ export function RegisterForm({
         form.setError("displayName", { message: t("errors.displayNameTaken") });
         return;
       }
+      if (error instanceof ApiRequestError && error.problem.code === "PHONE_TAKEN") {
+        form.setError("phone", { message: t("errors.phoneTaken") });
+        return;
+      }
       setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
     }
   }

@@ -18,7 +18,7 @@ from app.api.v1 import router as api_v1_router
 from app.core.authz.ports import bind_identity_loader, bind_session_revoker
 from app.core.config import Settings, get_settings
 from app.core.database import Database
-from app.core.email import SmtpEmailSender
+from app.core.email import LoggingEmailSender, SmtpEmailSender
 from app.core.errors import register_error_handlers
 from app.core.events import DomainEvent, EventDispatcher, EventPublisher, bind_event_dispatcher
 from app.core.health import router as health_router
@@ -121,7 +121,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.password_service = PasswordService(settings)
         app.state.access_token_service = AccessTokenService(settings)
         app.state.rate_limiter = RateLimiter(redis)
-        app.state.email_sender = SmtpEmailSender(settings)
+        app.state.email_sender = (
+            SmtpEmailSender(settings) if settings.smtp_configured else LoggingEmailSender()
+        )
         app.state.sms_sender = (
             TwilioSmsSender(settings) if settings.sms_configured else NullSmsSender()
         )

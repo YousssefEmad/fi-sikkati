@@ -50,11 +50,22 @@ def test_docs_only_outside_production(env: str, docs: bool) -> None:
         "TWILIO_ACCOUNT_SID": "AC123",
         "TWILIO_AUTH_TOKEN": "token",
         "SMS_FROM": "+15005550006",
+        "SMTP_HOST": "smtp.example.com",
     }
     settings = Settings.model_validate(
         {**_BASE, "APP_ENV": env, **(production if env == "production" else {})}
     )
     assert settings.docs_enabled is docs
+
+
+def test_loopback_smtp_is_not_configured() -> None:
+    settings = Settings.model_validate(_BASE)
+    assert settings.smtp_configured is False
+
+
+def test_real_smtp_host_is_configured() -> None:
+    settings = Settings.model_validate({**_BASE, "SMTP_HOST": "smtp.example.com"})
+    assert settings.smtp_configured is True
 
 
 def test_short_secrets_are_rejected() -> None:
