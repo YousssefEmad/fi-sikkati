@@ -43,7 +43,10 @@ export function RegisterForm({
         (value) => value <= adultCutoffDate(minimumAgeYears),
         t("errors.tooYoung", { age: minimumAgeYears }),
       ),
-    phone: z.string().trim().min(1, t("errors.required")).refine(isMobileNumber, t("errors.phone")),
+    phone: z
+      .string()
+      .trim()
+      .refine((value) => value.length === 0 || isMobileNumber(value), t("errors.phone")),
     accepted: z.boolean().refine((value) => value, t("errors.legal")),
   });
 
@@ -73,7 +76,7 @@ export function RegisterForm({
         fullName: parsed.fullName,
         dateOfBirth: parsed.dateOfBirth,
         locale: locale === "en" ? "en" : "ar",
-        phone: parsed.phone,
+        phone: parsed.phone.length > 0 ? parsed.phone : undefined,
         acceptedTermsVersion: termsVersion,
         acceptedPrivacyVersion: privacyVersion,
       });

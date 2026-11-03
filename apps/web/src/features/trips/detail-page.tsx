@@ -156,15 +156,7 @@ export function TripDetail({ tripId }: { tripId: string }) {
               phoneVerified={account.phoneVerified}
             />
           ) : null}
-          {mine && trip.status === "DRAFT" && !account.phoneVerified ? (
-            <p className="bg-brand-soft mt-6 rounded-md px-4 py-3 text-sm">
-              {t("needPhone")}{" "}
-              <Link href="/me" className="font-semibold underline-offset-4 hover:underline">
-                {accountT("phoneTitle")}
-              </Link>
-            </p>
-          ) : null}
-          {mine && trip.status === "DRAFT" && account.phoneVerified ? (
+          {mine && trip.status === "DRAFT" ? (
             <Button className="mt-6" disabled={busy} onClick={() => void act("publish")}>
               {t("publish")}
             </Button>

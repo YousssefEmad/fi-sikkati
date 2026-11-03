@@ -16,7 +16,6 @@ from app.core.errors import (
     InvalidTransitionError,
     NotFoundError,
     OverlappingTripError,
-    PhoneNotVerifiedError,
     PreconditionRequiredError,
     VehicleNotEligibleError,
     VersionConflictError,
@@ -127,10 +126,9 @@ class TripService:
         idempotency_key: str | None,
         now: datetime | None = None,
     ) -> TripView:
+        del phone_verified  # Phone confirmation is optional (OD-004 / BR-ACC-01).
         if not email_verified:
             raise EmailNotVerifiedError("Confirm your email before publishing trips.")
-        if not phone_verified:
-            raise PhoneNotVerifiedError("Confirm your mobile number before publishing trips.")
         if idempotency_key:
             existing = await self._repository.get_by_idempotency(driver_id, idempotency_key)
             if existing is not None:

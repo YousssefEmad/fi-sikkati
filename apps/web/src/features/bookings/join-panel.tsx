@@ -173,16 +173,6 @@ function PassengerRequest({
   if (!emailVerified) {
     return <p className="bg-brand-soft mt-8 rounded-md px-4 py-3 text-sm">{t("needEmail")}</p>;
   }
-  if (!phoneVerified) {
-    return (
-      <p className="bg-brand-soft mt-8 rounded-md px-4 py-3 text-sm">
-        {t("needPhone")}{" "}
-        <Link href="/me" className="font-semibold underline-offset-4 hover:underline">
-          {t("phoneLink")}
-        </Link>
-      </p>
-    );
-  }
   if (identityStatus !== "APPROVED") {
     return (
       <p className="bg-brand-soft mt-8 rounded-md px-4 py-3 text-sm">

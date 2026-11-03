@@ -233,7 +233,8 @@ class AuthService:
                 code="SMS_FAILED",
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             ) from exc
-        reveal = self._settings.app_env == "development" and not self._settings.sms_configured
+        # No Twilio in staging/dev: show the code in the API response so testers can confirm.
+        reveal = (not self._settings.is_production) and (not self._settings.sms_configured)
         return expires_at, code if reveal else None
 
     async def confirm_phone(self, user_id: UUID, code: str) -> None:

@@ -20,7 +20,6 @@ from app.core.errors import (
     IdentityNotVerifiedError,
     InvalidTransitionError,
     NotFoundError,
-    PhoneNotVerifiedError,
     RequestNotPendingError,
     RouteIncompatibleError,
     SeatUnavailableError,
@@ -528,10 +527,9 @@ class BookingService:
 
 
 def _require_verified_contact(email_verified: bool, phone_verified: bool) -> None:
+    del phone_verified  # Phone confirmation is optional (OD-004 / BR-ACC-01).
     if not email_verified:
         raise EmailNotVerifiedError("Confirm your email before requesting a seat.")
-    if not phone_verified:
-        raise PhoneNotVerifiedError("Confirm your mobile number before requesting a seat.")
 
 
 def _reserve(trip: Trip, seats: int) -> None:
