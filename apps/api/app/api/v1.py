@@ -18,6 +18,7 @@ from app.modules.auth.router import sessions_router as auth_sessions_router
 from app.modules.bookings.router import join_router, me_join_router, trip_join_router
 from app.modules.chat.router import me_router as me_conversations_router
 from app.modules.chat.router import router as conversations_router
+from app.modules.files.router import router as files_router
 from app.modules.maps.router import router as maps_router
 from app.modules.notifications.router import preferences_router as notification_preferences_router
 from app.modules.notifications.router import push_router
@@ -42,6 +43,7 @@ API_V1_PREFIX = "/api/v1"
 
 router = APIRouter(prefix=API_V1_PREFIX)
 router.include_router(platform_router)
+router.include_router(files_router)
 router.include_router(auth_router)
 router.include_router(phone_router)
 # ``/me/sessions`` before ``/me`` so the more specific prefix is matched first.

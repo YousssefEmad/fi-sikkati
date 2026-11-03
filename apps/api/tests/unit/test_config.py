@@ -51,6 +51,7 @@ def test_docs_only_outside_production(env: str, docs: bool) -> None:
         "TWILIO_AUTH_TOKEN": "token",
         "SMS_FROM": "+15005550006",
         "SMTP_HOST": "smtp.example.com",
+        "S3_ENDPOINT": "https://s3.example.com",
     }
     settings = Settings.model_validate(
         {**_BASE, "APP_ENV": env, **(production if env == "production" else {})}
@@ -66,6 +67,16 @@ def test_loopback_smtp_is_not_configured() -> None:
 def test_real_smtp_host_is_configured() -> None:
     settings = Settings.model_validate({**_BASE, "SMTP_HOST": "smtp.example.com"})
     assert settings.smtp_configured is True
+
+
+def test_loopback_s3_is_not_configured() -> None:
+    settings = Settings.model_validate(_BASE)
+    assert settings.s3_configured is False
+
+
+def test_real_s3_endpoint_is_configured() -> None:
+    settings = Settings.model_validate({**_BASE, "S3_ENDPOINT": "https://s3.example.com"})
+    assert settings.s3_configured is True
 
 
 def test_short_secrets_are_rejected() -> None:

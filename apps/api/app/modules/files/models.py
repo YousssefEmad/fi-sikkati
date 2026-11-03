@@ -7,7 +7,7 @@ from enum import StrEnum
 from typing import Final
 from uuid import UUID
 
-from sqlalchemy import BigInteger, DateTime, Enum, ForeignKey, Text
+from sqlalchemy import BigInteger, DateTime, Enum, ForeignKey, LargeBinary, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base, TimestampMixin, uuid_primary_key
@@ -33,8 +33,19 @@ BUCKET_ENUM: Final = _pg_enum(StorageBucket, "stored_files_bucket_enum")
 SCAN_STATUS_ENUM: Final = _pg_enum(ScanStatus, "stored_files_scan_status_enum")
 
 
+class ObjectBlob(Base):
+    """Fallback object bytes when S3/MinIO is not configured (staging)."""
+
+    __tablename__ = "object_blobs"
+
+    bucket: Mapped[str] = mapped_column(String(64), primary_key=True)
+    object_key: Mapped[str] = mapped_column(Text, primary_key=True)
+    content_type: Mapped[str] = mapped_column(String(120), nullable=False)
+    data: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+
+
 class StoredFile(Base, TimestampMixin):
-    """One object in S3/MinIO. Bytes never live in PostgreSQL."""
+    """One stored object metadata row. Bytes live in S3/MinIO or ``object_blobs``."""
 
     __tablename__ = "stored_files"
 

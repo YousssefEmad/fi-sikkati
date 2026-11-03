@@ -102,7 +102,7 @@ export function NotificationBell() {
       {open ? (
         <div
           id={panelId}
-          className="border-border bg-background absolute end-0 z-50 mt-2 w-[min(22rem,calc(100vw-2rem))] rounded-2xl border p-3 shadow-lg"
+          className="border-border bg-background fixed inset-x-3 top-[3.75rem] z-50 max-h-[min(28rem,calc(100dvh-5rem))] overflow-y-auto rounded-2xl border p-3 shadow-lg sm:absolute sm:inset-x-auto sm:end-0 sm:top-auto sm:mt-2 sm:max-h-none sm:w-[min(22rem,calc(100vw-2rem))] sm:overflow-visible"
         >
           <p className="px-1 text-sm font-bold">{t("title")}</p>
           <div className="mt-3 max-h-96 space-y-2 overflow-y-auto">

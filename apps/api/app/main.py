@@ -19,6 +19,7 @@ from app.core.authz.ports import bind_identity_loader, bind_session_revoker
 from app.core.config import Settings, get_settings
 from app.core.database import Database
 from app.core.email import LoggingEmailSender, SmtpEmailSender
+from app.modules.files.database_storage import DatabaseObjectStorage
 from app.core.errors import register_error_handlers
 from app.core.events import DomainEvent, EventDispatcher, EventPublisher, bind_event_dispatcher
 from app.core.health import router as health_router
@@ -127,7 +128,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.sms_sender = (
             TwilioSmsSender(settings) if settings.sms_configured else NullSmsSender()
         )
-        app.state.object_storage = MinioObjectStorage(settings)
+        app.state.object_storage = (
+            MinioObjectStorage(settings) if settings.s3_configured else DatabaseObjectStorage(settings)
+        )
         if settings.mapbox_access_token:
             app.state.map_provider = MapboxMapProvider(settings)
         else:

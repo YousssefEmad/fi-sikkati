@@ -351,6 +351,9 @@ class Settings(BaseSettings):
         if self.app_env == "production" and not self.smtp_configured:
             msg = "SMTP_HOST must point at a real mail server in production (not localhost)"
             raise ValueError(msg)
+        if self.app_env == "production" and not self.s3_configured:
+            msg = "S3_ENDPOINT must point at a real object store in production (not localhost)"
+            raise ValueError(msg)
         return self
 
     @property
@@ -364,6 +367,12 @@ class Settings(BaseSettings):
         """False for loopback Mailpit-style hosts that are unreachable on Fly staging."""
         host = (self.smtp_host or "").strip().lower()
         return bool(host) and host not in {"127.0.0.1", "localhost", "::1"}
+
+    @property
+    def s3_configured(self) -> bool:
+        """False when S3_ENDPOINT still points at local MinIO (unreachable on Fly staging)."""
+        endpoint = (self.s3_endpoint or "").strip().lower()
+        return bool(endpoint) and "127.0.0.1" not in endpoint and "localhost" not in endpoint
 
     @property
     def is_production(self) -> bool:
