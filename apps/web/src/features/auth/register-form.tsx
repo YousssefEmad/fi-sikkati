@@ -76,7 +76,7 @@ export function RegisterForm({
         fullName: parsed.fullName,
         dateOfBirth: parsed.dateOfBirth,
         locale: locale === "en" ? "en" : "ar",
-        phone: parsed.phone.length > 0 ? parsed.phone : undefined,
+        phone: parsed.phone.length > 0 ? parsed.phone : null,
         acceptedTermsVersion: termsVersion,
         acceptedPrivacyVersion: privacyVersion,
       });

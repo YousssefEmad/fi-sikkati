@@ -27,7 +27,6 @@ export function JoinPanel({
   tripStatus,
   identityStatus,
   emailVerified,
-  phoneVerified,
 }: {
   tripId: string;
   focusRequestId?: string | null;
@@ -35,7 +34,7 @@ export function JoinPanel({
   tripStatus: string;
   identityStatus: string;
   emailVerified: boolean;
-  phoneVerified: boolean;
+  phoneVerified?: boolean;
 }) {
   if (isDriver) {
     return <DriverRequests tripId={tripId} focusRequestId={focusRequestId ?? null} />;
@@ -46,7 +45,6 @@ export function JoinPanel({
       tripStatus={tripStatus}
       identityStatus={identityStatus}
       emailVerified={emailVerified}
-      phoneVerified={phoneVerified}
     />
   );
 }
@@ -149,13 +147,11 @@ function PassengerRequest({
   tripStatus,
   identityStatus,
   emailVerified,
-  phoneVerified,
 }: {
   tripId: string;
   tripStatus: string;
   identityStatus: string;
   emailVerified: boolean;
-  phoneVerified: boolean;
 }) {
   const t = useTranslations("Bookings");
   const queryClient = useQueryClient();
