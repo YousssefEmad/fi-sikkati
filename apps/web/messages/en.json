@@ -200,7 +200,7 @@
     "verifyOk": "Your email is confirmed. You can sign in.",
     "checkEmailTitle": "Check your email",
     "checkEmailBody": "If that address can be used, a confirmation message is on its way. Confirm it before you expect a fully set-up account.",
-    "checkEmailDevHint": "On this development machine, open Mailpit at http://localhost:8025 to read the message.",
+    "checkEmailDevHint": "On this staging build there is no outbound email yet, so new accounts are confirmed automatically. Sign in and continue.",
     "acceptLegal": "I accept the <terms>terms of use</terms> and the <privacy>privacy notice</privacy>.",
     "haveAccount": "Already have an account? <link>Sign in</link>",
     "needAccount": "New here? <link>Create an account</link>",

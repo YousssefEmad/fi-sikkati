@@ -164,14 +164,19 @@ class AuthService:
             accepted_privacy_version=request.accepted_privacy_version,
         )
         if not outcome.created:
-            await self._emails.send(
-                emails.existing_account_email(
-                    to=outcome.email,
-                    display_name=outcome.display_name,
-                    locale=outcome.locale,
-                    link=self._web_link(outcome.locale, "auth/sign-in"),
+            if self._settings.smtp_configured:
+                await self._emails.send(
+                    emails.existing_account_email(
+                        to=outcome.email,
+                        display_name=outcome.display_name,
+                        locale=outcome.locale,
+                        link=self._web_link(outcome.locale, "auth/sign-in"),
+                    )
                 )
-            )
+            return
+        # Staging/dev without a real mailbox: mark verified immediately so testers are not stuck.
+        if not self._settings.is_production and not self._settings.smtp_configured:
+            await self._users.mark_email_verified(outcome.user_id)
             return
         await self._send_verification_email(
             user_id=outcome.user_id,
