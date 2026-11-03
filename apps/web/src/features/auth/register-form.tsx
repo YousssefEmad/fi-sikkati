@@ -11,7 +11,15 @@ import { ApiRequestError, registerAccount } from "@/features/auth/api";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { adultCutoffDate, isMobileNumber } from "@/features/auth/validation";
 import { Link, useRouter } from "@/i18n/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+/** Prefer the first word of the full name as a public nickname. */
+function suggestDisplayName(fullName: string): string {
+  const trimmed = fullName.trim();
+  if (!trimmed) return "";
+  const first = trimmed.split(/\s+/)[0] ?? "";
+  return first.slice(0, 60);
+}
 
 export function RegisterForm({
   passwordMinLength,
@@ -28,6 +36,7 @@ export function RegisterForm({
   const locale = useLocale();
   const router = useRouter();
   const [formError, setFormError] = useState<string | undefined>();
+  const autoDisplayName = useRef(true);
 
   const schema = z.object({
     email: z.email(t("errors.email")),
@@ -67,7 +76,11 @@ export function RegisterForm({
 
   async function onSubmit(values: Values) {
     setFormError(undefined);
-    const parsed = schema.parse(values);
+    const withDisplay =
+      values.displayName.trim().length >= 2
+        ? values
+        : { ...values, displayName: suggestDisplayName(values.fullName) };
+    const parsed = schema.parse(withDisplay);
     try {
       await registerAccount({
         email: parsed.email,
@@ -117,15 +130,37 @@ export function RegisterForm({
           {...form.register("password")}
         />
       </Field>
+      <Field id="fullName" label={t("fullName")} error={form.formState.errors.fullName?.message}>
+        <TextInput
+          id="fullName"
+          autoComplete="name"
+          {...form.register("fullName", {
+            onChange: (event) => {
+              if (!autoDisplayName.current) return;
+              const suggested = suggestDisplayName(event.target.value);
+              if (suggested.length >= 2) {
+                form.setValue("displayName", suggested, { shouldValidate: true, shouldDirty: true });
+                form.clearErrors("displayName");
+              }
+            },
+          })}
+        />
+      </Field>
       <Field
         id="displayName"
         label={t("displayName")}
+        hint={t("displayNameHint")}
         error={form.formState.errors.displayName?.message}
       >
-        <TextInput id="displayName" autoComplete="nickname" {...form.register("displayName")} />
-      </Field>
-      <Field id="fullName" label={t("fullName")} error={form.formState.errors.fullName?.message}>
-        <TextInput id="fullName" autoComplete="name" {...form.register("fullName")} />
+        <TextInput
+          id="displayName"
+          autoComplete="nickname"
+          {...form.register("displayName", {
+            onChange: () => {
+              autoDisplayName.current = false;
+            },
+          })}
+        />
       </Field>
       <Field
         id="dateOfBirth"

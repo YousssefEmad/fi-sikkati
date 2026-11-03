@@ -174,6 +174,7 @@
     "newPassword": "New password",
     "confirmPassword": "Confirm password",
     "displayName": "Display name",
+    "displayNameHint": "The name other people see on trips. Your first name is fine.",
     "fullName": "Full name",
     "dateOfBirth": "Date of birth",
     "ageHint": "You must be {age} or older.",
