@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Field, TextInput } from "@/components/ui/field";
 import { Skeleton } from "@/components/ui/skeleton";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
   getConversation,
   listMessages,
@@ -24,6 +25,26 @@ export function ThreadPage({ conversationId }: { conversationId: string }) {
       <Thread conversationId={conversationId} />
     </RequireAccount>
   );
+}
+
+function messageText(
+  body: string,
+  systemEvent: string | null | undefined,
+  kind: string,
+  t: ReturnType<typeof useTranslations<"Chat">>,
+): string {
+  if (kind === "SYSTEM" && systemEvent) {
+    try {
+      return t(`events.${systemEvent}` as "events.TRIP_STARTED");
+    } catch {
+      /* fall through */
+    }
+  }
+  if (kind === "SYSTEM" && body.includes(" / ")) {
+    const [ar] = body.split(" / ");
+    return (ar ?? body).trim();
+  }
+  return body;
 }
 
 function Thread({ conversationId }: { conversationId: string }) {
@@ -74,64 +95,67 @@ function Thread({ conversationId }: { conversationId: string }) {
   }
 
   const trip = conversation.data;
+  const isCommunity = trip.tripId === null;
+
   return (
     <div className="mx-auto flex min-h-[70dvh] w-full max-w-3xl flex-col px-4 py-8 sm:px-6">
-      <Link href="/messages" className="text-sm font-semibold underline-offset-4 hover:underline">
+      <Link href="/messages" className="text-base font-bold underline-offset-4 hover:underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-2xl font-extrabold">
-        {trip.tripId === null
-          ? t("community")
-          : trip.originLabel && trip.destinationLabel
-            ? `${trip.originLabel} → ${trip.destinationLabel}`
-            : t("untitled")}
-      </h1>
-      <p className="text-muted-foreground mt-1 text-sm">
-        {trip.tripId === null
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <h1 className="text-2xl font-extrabold">
+          {isCommunity
+            ? t("community")
+            : trip.originLabel && trip.destinationLabel
+              ? `${trip.originLabel} → ${trip.destinationLabel}`
+              : t("untitled")}
+        </h1>
+        <StatusBadge tone={isCommunity ? "success" : "warning"}>
+          {isCommunity ? t("communityBadge") : t("tripBadge")}
+        </StatusBadge>
+      </div>
+      <p className="text-muted-foreground mt-2 text-base">
+        {isCommunity
           ? t("communityHint")
-          : trip.memberNames.filter(Boolean).join(" · ") || t("members")}
+          : trip.memberNames.filter(Boolean).join(" · ") || t("tripHint")}
       </p>
-      {trip.isReadOnly ? <p className="text-muted-foreground mt-1 text-sm">{t("readOnly")}</p> : null}
+      {trip.isReadOnly ? (
+        <p className="text-muted-foreground mt-1 text-sm font-semibold">{t("readOnly")}</p>
+      ) : null}
       <ol className="mt-6 flex flex-1 flex-col gap-3">
         {messages.data?.map((item) => {
           const mine = item.senderId === account?.id;
+          const text = item.deleted
+            ? t("removed")
+            : messageText(item.body, item.systemEvent, item.kind, t);
           return (
             <li
               key={item.id}
-              className={mine ? "self-end" : "self-start"}
-              style={{ maxWidth: "85%" }}
+              className={item.kind === "SYSTEM" ? "self-center" : mine ? "self-end" : "self-start"}
+              style={{ maxWidth: item.kind === "SYSTEM" ? "95%" : "85%" }}
             >
-              <p
-                className={
-                  item.kind === "SYSTEM"
-                    ? "text-muted-foreground mb-1 text-center text-xs font-bold"
-                    : mine
-                      ? "mb-1 text-end text-xs font-bold"
-                      : "mb-1 text-xs font-bold"
-                }
-              >
-                {item.kind === "SYSTEM"
-                  ? t("system")
-                  : (item.senderDisplayName ??
-                    (mine ? account.displayName : t("unknownSender")))}
-              </p>
+              {item.kind === "SYSTEM" ? null : (
+                <p className={mine ? "mb-1 text-end text-xs font-bold" : "mb-1 text-xs font-bold"}>
+                  {item.senderDisplayName ?? (mine ? account?.displayName : t("unknownSender"))}
+                </p>
+              )}
               <div
                 className={
                   item.kind === "SYSTEM"
-                    ? "text-muted-foreground text-center text-xs"
+                    ? "bg-surface-muted text-foreground rounded-full px-4 py-2 text-center text-sm font-semibold"
                     : mine
-                      ? "bg-primary text-primary-foreground rounded-2xl px-4 py-2 text-sm"
-                      : "bg-surface-muted rounded-2xl px-4 py-2 text-sm"
+                      ? "bg-primary text-primary-foreground rounded-2xl px-4 py-2.5 text-base"
+                      : "bg-surface-muted rounded-2xl px-4 py-2.5 text-base"
                 }
               >
-                {item.deleted ? t("removed") : item.body}
+                {text}
               </div>
             </li>
           );
         })}
       </ol>
       <form
-        className="mt-6 flex gap-2"
+        className="mt-6 flex items-end gap-2"
         onSubmit={(event) => {
           event.preventDefault();
           if (draft.trim()) send.mutate();

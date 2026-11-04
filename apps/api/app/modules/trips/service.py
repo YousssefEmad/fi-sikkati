@@ -184,6 +184,13 @@ class TripService:
             raise NotFoundError("Trip not found.")
         return await self._view(trip, exact=exact)
 
+    async def list_browse(self, *, limit: int = 12) -> list[TripView]:
+        """Public-ish home feed of upcoming published trips (approximate stops)."""
+        rows = await self._repository.list_upcoming_published(
+            limit=limit, now=datetime.now(UTC)
+        )
+        return [await self._view(row, exact=False) for row in rows]
+
     async def list_mine(
         self,
         driver_id: UUID,

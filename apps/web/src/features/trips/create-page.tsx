@@ -47,10 +47,6 @@ function CreateForm() {
 
   const isDriver = session?.roles.includes("DRIVER") === true;
 
-  if (refreshing && !isDriver) {
-    return <p className="text-muted-foreground px-4 py-16 text-center">{auth("loading")}</p>;
-  }
-
   async function onPreview(): Promise<void> {
     if (!origin || !destination) return;
     setBusy(true);
@@ -98,11 +94,51 @@ function CreateForm() {
     }
   }
 
+  if (vehicles.isPending || (refreshing && !isDriver)) {
+    return <p className="text-muted-foreground px-4 py-16 text-center">{auth("loading")}</p>;
+  }
+
   if (!isDriver) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-12">
-        <p className="text-muted-foreground">{t("needDriver")}</p>
-        <Link href="/drive" className="text-primary mt-4 inline-block font-semibold underline">
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        <h1 className="text-3xl font-extrabold tracking-tight">{t("createTitle")}</h1>
+        <p className="text-muted-foreground mt-3 text-base leading-relaxed">{t("needDriver")}</p>
+        <p className="text-muted-foreground mt-2 text-base">{t("needDriverHint")}</p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/me/setup"
+            className="bg-brand text-brand-foreground inline-flex min-h-12 items-center justify-center rounded-full px-6 text-base font-bold"
+            onClick={() => {
+              try {
+                localStorage.setItem("fi-sikkati-role-intent", "driver");
+                localStorage.removeItem("fi-sikkati-setup-done");
+              } catch {
+                /* ignore */
+              }
+            }}
+          >
+            {t("completeDriverSetup")}
+          </Link>
+          <Link
+            href="/drive"
+            className="border-border-strong inline-flex min-h-12 items-center justify-center rounded-full border px-6 text-base font-bold"
+          >
+            {account("navDrive")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (fleet.length === 0) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        <h1 className="text-3xl font-extrabold tracking-tight">{t("createTitle")}</h1>
+        <p className="text-muted-foreground mt-3 text-base leading-relaxed">{t("needApprovedVehicle")}</p>
+        <Link
+          href="/drive"
+          className="bg-brand text-brand-foreground mt-6 inline-flex min-h-12 items-center justify-center rounded-full px-6 text-base font-bold"
+        >
           {account("navDrive")}
         </Link>
       </div>
@@ -208,7 +244,7 @@ function CreateForm() {
 
 export function CreateTripPage() {
   return (
-    <RequireAccount>
+    <RequireAccount needIdentity>
       <CreateForm />
     </RequireAccount>
   );

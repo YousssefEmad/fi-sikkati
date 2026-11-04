@@ -119,6 +119,21 @@ async def create_trip(
 
 
 @trips_router.get(
+    "/browse",
+    response_model=TripListResponse,
+    operation_id="trips_browse",
+    summary="Upcoming published trips for discovery",
+)
+async def browse_trips(
+    service: TripServiceDep,
+    limit: Annotated[int, Query(ge=1, le=30)] = 12,
+) -> TripListResponse:
+    """Home feed: approximate trip cards anyone can scroll before searching."""
+    items = await service.list_browse(limit=limit)
+    return TripListResponse(items=[_response(item) for item in items], next_cursor=None)
+
+
+@trips_router.get(
     "/{trip_id}",
     response_model=TripResponse,
     operation_id="trips_get",

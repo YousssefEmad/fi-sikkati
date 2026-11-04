@@ -55,14 +55,16 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans text-base antialiased sm:text-[1.05rem];
     text-wrap: pretty;
+    line-height: 1.6;
   }
 
   h1,
   h2,
   h3 {
     text-wrap: balance;
+    letter-spacing: -0.02em;
   }
 
   /* Visible focus for keyboard users on every interactive element (NFR-03). */

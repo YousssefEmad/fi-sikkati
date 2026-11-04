@@ -1,31 +1,68 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
+import { StatusBadge, identityTone } from "@/components/ui/status-badge";
 import { PhoneForm } from "@/features/account/phone-form";
 import { PhotoForm } from "@/features/account/photo-form";
 import { ProfileForm } from "@/features/account/profile-form";
+import { readSetupRole, shouldRemindDrive } from "@/features/account/setup-intent";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
 import { Link } from "@/i18n/navigation";
 
 export function AccountHome() {
   const t = useTranslations("Account");
+  const setup = useTranslations("Setup");
   const { account } = useSession();
+  const [remindDrive, setRemindDrive] = useState(false);
+
+  useEffect(() => {
+    setRemindDrive(shouldRemindDrive() && readSetupRole() !== "driver");
+  }, []);
+
   if (!account) return null;
+
+  const needsSetup =
+    account.identityVerificationStatus === "NOT_SUBMITTED" ||
+    account.identityVerificationStatus === "REJECTED";
+  const isDriver = account.roles.includes("DRIVER");
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-extrabold tracking-tight">{t("title")}</h1>
-      <p className="text-muted-foreground mt-2">{account.email}</p>
+      <p className="text-muted-foreground mt-2 text-base">{account.email}</p>
       {account.emailVerified ? null : (
-        <p className="bg-brand-soft mt-4 rounded-md px-4 py-3 text-sm">{t("verifyBanner")}</p>
+        <p className="bg-brand-soft mt-4 rounded-xl px-4 py-3 text-base font-semibold">
+          {t("verifyBanner")}
+        </p>
       )}
+      {needsSetup ? (
+        <p className="bg-danger/10 text-danger mt-4 rounded-xl px-4 py-3 text-base font-bold">
+          {t("verificationStatus.NOT_SUBMITTED")}{" "}
+          <Link href="/me/setup" className="underline underline-offset-4">
+            {t("navVerification")}
+          </Link>
+        </p>
+      ) : null}
+      {!isDriver && remindDrive ? (
+        <p className="bg-brand-soft mt-4 rounded-xl px-4 py-3 text-base font-semibold">
+          {setup("driveReminder")}{" "}
+          <Link href="/drive" className="font-bold underline underline-offset-4">
+            {t("navDrive")}
+          </Link>
+        </p>
+      ) : null}
       <PhoneForm account={account} />
-      <p className="text-muted-foreground mt-3 text-sm">
-        {t("verificationStatusLine", {
-          status: t(`verificationStatus.${account.identityVerificationStatus}`),
-        })}
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <p className="text-base font-bold">{t("verificationLabel")}</p>
+        <StatusBadge tone={identityTone(account.identityVerificationStatus)}>
+          {t(`verificationBadge.${account.identityVerificationStatus}`)}
+        </StatusBadge>
+      </div>
+      <p className="text-muted-foreground mt-2 text-sm">
+        {t(`verificationStatus.${account.identityVerificationStatus}`)}
       </p>
       <nav className="border-border mt-6 grid grid-cols-2 gap-2 rounded-2xl border p-3 text-sm font-semibold sm:grid-cols-3 md:flex md:flex-wrap md:gap-4 md:border-0 md:p-0">
         <Link href="/me" className="text-primary min-h-11 rounded-xl px-3 py-2 hover:bg-surface-muted md:px-0 md:py-0 md:underline-offset-4 md:hover:bg-transparent md:hover:underline">

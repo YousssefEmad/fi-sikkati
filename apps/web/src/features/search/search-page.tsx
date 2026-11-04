@@ -17,24 +17,24 @@ import { Link } from "@/i18n/navigation";
 function ResultCard({ item }: { item: SearchTripItem }) {
   const t = useTranslations("Search");
   return (
-    <li className="border-border rounded-lg border p-4">
-      <p className="font-semibold">
+    <li className="border-border rounded-xl border p-5">
+      <p className="text-lg font-bold">
         {t("summary", { origin: item.originLabel, destination: item.destinationLabel })}
       </p>
-      <p className="text-muted-foreground mt-1 text-sm">
+      <p className="text-muted-foreground mt-2 text-base">
         {t("driverLine", { kind: t(`match.${item.matchKind}`), name: item.driver.displayName })}
       </p>
-      <p className="text-muted-foreground mt-1 text-sm">
+      <p className="text-foreground mt-2 text-base font-semibold">
         {t("seatsLeft", { available: item.availableSeats, total: item.totalSeats })}
       </p>
       {item.pricePerSeatMinor !== null ? (
-        <p className="mt-1 text-sm">
+        <p className="text-brand-strong mt-1 text-base font-bold">
           {t("price", { amount: (item.pricePerSeatMinor / 100).toFixed(0) })}
         </p>
       ) : null}
       <Link
         href={`/trips/${item.tripId}`}
-        className="text-primary mt-3 inline-block text-sm font-semibold underline-offset-4 hover:underline"
+        className="bg-brand text-brand-foreground mt-4 inline-flex min-h-12 items-center justify-center rounded-full px-5 text-base font-bold"
       >
         {t("viewTrip")}
       </Link>

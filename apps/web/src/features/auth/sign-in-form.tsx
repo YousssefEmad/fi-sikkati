@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
-import { ApiRequestError, signIn } from "@/features/auth/api";
+import { ApiRequestError, getMe, signIn } from "@/features/auth/api";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { useSession } from "@/features/auth/session-provider";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -35,7 +35,21 @@ export function SignInForm() {
     try {
       await signIn(values.email, values.password);
       await refreshAccount();
-      router.replace("/me");
+      let setupDone = false;
+      let role: string | null = null;
+      try {
+        setupDone = localStorage.getItem("fi-sikkati-setup-done") === "1";
+        role = localStorage.getItem("fi-sikkati-role-intent");
+      } catch {
+        setupDone = false;
+      }
+      const account = await getMe();
+      const isDriver = account.roles.includes("DRIVER");
+      if (!setupDone || !role || (role === "driver" && !isDriver)) {
+        router.replace("/me/setup");
+        return;
+      }
+      router.replace(role === "driver" ? "/trips/new" : "/search");
     } catch (error) {
       setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
     }

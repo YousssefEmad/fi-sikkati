@@ -171,6 +171,20 @@ class TripRepository:
         )
         return result.scalar_one_or_none()
 
+    async def list_upcoming_published(self, *, limit: int, now: datetime) -> list[Trip]:
+        """Upcoming discoverable trips for the home feed (approximate locations)."""
+        result = await self._db.execute(
+            select(Trip)
+            .options(selectinload(Trip.route), selectinload(Trip.stops))
+            .where(
+                Trip.status.in_((TripStatus.PUBLISHED, TripStatus.FULL)),
+                Trip.departure_at >= now,
+            )
+            .order_by(Trip.departure_at.asc(), Trip.id.asc())
+            .limit(limit)
+        )
+        return list(result.scalars())
+
     async def list_for_driver(
         self,
         driver_id: UUID,

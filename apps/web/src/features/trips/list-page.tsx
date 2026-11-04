@@ -39,7 +39,7 @@ function List() {
             >
               {t("summary", { origin: trip.originLabel, destination: trip.destinationLabel })}
             </Link>
-            <p className="text-muted-foreground mt-1 text-sm">{t(`status.${trip.status}`)}</p>
+            <p className="text-foreground mt-1 text-sm font-bold">{t(`status.${trip.status}`)}</p>
             <p className="mt-1 text-sm">
               {t("seatsFilled", {
                 filled: trip.totalSeats - trip.availableSeats,
@@ -63,7 +63,7 @@ function List() {
             >
               {t("summary", { origin: trip.originLabel, destination: trip.destinationLabel })}
             </Link>
-            <p className="text-muted-foreground mt-1 text-sm">{t(`status.${trip.status}`)}</p>
+            <p className="text-foreground mt-1 text-sm font-bold">{t(`status.${trip.status}`)}</p>
             <p className="mt-1 text-sm">
               {t("seatsFilled", {
                 filled: trip.totalSeats - trip.availableSeats,

@@ -137,9 +137,22 @@ function DriveForm() {
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-extrabold tracking-tight">{t("title")}</h1>
       <p className="text-muted-foreground mt-2">{t("intro")}</p>
-      <p className="mt-3 text-sm">
-        {t("status", { status: shownStatus ? t(shownStatus) : t("none") })}
-      </p>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <p className="text-base font-bold">{t("driverStatusLabel")}</p>
+        <span
+          className={
+            shownStatus === "APPROVED"
+              ? "bg-success/15 text-success border-success/30 inline-flex rounded-full border px-3 py-1.5 text-sm font-bold"
+              : shownStatus === "PENDING"
+                ? "bg-brand-soft text-brand-foreground border-brand-strong/40 inline-flex rounded-full border px-3 py-1.5 text-sm font-bold"
+                : shownStatus === "REJECTED" || shownStatus === "REVOKED"
+                  ? "bg-danger/10 text-danger border-danger/25 inline-flex rounded-full border px-3 py-1.5 text-sm font-bold"
+                  : "bg-surface-muted text-muted-foreground border-border inline-flex rounded-full border px-3 py-1.5 text-sm font-bold"
+          }
+        >
+          {shownStatus ? t(shownStatus) : t("none")}
+        </span>
+      </div>
       {acceptedDriver ? (
         <p className="mt-4">
           <Link
@@ -151,7 +164,7 @@ function DriveForm() {
         </p>
       ) : null}
       {identityApproved ? null : (
-        <p className="bg-brand-soft mt-4 rounded-md px-4 py-3 text-sm">
+        <p className="bg-danger/10 text-danger mt-4 rounded-xl px-4 py-3 text-base font-bold">
           {t("needIdentity")}
           <Link href="/me/verification" className="ms-1 font-semibold underline">
             {account("navVerification")}
@@ -174,8 +187,8 @@ function DriveForm() {
                   plate: vehicle.plateNumber,
                 })}
               </p>
-              <p className="text-muted-foreground text-sm">
-                {vehicles("status", { status: vehicle.verificationStatus })}
+              <p className="mt-2 text-sm font-bold">
+                {vehicles(`verification.${vehicle.verificationStatus}` as "verification.APPROVED")}
               </p>
               <p className="text-muted-foreground mt-1 text-xs">{vehicles("plateHint")}</p>
               <div className="mt-3 space-y-2 text-sm">

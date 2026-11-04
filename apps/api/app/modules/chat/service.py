@@ -338,8 +338,9 @@ class ChatService:
         self, conversation_id: UUID, event: SystemEvent, *, body: str | None = None
     ) -> None:
         if body is None:
+            # Prefer Arabic as the product default; the UI can still localise via systemEvent.
             copy = _SYSTEM_COPY[event]
-            body = f"{copy['ar']} / {copy['en']}"
+            body = copy["ar"]
         message = Message(
             id=uuid7(),
             conversation_id=conversation_id,

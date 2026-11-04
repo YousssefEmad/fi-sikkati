@@ -6,8 +6,10 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/field";
+import { StatusBadge, identityTone } from "@/components/ui/status-badge";
 import { ApiRequestError } from "@/features/auth/api";
 import { RequireAccount } from "@/features/auth/require-account";
+import { useSession } from "@/features/auth/session-provider";
 import {
   getVerification,
   submitIdentity,
@@ -21,9 +23,11 @@ const TYPES = [
   ["SELFIE", "selfie"],
 ] as const;
 
-function IdentityForm() {
+/** Identity upload UI; ``embedded`` hides the page chrome for the setup wizard. */
+export function IdentityPageInner({ embedded = false }: { embedded?: boolean }) {
   const t = useTranslations("Verification");
-  const account = useTranslations("Account");
+  const accountT = useTranslations("Account");
+  const { refreshAccount } = useSession();
   const queryClient = useQueryClient();
   const query = useQuery({ queryKey: ["verification", "me"], queryFn: getVerification });
   const [error, setError] = useState<string | undefined>();
@@ -55,6 +59,7 @@ function IdentityForm() {
     setError(undefined);
     try {
       queryClient.setQueryData(["verification", "me"], await submitIdentity());
+      await refreshAccount();
     } catch (err) {
       setError(err instanceof ApiRequestError ? err.message : t("errors.submit"));
     } finally {
@@ -63,47 +68,60 @@ function IdentityForm() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-extrabold tracking-tight">{t("title")}</h1>
-      <p className="text-muted-foreground mt-2">{t("intro")}</p>
+    <div className={embedded ? undefined : "mx-auto w-full max-w-3xl px-4 py-12 sm:px-6"}>
+      {embedded ? null : (
+        <>
+          <h1 className="text-3xl font-extrabold tracking-tight">{t("title")}</h1>
+          <p className="text-muted-foreground mt-2 text-base">{t("intro")}</p>
+        </>
+      )}
       {status ? (
-        <p className="mt-3 text-sm">
-          {t("status", { status: account(`verificationStatus.${status.identityStatus}`) })}
-        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <StatusBadge tone={identityTone(status.identityStatus)}>
+            {accountT(`verificationBadge.${status.identityStatus}`)}
+          </StatusBadge>
+          <p className="text-muted-foreground text-sm">
+            {accountT(`verificationStatus.${status.identityStatus}`)}
+          </p>
+        </div>
       ) : null}
       {status ? (
-        <p className="text-muted-foreground mt-1 text-sm">
+        <p className="text-muted-foreground mt-2 text-sm">
           {t("sla", { hours: status.reviewSlaHours })}
         </p>
       ) : null}
       {status?.identityRejectionReason ? (
-        <p className="bg-brand-soft mt-4 rounded-md px-4 py-3 text-sm">
+        <p className="bg-danger/10 text-danger mt-4 rounded-xl px-4 py-3 text-sm font-semibold">
           {t("rejection", { reason: status.identityRejectionReason })}
         </p>
       ) : null}
-      {locked ? <p className="text-muted-foreground mt-4 text-sm">{t("locked")}</p> : null}
-      <ul className="mt-8 space-y-4">
+      {locked ? <p className="text-muted-foreground mt-4 text-sm font-semibold">{t("locked")}</p> : null}
+      <ul className="mt-6 space-y-4">
         {TYPES.map(([documentType, key]) => {
           const uploaded = status?.identityDocuments.find(
             (doc) => doc.documentType === documentType,
           );
           return (
-            <li key={documentType} className="border-border rounded-lg border p-4">
-              <p className="font-semibold">{t(key)}</p>
+            <li key={documentType} className="border-border rounded-xl border p-4">
+              <p className="text-base font-bold">{t(key)}</p>
               {uploaded ? (
-                <p className="text-muted-foreground mt-1 text-sm">
+                <StatusBadge tone="success" className="mt-2">
                   {t("uploaded", { name: uploaded.originalName })}
-                </p>
-              ) : null}
+                </StatusBadge>
+              ) : (
+                <StatusBadge tone="muted" className="mt-2">
+                  {t("missing")}
+                </StatusBadge>
+              )}
               {locked ? null : (
                 <label
                   htmlFor={`identity-${documentType}`}
-                  className="mt-3 block text-sm font-semibold"
+                  className="mt-3 block text-sm font-bold"
                 >
                   {t("choose")}
                   <input
                     id={`identity-${documentType}`}
-                    className="mt-1 block"
+                    className="mt-1 block w-full text-sm font-normal"
                     type="file"
                     accept="image/jpeg,image/png,application/pdf"
                     aria-label={t(key)}
@@ -121,18 +139,20 @@ function IdentityForm() {
       </ul>
       {error ? <FormError message={error} /> : null}
       {locked ? null : (
-        <Button className="mt-6" disabled={busy !== null} onClick={() => void onSubmit()}>
+        <Button className="mt-6" size="lg" disabled={busy !== null} onClick={() => void onSubmit()}>
           {busy === "submit" ? t("submitting") : t("submit")}
         </Button>
       )}
-      <p className="mt-8">
-        <Link
-          href="/me"
-          className="text-primary text-sm font-semibold underline-offset-4 hover:underline"
-        >
-          {account("backToAccount")}
-        </Link>
-      </p>
+      {embedded ? null : (
+        <p className="mt-8">
+          <Link
+            href="/me"
+            className="text-primary text-base font-bold underline-offset-4 hover:underline"
+          >
+            {accountT("backToAccount")}
+          </Link>
+        </p>
+      )}
     </div>
   );
 }
@@ -140,7 +160,7 @@ function IdentityForm() {
 export function IdentityPage() {
   return (
     <RequireAccount>
-      <IdentityForm />
+      <IdentityPageInner />
     </RequireAccount>
   );
 }

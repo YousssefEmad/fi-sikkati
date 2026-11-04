@@ -171,9 +171,9 @@ function PassengerRequest({
   }
   if (identityStatus !== "APPROVED") {
     return (
-      <p className="bg-brand-soft mt-8 rounded-md px-4 py-3 text-sm">
+      <p className="bg-danger/10 text-danger mt-8 rounded-xl px-4 py-3 text-base font-bold">
         {t("needIdentity")}{" "}
-        <Link href="/me/verification" className="font-semibold underline-offset-4 hover:underline">
+        <Link href="/me/setup" className="underline underline-offset-4">
           {t("verifyLink")}
         </Link>
       </p>

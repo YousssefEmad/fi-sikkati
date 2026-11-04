@@ -89,7 +89,9 @@ export function TripDetail({ tripId }: { tripId: string }) {
           <h1 className="text-3xl font-extrabold tracking-tight">
             {t("summary", { origin: trip.originLabel, destination: trip.destinationLabel })}
           </h1>
-          <p className="text-muted-foreground mt-2 text-sm">{t(`status.${trip.status}`)}</p>
+          <p className="text-foreground mt-2 inline-flex rounded-full border border-border px-3 py-1.5 text-sm font-bold">
+            {t(`status.${trip.status}`)}
+          </p>
           <p className="mt-4 text-sm">
             {t("seatsFilled", {
               filled: trip.totalSeats - trip.availableSeats,
