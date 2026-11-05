@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FormError, SelectInput, TextInput } from "@/components/ui/field";
 import { SuggestInput } from "@/components/ui/suggest-input";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
 import { PlaceSuggest, type PickedPlace } from "@/features/places/place-suggest";
@@ -19,6 +20,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 
 function CreateForm() {
   const t = useTranslations("Trips");
+  const errorsT = useTranslations("Errors");
   const auth = useTranslations("Auth");
   const account = useTranslations("Account");
   const { account: session, refreshing } = useSession();
@@ -64,7 +66,7 @@ function CreateForm() {
       const quote = await estimatePrice(route.distanceM);
       setPrice(quote.suggestedPriceMinor);
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }
@@ -88,7 +90,7 @@ function CreateForm() {
       await queryClient.invalidateQueries({ queryKey: ["trips", "mine"] });
       router.push(`/trips/${trip.id}`);
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

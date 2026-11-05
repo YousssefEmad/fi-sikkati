@@ -84,6 +84,7 @@ function Inbox() {
                     <StatusBadge tone={isCommunity ? "success" : "warning"}>
                       {isCommunity ? t("communityBadge") : t("tripBadge")}
                     </StatusBadge>
+                    {item.muted ? <StatusBadge tone="muted">{t("mutedBadge")}</StatusBadge> : null}
                   </div>
                   <p className="text-muted-foreground mt-1 text-sm">
                     {isCommunity

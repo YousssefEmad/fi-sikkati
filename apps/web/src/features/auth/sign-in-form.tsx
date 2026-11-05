@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError, getMe, signIn } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { AuthAlternatives } from "@/features/auth/auth-alternatives";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { useSession } from "@/features/auth/session-provider";
@@ -16,6 +17,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 
 export function SignInForm() {
   const t = useTranslations("Auth");
+  const errorsT = useTranslations("Errors");
   const router = useRouter();
   const { refreshAccount } = useSession();
   const [formError, setFormError] = useState<string | undefined>();
@@ -52,7 +54,7 @@ export function SignInForm() {
       }
       router.replace(role === "driver" ? "/trips/new" : "/search");
     } catch (error) {
-      setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setFormError(apiErrorMessage(error, errorsT));
     }
   }
 

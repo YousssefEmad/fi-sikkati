@@ -23,6 +23,7 @@ from app.modules.chat.schemas import (
     MessageCreate,
     MessageListResponse,
     MessageResponse,
+    MuteConversationRequest,
 )
 from app.modules.chat.service import ConversationView, MessageView
 
@@ -53,6 +54,7 @@ def _conversation(view: ConversationView) -> ConversationResponse:
         departure_at=view.departure_at,
         is_read_only=view.is_read_only,
         unread_count=view.unread_count,
+        muted=view.muted,
         last_message=None if view.last_message is None else _message(view.last_message),
         member_ids=list(view.member_ids),
         member_names=list(view.member_names),
@@ -168,6 +170,25 @@ async def mark_read(
 ) -> None:
     await service.mark_read(
         conversation_id, viewer_id=principal.user_id, message_id=payload.message_id
+    )
+
+
+@router.put(
+    "/{conversation_id}/mute",
+    response_model=ConversationResponse,
+    operation_id="chat_mute",
+    summary="Mute or unmute notifications for this conversation",
+)
+async def mute_conversation(
+    conversation_id: UUID,
+    payload: MuteConversationRequest,
+    service: ChatServiceDep,
+    principal: Annotated[Principal, Depends(require_permission(Permission.CHAT_READ))],
+) -> ConversationResponse:
+    return _conversation(
+        await service.set_muted(
+            conversation_id, viewer_id=principal.user_id, muted=payload.muted
+        )
     )
 
 

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
 import {
@@ -27,6 +28,7 @@ import { Link } from "@/i18n/navigation";
 
 function AdminQueue() {
   const t = useTranslations("Admin");
+  const errorsT = useTranslations("Errors");
   const accountT = useTranslations("Account");
   const { account } = useSession();
   const queryClient = useQueryClient();
@@ -100,7 +102,7 @@ function AdminQueue() {
       await queryClient.invalidateQueries({ queryKey: ["admin"] });
       await queryClient.invalidateQueries({ queryKey: ["notifications"] });
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

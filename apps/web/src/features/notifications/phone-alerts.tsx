@@ -71,6 +71,9 @@ export function PhoneAlerts() {
           {t("phoneEnable")}
         </Button>
       ) : null}
+      {state === "on" || state === "off" ? (
+        <p className="text-muted-foreground mt-3 text-sm">{t("communityMuteHint")}</p>
+      ) : null}
     </div>
   );
 }

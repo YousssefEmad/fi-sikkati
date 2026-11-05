@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { SuggestInput } from "@/components/ui/suggest-input";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
 import { getVerification, submitDriver, uploadLicence } from "@/features/verification/api";
@@ -31,6 +32,7 @@ const VEHICLE_TYPES = ["SEDAN", "HATCHBACK", "SUV", "VAN", "MINIBUS", "OTHER"] a
 
 function DriveForm() {
   const t = useTranslations("Drive");
+  const errorsT = useTranslations("Errors");
   const vehicles = useTranslations("Vehicles");
   const locale = useLocale();
   const account = useTranslations("Account");
@@ -70,7 +72,7 @@ function DriveForm() {
       });
       await queryClient.invalidateQueries({ queryKey: ["vehicles", "mine"] });
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : vehicles("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }
@@ -88,7 +90,7 @@ function DriveForm() {
       await uploadVehicleDocument(vehicleId, documentType, file);
       await queryClient.invalidateQueries({ queryKey: ["vehicles", "mine"] });
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : vehicles("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }
@@ -102,7 +104,7 @@ function DriveForm() {
       const uploaded = await uploadLicence(file);
       setLicenceFileId(uploaded.fileId);
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }
@@ -122,7 +124,7 @@ function DriveForm() {
         }),
       );
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

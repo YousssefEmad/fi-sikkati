@@ -9,6 +9,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError, resetPassword } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { Link, useRouter } from "@/i18n/navigation";
 
@@ -20,6 +21,7 @@ export function ResetPasswordForm({
   passwordMinLength: number;
 }) {
   const t = useTranslations("Auth");
+  const errorsT = useTranslations("Errors");
   const router = useRouter();
   const [formError, setFormError] = useState<string | undefined>();
 
@@ -46,7 +48,7 @@ export function ResetPasswordForm({
       await resetPassword(token, values.password);
       router.replace("/auth/sign-in");
     } catch (error) {
-      setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setFormError(apiErrorMessage(error, errorsT));
     }
   }
 

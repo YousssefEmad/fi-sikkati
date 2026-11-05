@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { ApiRequestError, registerAccount } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { AuthAlternatives } from "@/features/auth/auth-alternatives";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { adultCutoffDate, isMobileNumber } from "@/features/auth/validation";
@@ -34,6 +35,7 @@ export function RegisterForm({
   privacyVersion: string;
 }) {
   const t = useTranslations("Auth");
+  const errorsT = useTranslations("Errors");
   const locale = useLocale();
   const router = useRouter();
   const [formError, setFormError] = useState<string | undefined>();
@@ -104,7 +106,7 @@ export function RegisterForm({
         form.setError("phone", { message: t("errors.phoneTaken") });
         return;
       }
-      setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setFormError(apiErrorMessage(error, errorsT));
     }
   }
 

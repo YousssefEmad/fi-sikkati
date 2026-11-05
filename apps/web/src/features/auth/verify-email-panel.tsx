@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { ApiRequestError, verifyEmail } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { Link } from "@/i18n/navigation";
 
 export function VerifyEmailPanel({ token }: { token: string }) {
   const t = useTranslations("Auth");
+  const errorsT = useTranslations("Errors");
   const [state, setState] = useState<"working" | "ok" | "error">(token ? "working" : "error");
   const [detail, setDetail] = useState<string | undefined>();
 
@@ -22,7 +24,7 @@ export function VerifyEmailPanel({ token }: { token: string }) {
       .catch((error: unknown) => {
         if (cancelled) return;
         setState("error");
-        setDetail(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+        setDetail(apiErrorMessage(error, errorsT));
       });
     return () => {
       cancelled = true;

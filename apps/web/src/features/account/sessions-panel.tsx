@@ -4,16 +4,13 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  ApiRequestError,
-  listSessions,
-  revokeSession,
-  type SessionSummary,
-} from "@/features/auth/api";
+import { listSessions, revokeSession, type SessionSummary } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function SessionsPanel() {
   const t = useTranslations("Account");
+  const errorsT = useTranslations("Errors");
   const queryClient = useQueryClient();
   const query = useQuery({ queryKey: ["sessions"], queryFn: listSessions });
   const [error, setError] = useState<string | undefined>();
@@ -24,7 +21,7 @@ export function SessionsPanel() {
       await revokeSession(session.id);
       await queryClient.invalidateQueries({ queryKey: ["sessions"] });
     } catch (caught) {
-      setError(caught instanceof ApiRequestError ? caught.message : t("errors.generic"));
+      setError(apiErrorMessage(caught, errorsT));
     }
   }
 

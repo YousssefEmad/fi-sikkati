@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { SuggestInput } from "@/components/ui/suggest-input";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import {
   acceptRequest,
   cancelRequest,
@@ -57,6 +58,7 @@ function DriverRequests({
   focusRequestId?: string | null;
 }) {
   const t = useTranslations("Bookings");
+  const errorsT = useTranslations("Errors");
   const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["join-requests", "trip", tripId],
@@ -81,7 +83,7 @@ function DriverRequests({
       await queryClient.invalidateQueries({ queryKey: ["join-requests", "trip", tripId] });
       await queryClient.invalidateQueries({ queryKey: ["trips", tripId] });
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(undefined);
     }
@@ -154,6 +156,7 @@ function PassengerRequest({
   emailVerified: boolean;
 }) {
   const t = useTranslations("Bookings");
+  const errorsT = useTranslations("Errors");
   const queryClient = useQueryClient();
   const mine = useQuery({ queryKey: ["join-requests", "mine"], queryFn: listMyRequests });
   const existing = (mine.data ?? []).find((item) => item.tripId === tripId);
@@ -199,7 +202,7 @@ function PassengerRequest({
                 await queryClient.invalidateQueries({ queryKey: ["trips", tripId] });
               })
               .catch((err: unknown) => {
-                setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+                setError(apiErrorMessage(err, errorsT));
               })
               .finally(() => {
                 setBusy(false);
@@ -227,7 +230,7 @@ function PassengerRequest({
       });
       await queryClient.invalidateQueries({ queryKey: ["join-requests", "mine"] });
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

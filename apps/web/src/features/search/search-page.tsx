@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { SuggestInput } from "@/components/ui/suggest-input";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { PlaceSuggest, type PickedPlace } from "@/features/places/place-suggest";
 import { searchTrips, type SearchTripItem } from "@/features/search/api";
@@ -16,6 +17,7 @@ import { Link } from "@/i18n/navigation";
 
 function ResultCard({ item }: { item: SearchTripItem }) {
   const t = useTranslations("Search");
+  const errorsT = useTranslations("Errors");
   return (
     <li className="border-border rounded-xl border p-5">
       <p className="text-lg font-bold">
@@ -134,7 +136,7 @@ function SearchForm() {
         {results.isError ? (
           <FormError
             message={
-              results.error instanceof ApiRequestError ? results.error.message : t("errors.generic")
+              apiErrorMessage(results.error, errorsT)
             }
           />
         ) : null}

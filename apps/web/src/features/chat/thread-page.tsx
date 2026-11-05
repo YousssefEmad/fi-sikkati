@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Eraser, ImagePlus, Mic, Trash2, X } from "lucide-react";
+import { Bell, BellOff, Eraser, ImagePlus, Mic, Trash2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -18,6 +18,7 @@ import {
   listMessages,
   markConversationRead,
   sendMessage,
+  setConversationMuted,
 } from "@/features/chat/api";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
@@ -152,6 +153,14 @@ function Thread({ conversationId }: { conversationId: string }) {
     },
   });
 
+  const muteChat = useMutation({
+    mutationFn: (muted: boolean) => setConversationMuted(conversationId, muted),
+    onSuccess: async (next) => {
+      queryClient.setQueryData(["conversation", conversationId], next);
+      await queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+  });
+
   function saveWallpaper(value: string) {
     setWallpaper(value);
     try {
@@ -213,6 +222,7 @@ function Thread({ conversationId }: { conversationId: string }) {
             <StatusBadge tone={isCommunity ? "success" : "warning"}>
               {isCommunity ? t("communityBadge") : t("tripBadge")}
             </StatusBadge>
+            {trip.muted ? <StatusBadge tone="muted">{t("mutedBadge")}</StatusBadge> : null}
           </div>
           <div className="mt-2 flex flex-wrap gap-2">
             <Button
@@ -225,6 +235,23 @@ function Thread({ conversationId }: { conversationId: string }) {
             >
               <ImagePlus aria-hidden="true" className="size-4" />
               {t("wallpaper")}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={muteChat.isPending}
+              title={trip.muted ? t("unmuteHint") : t("muteHint")}
+              onClick={() => {
+                muteChat.mutate(!trip.muted);
+              }}
+            >
+              {trip.muted ? (
+                <Bell aria-hidden="true" className="size-4" />
+              ) : (
+                <BellOff aria-hidden="true" className="size-4" />
+              )}
+              {trip.muted ? t("unmute") : t("mute")}
             </Button>
             {isModerator ? (
               <Button

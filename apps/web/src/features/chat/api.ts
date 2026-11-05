@@ -20,6 +20,7 @@ export interface Conversation {
   departureAt: string | null;
   isReadOnly: boolean;
   unreadCount: number;
+  muted: boolean;
   lastMessage: ChatMessage | null;
   memberIds: string[];
   memberNames: string[];
@@ -82,5 +83,15 @@ export async function clearConversation(
 export async function adminDeleteConversation(conversationId: string): Promise<void> {
   await apiJson(`/api/v1/conversations/${conversationId}`, {
     method: "DELETE",
+  });
+}
+
+export async function setConversationMuted(
+  conversationId: string,
+  muted: boolean,
+): Promise<Conversation> {
+  return apiJson<Conversation>(`/api/v1/conversations/${conversationId}/mute`, {
+    method: "PUT",
+    body: JSON.stringify({ muted }),
   });
 }

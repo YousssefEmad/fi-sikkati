@@ -105,6 +105,27 @@ class ChatRepository:
         )
         return list(result.scalars())
 
+    async def active_notify_member_ids(self, conversation_id: UUID) -> list[UUID]:
+        """Active members who have not muted this conversation (for alerts/push)."""
+        result = await self._db.execute(
+            select(ConversationMember.user_id).where(
+                ConversationMember.conversation_id == conversation_id,
+                ConversationMember.left_at.is_(None),
+                ConversationMember.muted.is_(False),
+            )
+        )
+        return list(result.scalars())
+
+    async def set_muted(
+        self, conversation_id: UUID, user_id: UUID, *, muted: bool
+    ) -> ConversationMember | None:
+        member = await self.member(conversation_id, user_id)
+        if member is None or member.left_at is not None:
+            return None
+        member.muted = muted
+        await self._db.flush()
+        return member
+
     async def set_read_only(self, conversation: Conversation, value: bool) -> None:
         conversation.is_read_only = value
 

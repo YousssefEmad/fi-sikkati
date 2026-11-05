@@ -9,11 +9,13 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError, forgotPassword } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { Link } from "@/i18n/navigation";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("Auth");
+  const errorsT = useTranslations("Errors");
   const [done, setDone] = useState(false);
   const [formError, setFormError] = useState<string | undefined>();
 
@@ -30,7 +32,7 @@ export function ForgotPasswordForm() {
       await forgotPassword(values.email);
       setDone(true);
     } catch (error) {
-      setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setFormError(apiErrorMessage(error, errorsT));
     }
   }
 

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
 import {
@@ -29,6 +30,7 @@ import { cn } from "@/lib/utils";
 
 export function TripDetail({ tripId }: { tripId: string }) {
   const t = useTranslations("Trips");
+  const errorsT = useTranslations("Errors");
   const accountT = useTranslations("Account");
   const { account } = useSession();
   const focusRequestId = useSearchParams().get("request");
@@ -76,7 +78,7 @@ export function TripDetail({ tripId }: { tripId: string }) {
       queryClient.setQueryData(["trips", tripId], next);
       if (kind === "notes") setNotesOverride(undefined);
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

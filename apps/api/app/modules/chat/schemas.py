@@ -32,9 +32,14 @@ class ConversationResponse(ApiModel):
     departure_at: datetime | None
     is_read_only: bool
     unread_count: int
+    muted: bool = False
     last_message: MessageResponse | None
     member_ids: list[UUID]
     member_names: list[str]
+
+
+class MuteConversationRequest(ApiModel):
+    muted: bool
 
 
 class ConversationListResponse(ApiModel):

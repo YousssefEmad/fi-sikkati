@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/field";
 import { StatusBadge, identityTone } from "@/components/ui/status-badge";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
 import {
@@ -26,6 +27,7 @@ const TYPES = [
 /** Identity upload UI; ``embedded`` hides the page chrome for the setup wizard. */
 export function IdentityPageInner({ embedded = false }: { embedded?: boolean }) {
   const t = useTranslations("Verification");
+  const errorsT = useTranslations("Errors");
   const accountT = useTranslations("Account");
   const { refreshAccount } = useSession();
   const queryClient = useQueryClient();
@@ -51,7 +53,7 @@ export function IdentityPageInner({ embedded = false }: { embedded?: boolean }) 
         await uploadIdentityDocument(documentType, file),
       );
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(null);
     }
@@ -64,7 +66,7 @@ export function IdentityPageInner({ embedded = false }: { embedded?: boolean }) 
       queryClient.setQueryData(["verification", "me"], await submitIdentity());
       await refreshAccount();
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.submit"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(null);
     }

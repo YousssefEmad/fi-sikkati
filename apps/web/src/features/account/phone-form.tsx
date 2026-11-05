@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { ApiRequestError, type Account } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { useSession } from "@/features/auth/session-provider";
 import { apiJson } from "@/lib/api/json";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ function shownNumber(value: string): string {
 
 export function PhoneForm({ account }: { account: Account }) {
   const t = useTranslations("Account");
+  const errorsT = useTranslations("Errors");
   const { refreshAccount } = useSession();
   const verified = Boolean(account.phoneVerified && account.phone);
   const [phone, setPhone] = useState(account.phone ? shownNumber(account.phone) : "");
@@ -41,7 +43,7 @@ export function PhoneForm({ account }: { account: Account }) {
       setDevCode(response.devCode ?? undefined);
       setSent(true);
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("phoneError"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }
@@ -61,7 +63,7 @@ export function PhoneForm({ account }: { account: Account }) {
       setChanging(false);
       await refreshAccount();
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("phoneError"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

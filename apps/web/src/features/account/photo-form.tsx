@@ -6,11 +6,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/ui/field";
 import { ApiRequestError } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { useSession } from "@/features/auth/session-provider";
 import { postMultipart } from "@/lib/api/upload";
 
 export function PhotoForm({ photoUrl }: { photoUrl: string | null | undefined }) {
   const t = useTranslations("Account");
+  const errorsT = useTranslations("Errors");
   const { refreshAccount } = useSession();
   const [error, setError] = useState<string | undefined>();
   const [busy, setBusy] = useState(false);
@@ -26,7 +28,7 @@ export function PhotoForm({ photoUrl }: { photoUrl: string | null | undefined })
       await postMultipart("/api/v1/me/photo", form);
       await refreshAccount();
     } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : t("errors.generic"));
+      setError(apiErrorMessage(err, errorsT));
     } finally {
       setBusy(false);
     }

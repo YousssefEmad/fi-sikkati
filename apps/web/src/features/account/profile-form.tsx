@@ -11,11 +11,13 @@ import { Field, FormError, SelectInput, TextArea, TextInput } from "@/components
 import { SuggestInput } from "@/components/ui/suggest-input";
 import { placesFor } from "@/features/places/catalog";
 import { ApiRequestError, updateMe, type Account } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { useSession } from "@/features/auth/session-provider";
 
 export function ProfileForm({ account }: { account: Account }) {
   const t = useTranslations("Account");
+  const errorsT = useTranslations("Errors");
   const locale = useLocale();
   const cityOptions = useMemo(() => placesFor(locale), [locale]);
   const { refreshAccount } = useSession();
@@ -23,8 +25,12 @@ export function ProfileForm({ account }: { account: Account }) {
   const [saved, setSaved] = useState(false);
 
   const schema = z.object({
-    displayName: z.string().trim().min(2).max(60),
-    fullName: z.string().trim().min(2).max(120),
+    displayName: z
+      .string()
+      .trim()
+      .min(2, t("errors.displayName"))
+      .max(60, t("errors.displayName")),
+    fullName: z.string().trim().min(2, t("errors.fullName")).max(120, t("errors.fullName")),
     city: z.string().trim().max(80),
     bio: z.string().max(300),
     locale: z.enum(["ar", "en"]),
@@ -62,7 +68,7 @@ export function ProfileForm({ account }: { account: Account }) {
         form.setError("displayName", { message: t("errors.displayNameTaken") });
         return;
       }
-      setFormError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setFormError(apiErrorMessage(error, errorsT));
     }
   }
 

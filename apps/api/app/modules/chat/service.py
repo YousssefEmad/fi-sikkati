@@ -109,6 +109,7 @@ class ConversationView:
     departure_at: datetime | None
     is_read_only: bool
     unread_count: int
+    muted: bool
     last_message: MessageView | None
     member_ids: tuple[UUID, ...]
     member_names: tuple[str, ...]
@@ -259,7 +260,8 @@ class ChatService:
             views = await self._message_views([recovered])
             return views[0]
         await self._repository.mark_read(conversation_id, sender_id, message.id)
-        recipients = tuple(user for user in members if user != sender_id)
+        notify_members = await self._repository.active_notify_member_ids(conversation_id)
+        recipients = tuple(user for user in notify_members if user != sender_id)
         if recipients:
             await self._events.publish(
                 MessagePosted(
@@ -426,6 +428,8 @@ class ChatService:
         unread = await self._repository.unread_count(conversation.id, viewer_id)
         members = await self._repository.active_member_ids(conversation.id)
         names = await self._repository.display_names(members)
+        membership = await self._repository.member(conversation.id, viewer_id)
+        muted = bool(membership is not None and membership.left_at is None and membership.muted)
         origin = destination = None
         departure = None
         if conversation.trip_id is not None:
@@ -441,10 +445,23 @@ class ChatService:
             departure_at=departure,
             is_read_only=conversation.is_read_only,
             unread_count=unread,
+            muted=muted,
             last_message=last_view,
             member_ids=tuple(members),
             member_names=tuple(names.get(user_id, "") for user_id in members),
         )
+
+    async def set_muted(
+        self, conversation_id: UUID, *, viewer_id: UUID, muted: bool
+    ) -> ConversationView:
+        await self._require_member(conversation_id, viewer_id, is_admin=False)
+        updated = await self._repository.set_muted(conversation_id, viewer_id, muted=muted)
+        if updated is None:
+            raise NotFoundError("Conversation membership not found.")
+        conversation = await self._repository.get(conversation_id)
+        if conversation is None:
+            raise NotFoundError("Conversation not found.")
+        return await self._conversation_view(conversation, viewer_id=viewer_id)
 
     async def _message_views(self, rows: list[Message]) -> list[MessageView]:
         senders = [row.sender_id for row in rows if row.sender_id is not None]

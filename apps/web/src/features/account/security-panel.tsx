@@ -9,6 +9,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError, changePassword, deleteMe, type Account } from "@/features/auth/api";
+import { apiErrorMessage } from "@/lib/api/error-message";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { useSession } from "@/features/auth/session-provider";
 import { useRouter } from "@/i18n/navigation";
@@ -23,6 +24,7 @@ export function SecurityPanel({
   deletionGraceDays: number;
 }) {
   const t = useTranslations("Account");
+  const errorsT = useTranslations("Errors");
   const router = useRouter();
   const { refreshAccount } = useSession();
   const [passwordError, setPasswordError] = useState<string | undefined>();
@@ -32,7 +34,7 @@ export function SecurityPanel({
 
   const schema = z
     .object({
-      currentPassword: z.string().min(1),
+      currentPassword: z.string().min(1, t("errors.required")),
       newPassword: z
         .string()
         .min(passwordMinLength, t("errors.passwordMin", { min: passwordMinLength })),
@@ -56,7 +58,7 @@ export function SecurityPanel({
       setPasswordSaved(true);
       form.reset();
     } catch (error) {
-      setPasswordError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setPasswordError(apiErrorMessage(error, errorsT));
     }
   }
 
@@ -71,7 +73,7 @@ export function SecurityPanel({
       await refreshAccount();
       router.replace("/");
     } catch (error) {
-      setDeleteError(error instanceof ApiRequestError ? error.message : t("errors.generic"));
+      setDeleteError(apiErrorMessage(error, errorsT));
     }
   }
 
