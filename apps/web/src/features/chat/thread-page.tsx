@@ -194,7 +194,6 @@ function Thread({ conversationId }: { conversationId: string }) {
 
   const trip = conversation.data;
   const isCommunity = trip.tripId === null;
-  const darkPaper = wallpaper.includes("#1a1c16") || wallpaper.includes("2c3224");
 
   return (
     <div className="bg-background fixed inset-x-0 top-14 bottom-20 z-30 flex flex-col sm:top-16 md:bottom-0">
@@ -258,20 +257,19 @@ function Thread({ conversationId }: { conversationId: string }) {
           </div>
         </header>
 
-        <div
-          ref={listRef}
-          className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain"
-          style={{ background: wallpaper }}
-          onClick={() => {
-            setMenuFor(null);
-          }}
-        >
+        <div className="relative min-h-0 flex-1">
           <div
-            className={cn(
-              "pointer-events-none absolute inset-0",
-              darkPaper ? "bg-black/25" : "bg-white/35",
-            )}
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{ background: wallpaper }}
           />
+          <div
+            ref={listRef}
+            className="relative h-full overflow-y-auto overscroll-contain"
+            onClick={() => {
+              setMenuFor(null);
+            }}
+          >
           <div className="relative flex min-h-full flex-col justify-end gap-1.5 px-3 py-3 sm:px-4">
             {(messages.data ?? []).map((item) => {
               const mine = item.senderId === account?.id;
@@ -286,7 +284,7 @@ function Thread({ conversationId }: { conversationId: string }) {
               if (item.kind === "SYSTEM") {
                 return (
                   <div key={item.id} className="flex justify-center py-1">
-                    <span className="bg-surface/90 text-muted-foreground rounded-full px-3 py-1 text-center text-xs font-semibold shadow-sm">
+                    <span className="bg-surface/95 text-muted-foreground rounded-full px-3 py-1 text-center text-xs font-semibold shadow-sm">
                       {text}
                     </span>
                   </div>
@@ -310,16 +308,12 @@ function Thread({ conversationId }: { conversationId: string }) {
                   }}
                 >
                   <div className="max-w-[82%] sm:max-w-[75%]">
-                    <p
-                      className={cn(
-                        "mb-0.5 px-1 text-[11px] font-bold",
-                        darkPaper ? "text-white/80" : "text-muted-foreground",
-                        mine ? "text-end" : "text-start",
-                      )}
-                    >
-                      {item.senderDisplayName ??
-                        (mine ? account?.displayName : t("unknownSender"))}
-                    </p>
+                    <div className={cn("mb-1 flex", mine ? "justify-end" : "justify-start")}>
+                      <p className="bg-surface text-foreground max-w-full truncate rounded-md px-2 py-0.5 text-[12px] font-extrabold shadow-sm">
+                        {item.senderDisplayName ??
+                          (mine ? account?.displayName : t("unknownSender"))}
+                      </p>
+                    </div>
                     <div
                       className={cn(
                         "rounded-2xl px-3.5 py-2 text-[15px] leading-snug shadow-sm",
@@ -365,6 +359,7 @@ function Thread({ conversationId }: { conversationId: string }) {
                 </div>
               );
             })}
+          </div>
           </div>
         </div>
 

@@ -71,7 +71,7 @@ async def _register_vehicle(client: AsyncClient, headers: dict[str, str]) -> str
     return str(vehicle_id)
 
 
-async def test_identity_submit_requires_all_three_documents(
+async def test_identity_submit_requires_national_id_front_only(
     accounts: AccountFactory, api_client: AsyncClient
 ) -> None:
     _, session = await accounts.signed_in()
@@ -81,7 +81,14 @@ async def test_identity_submit_requires_all_three_documents(
     assert empty.status_code == 400
     assert error_code(empty) == "INVALID_TRANSITION"
 
-    await _upload_identity(api_client, session.csrf_headers)
+    front_only = await api_client.post(
+        "/api/v1/me/verification/identity/documents",
+        data={"documentType": "NATIONAL_ID_FRONT"},
+        files={"file": ("NATIONAL_ID_FRONT.jpg", jpeg_bytes(), "image/jpeg")},
+        headers=session.csrf_headers,
+    )
+    assert front_only.status_code == 200, front_only.text
+
     submitted = await api_client.post(
         "/api/v1/me/verification/identity/submit", headers=session.csrf_headers
     )

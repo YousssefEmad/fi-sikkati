@@ -171,12 +171,15 @@ function PassengerRequest({
   }
   if (identityStatus !== "APPROVED") {
     return (
-      <p className="bg-danger/10 text-danger mt-8 rounded-xl px-4 py-3 text-base font-bold">
-        {t("needIdentity")}{" "}
-        <Link href="/me/setup" className="underline underline-offset-4">
+      <div className="bg-danger/10 text-danger border-danger/20 mt-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3">
+        <p className="text-base font-extrabold">{t("needIdentity")}</p>
+        <Link
+          href="/me/verification"
+          className="bg-danger inline-flex min-h-11 shrink-0 items-center justify-center rounded-full px-4 text-sm font-bold text-white"
+        >
           {t("verifyLink")}
         </Link>
-      </p>
+      </div>
     );
   }
   if (existing && (existing.status === "PENDING" || existing.status === "ACCEPTED")) {

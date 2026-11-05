@@ -32,11 +32,10 @@ class DriverVerificationStatus(StrEnum):
     REVOKED = "REVOKED"
 
 
+# Front of the national ID is enough to submit; back and selfie stay optional helpers.
 REQUIRED_IDENTITY_DOCUMENT_TYPES: Final[frozenset[IdentityDocumentType]] = frozenset(
     {
         IdentityDocumentType.NATIONAL_ID_FRONT,
-        IdentityDocumentType.NATIONAL_ID_BACK,
-        IdentityDocumentType.SELFIE,
     }
 )
 

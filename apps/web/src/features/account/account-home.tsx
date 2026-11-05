@@ -39,12 +39,22 @@ export function AccountHome() {
         </p>
       )}
       {needsSetup ? (
-        <p className="bg-danger/10 text-danger mt-4 rounded-xl px-4 py-3 text-base font-bold">
-          {t("verificationStatus.NOT_SUBMITTED")}{" "}
-          <Link href="/me/setup" className="underline underline-offset-4">
-            {t("navVerification")}
+        <div className="bg-danger/10 text-danger border-danger/20 mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3">
+          <div>
+            <p className="text-base font-extrabold">{t("identityNudge.title.NOT_SUBMITTED")}</p>
+            <p className="mt-1 text-sm font-semibold opacity-90">
+              {account.identityVerificationStatus === "REJECTED"
+                ? t("identityNudge.body.REJECTED")
+                : t("identityNudge.body.NOT_SUBMITTED")}
+            </p>
+          </div>
+          <Link
+            href="/me/verification"
+            className="bg-danger inline-flex min-h-11 shrink-0 items-center justify-center rounded-full px-4 text-sm font-bold text-white"
+          >
+            {t("identityNudge.cta")}
           </Link>
-        </p>
+        </div>
       ) : null}
       {!isDriver && remindDrive ? (
         <p className="bg-brand-soft mt-4 rounded-xl px-4 py-3 text-base font-semibold">

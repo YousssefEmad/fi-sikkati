@@ -177,7 +177,7 @@ class VerificationService:
         latest = await self._repository.latest_identity_by_type(user_id)
         missing = REQUIRED_IDENTITY_DOCUMENT_TYPES - set(latest)
         if missing:
-            raise InvalidTransitionError("Upload the national ID front, back and a selfie first.")
+            raise InvalidTransitionError("Upload the national ID front first.")
         user = await self._users.require_user(user_id)
         user.identity_verification_status = IdentityVerificationStatus.PENDING
         await self._audit.record(
