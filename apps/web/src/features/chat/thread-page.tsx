@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckSquare, Eraser, Trash2, X } from "lucide-react";
+import { Eraser, ImagePlus, Mic, Trash2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -11,9 +11,9 @@ import { TextInput } from "@/components/ui/field";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/components/ui/status-badge";
 import {
+  adminDeleteConversation,
   clearConversation,
   deleteMessage,
-  deleteMessages,
   getConversation,
   listMessages,
   markConversationRead,
@@ -21,8 +21,25 @@ import {
 } from "@/features/chat/api";
 import { RequireAccount } from "@/features/auth/require-account";
 import { useSession } from "@/features/auth/session-provider";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+
+const WALLPAPER_KEY = "fi-sikkati-chat-wallpaper";
+
+const PRESET_WALLPAPERS = [
+  {
+    id: "soft",
+    style: "linear-gradient(160deg, #f3f6ea 0%, #e8f0d4 45%, #dce8c4 100%)",
+  },
+  {
+    id: "dusk",
+    style: "linear-gradient(160deg, #1a1c16 0%, #2c3224 50%, #3d4630 100%)",
+  },
+  {
+    id: "mint",
+    style: "linear-gradient(160deg, #e9fff0 0%, #d4f5e0 40%, #c4ecd4 100%)",
+  },
+] as const;
 
 export function ThreadPage({ conversationId }: { conversationId: string }) {
   return (
@@ -55,11 +72,15 @@ function messageText(
 function Thread({ conversationId }: { conversationId: string }) {
   const t = useTranslations("Chat");
   const { account } = useSession();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState("");
-  const [selectMode, setSelectMode] = useState(false);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [menuFor, setMenuFor] = useState<string | null>(null);
+  const [wallpaper, setWallpaper] = useState(PRESET_WALLPAPERS[0].style);
+  const [showWallpaper, setShowWallpaper] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const longPressTimer = useRef<number | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const isModerator =
     account?.roles.includes("ADMIN") === true || account?.roles.includes("SUPER_ADMIN") === true;
 
@@ -74,6 +95,15 @@ function Thread({ conversationId }: { conversationId: string }) {
   });
 
   useEffect(() => {
+    try {
+      const saved = localStorage.getItem(WALLPAPER_KEY);
+      if (saved) setWallpaper(saved);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
     const last = messages.data?.at(-1);
     if (last) {
       void markConversationRead(conversationId, last.id);
@@ -84,7 +114,7 @@ function Thread({ conversationId }: { conversationId: string }) {
     const list = listRef.current;
     if (!list) return;
     list.scrollTop = list.scrollHeight;
-  }, [messages.data, selectMode]);
+  }, [messages.data]);
 
   async function refreshMessages() {
     await queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
@@ -102,15 +132,7 @@ function Thread({ conversationId }: { conversationId: string }) {
   const removeOne = useMutation({
     mutationFn: (messageId: string) => deleteMessage(conversationId, messageId),
     onSuccess: async () => {
-      await refreshMessages();
-    },
-  });
-
-  const removeMany = useMutation({
-    mutationFn: (ids: string[]) => deleteMessages(conversationId, ids),
-    onSuccess: async () => {
-      setSelected(new Set());
-      setSelectMode(false);
+      setMenuFor(null);
       await refreshMessages();
     },
   });
@@ -118,11 +140,41 @@ function Thread({ conversationId }: { conversationId: string }) {
   const clearAll = useMutation({
     mutationFn: () => clearConversation(conversationId),
     onSuccess: async () => {
-      setSelected(new Set());
-      setSelectMode(false);
       await refreshMessages();
     },
   });
+
+  const purgeTripChat = useMutation({
+    mutationFn: () => adminDeleteConversation(conversationId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["conversations"] });
+      router.replace("/messages");
+    },
+  });
+
+  function saveWallpaper(value: string) {
+    setWallpaper(value);
+    try {
+      localStorage.setItem(WALLPAPER_KEY, value);
+    } catch {
+      /* ignore */
+    }
+    setShowWallpaper(false);
+  }
+
+  function startLongPress(messageId: string, canAct: boolean) {
+    if (!canAct) return;
+    longPressTimer.current = window.setTimeout(() => {
+      setMenuFor(messageId);
+    }, 480);
+  }
+
+  function cancelLongPress() {
+    if (longPressTimer.current !== null) {
+      window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }
 
   if (conversation.isPending) {
     return (
@@ -142,15 +194,7 @@ function Thread({ conversationId }: { conversationId: string }) {
 
   const trip = conversation.data;
   const isCommunity = trip.tripId === null;
-
-  function toggleSelected(id: string) {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
+  const darkPaper = wallpaper.includes("#1a1c16") || wallpaper.includes("2c3224");
 
   return (
     <div className="bg-background fixed inset-x-0 top-14 bottom-20 z-30 flex flex-col sm:top-16 md:bottom-0">
@@ -171,95 +215,78 @@ function Thread({ conversationId }: { conversationId: string }) {
               {isCommunity ? t("communityBadge") : t("tripBadge")}
             </StatusBadge>
           </div>
-          <p className="text-muted-foreground mt-1 line-clamp-1 text-sm">
-            {isCommunity
-              ? t("communityHint")
-              : trip.memberNames.filter(Boolean).join(" · ") || t("tripHint")}
-          </p>
-          {isModerator ? (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {selectMode ? (
-                <>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    disabled={selected.size === 0 || removeMany.isPending}
-                    onClick={() => {
-                      if (
-                        window.confirm(t("confirmDeleteSelected", { count: selected.size }))
-                      ) {
-                        removeMany.mutate([...selected]);
-                      }
-                    }}
-                  >
-                    <Trash2 aria-hidden="true" className="size-4" />
-                    {t("deleteSelected", { count: selected.size })}
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      setSelectMode(false);
-                      setSelected(new Set());
-                    }}
-                  >
-                    <X aria-hidden="true" className="size-4" />
-                    {t("cancelSelect")}
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      setSelectMode(true);
-                    }}
-                  >
-                    <CheckSquare aria-hidden="true" className="size-4" />
-                    {t("selectMessages")}
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    disabled={clearAll.isPending}
-                    onClick={() => {
-                      if (window.confirm(t("confirmClear"))) {
-                        clearAll.mutate();
-                      }
-                    }}
-                  >
-                    <Eraser aria-hidden="true" className="size-4" />
-                    {t("clearChat")}
-                  </Button>
-                </>
-              )}
-            </div>
-          ) : null}
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                setShowWallpaper(true);
+              }}
+            >
+              <ImagePlus aria-hidden="true" className="size-4" />
+              {t("wallpaper")}
+            </Button>
+            {isModerator ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={clearAll.isPending}
+                onClick={() => {
+                  if (window.confirm(t("confirmClear"))) clearAll.mutate();
+                }}
+              >
+                <Eraser aria-hidden="true" className="size-4" />
+                {t("clearChat")}
+              </Button>
+            ) : null}
+            {isModerator && !isCommunity ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={purgeTripChat.isPending}
+                onClick={() => {
+                  if (window.confirm(t("confirmDeleteTripChat"))) purgeTripChat.mutate();
+                }}
+              >
+                <Trash2 aria-hidden="true" className="size-4" />
+                {t("deleteTripChat")}
+              </Button>
+            ) : null}
+          </div>
         </header>
 
         <div
           ref={listRef}
-          className="bg-surface-muted/40 min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3 sm:px-4"
+          className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain"
+          style={{ background: wallpaper }}
+          onClick={() => {
+            setMenuFor(null);
+          }}
         >
-          <div className="flex min-h-full flex-col justify-end gap-1.5">
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-0",
+              darkPaper ? "bg-black/25" : "bg-white/35",
+            )}
+          />
+          <div className="relative flex min-h-full flex-col justify-end gap-1.5 px-3 py-3 sm:px-4">
             {(messages.data ?? []).map((item) => {
               const mine = item.senderId === account?.id;
               const text = item.deleted
                 ? t("removed")
                 : messageText(item.body, item.systemEvent, item.kind, t);
-              const canModerate =
-                isModerator && item.kind === "TEXT" && !item.deleted;
-              const checked = selected.has(item.id);
+              const canAct =
+                item.kind === "TEXT" &&
+                !item.deleted &&
+                (mine || isModerator);
 
               if (item.kind === "SYSTEM") {
                 return (
                   <div key={item.id} className="flex justify-center py-1">
-                    <span className="bg-surface text-muted-foreground rounded-full px-3 py-1 text-center text-xs font-semibold shadow-sm">
+                    <span className="bg-surface/90 text-muted-foreground rounded-full px-3 py-1 text-center text-xs font-semibold shadow-sm">
                       {text}
                     </span>
                   </div>
@@ -269,28 +296,24 @@ function Thread({ conversationId }: { conversationId: string }) {
               return (
                 <div
                   key={item.id}
-                  className={cn(
-                    "flex items-end gap-2",
-                    mine ? "justify-end" : "justify-start",
-                    selectMode && canModerate && "cursor-pointer",
-                  )}
-                  onClick={() => {
-                    if (selectMode && canModerate) toggleSelected(item.id);
+                  className={cn("flex items-end gap-2", mine ? "justify-end" : "justify-start")}
+                  onPointerDown={() => {
+                    startLongPress(item.id, canAct);
+                  }}
+                  onPointerUp={cancelLongPress}
+                  onPointerLeave={cancelLongPress}
+                  onPointerCancel={cancelLongPress}
+                  onContextMenu={(event) => {
+                    if (!canAct) return;
+                    event.preventDefault();
+                    setMenuFor(item.id);
                   }}
                 >
-                  {selectMode && canModerate ? (
-                    <input
-                      type="checkbox"
-                      className="mb-3 size-4 shrink-0"
-                      checked={checked}
-                      readOnly
-                      aria-label={t("selectMessage")}
-                    />
-                  ) : null}
-                  <div className={cn("max-w-[82%] sm:max-w-[75%]", mine && "items-end")}>
+                  <div className="max-w-[82%] sm:max-w-[75%]">
                     <p
                       className={cn(
-                        "text-muted-foreground mb-0.5 px-1 text-[11px] font-bold",
+                        "mb-0.5 px-1 text-[11px] font-bold",
+                        darkPaper ? "text-white/80" : "text-muted-foreground",
                         mine ? "text-end" : "text-start",
                       )}
                     >
@@ -301,32 +324,42 @@ function Thread({ conversationId }: { conversationId: string }) {
                       className={cn(
                         "rounded-2xl px-3.5 py-2 text-[15px] leading-snug shadow-sm",
                         item.deleted
-                          ? "bg-surface-muted text-muted-foreground italic"
+                          ? "bg-surface-muted/90 text-muted-foreground italic"
                           : mine
                             ? "bg-primary text-primary-foreground rounded-ee-md"
-                            : "bg-surface text-foreground rounded-es-md",
-                        checked && "ring-brand-strong ring-2",
+                            : "bg-surface/95 text-foreground rounded-es-md",
                       )}
                     >
                       {text}
                     </div>
-                    {isModerator && !selectMode && canModerate ? (
-                      <button
-                        type="button"
+                    {menuFor === item.id && canAct ? (
+                      <div
                         className={cn(
-                          "text-danger mt-1 text-xs font-bold underline-offset-2 hover:underline",
-                          mine ? "ms-auto block" : "block",
+                          "bg-surface border-border mt-1 inline-flex overflow-hidden rounded-xl border shadow-lift",
+                          mine ? "float-end" : "float-start",
                         )}
-                        disabled={removeOne.isPending}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          if (window.confirm(t("confirmDeleteOne"))) {
-                            removeOne.mutate(item.id);
-                          }
-                        }}
+                        onClick={(event) => event.stopPropagation()}
                       >
-                        {t("deleteOne")}
-                      </button>
+                        <button
+                          type="button"
+                          className="text-danger hover:bg-danger/10 px-4 py-2 text-sm font-bold"
+                          disabled={removeOne.isPending}
+                          onClick={() => {
+                            removeOne.mutate(item.id);
+                          }}
+                        >
+                          {t("deleteOne")}
+                        </button>
+                        <button
+                          type="button"
+                          className="text-muted-foreground hover:bg-surface-muted px-3 py-2 text-sm font-bold"
+                          onClick={() => {
+                            setMenuFor(null);
+                          }}
+                        >
+                          {t("cancelSelect")}
+                        </button>
+                      </div>
                     ) : null}
                   </div>
                 </div>
@@ -343,6 +376,17 @@ function Thread({ conversationId }: { conversationId: string }) {
           }}
         >
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="border-border text-muted-foreground hover:bg-surface-muted inline-flex size-12 shrink-0 items-center justify-center rounded-full border"
+              title={t("voiceSoon")}
+              aria-label={t("voiceSoon")}
+              onClick={() => {
+                window.alert(t("voiceSoon"));
+              }}
+            >
+              <Mic aria-hidden="true" className="size-5" />
+            </button>
             <label htmlFor="chat-body" className="sr-only">
               {t("composer")}
             </label>
@@ -354,15 +398,13 @@ function Thread({ conversationId }: { conversationId: string }) {
               onChange={(event) => {
                 setDraft(event.target.value);
               }}
-              disabled={trip.isReadOnly || send.isPending || selectMode}
+              disabled={trip.isReadOnly || send.isPending}
               autoComplete="off"
             />
             <Button
               type="submit"
               className="min-h-12 shrink-0 rounded-full px-5"
-              disabled={
-                trip.isReadOnly || send.isPending || selectMode || !draft.trim()
-              }
+              disabled={trip.isReadOnly || send.isPending || !draft.trim()}
             >
               {t("send")}
             </Button>
@@ -374,6 +416,80 @@ function Thread({ conversationId }: { conversationId: string }) {
           ) : null}
         </form>
       </div>
+
+      {showWallpaper ? (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-4 sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => {
+            setShowWallpaper(false);
+          }}
+        >
+          <div
+            className="bg-surface w-full max-w-md rounded-2xl p-5 shadow-lift"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-extrabold">{t("wallpaperTitle")}</h2>
+              <button
+                type="button"
+                className="hover:bg-surface-muted rounded-full p-1.5"
+                aria-label={t("cancelSelect")}
+                onClick={() => {
+                  setShowWallpaper(false);
+                }}
+              >
+                <X aria-hidden="true" className="size-5" />
+              </button>
+            </div>
+            <p className="text-muted-foreground mt-2 text-sm">{t("wallpaperHint")}</p>
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              {PRESET_WALLPAPERS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="border-border h-20 rounded-xl border-2"
+                  style={{ background: item.style }}
+                  aria-label={item.id}
+                  onClick={() => {
+                    saveWallpaper(item.style);
+                  }}
+                />
+              ))}
+            </div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                  if (typeof reader.result === "string") {
+                    saveWallpaper(`center / cover no-repeat url("${reader.result}")`);
+                  }
+                };
+                reader.readAsDataURL(file);
+              }}
+            />
+            <Button
+              type="button"
+              className="mt-4"
+              block
+              variant="outline"
+              onClick={() => {
+                fileRef.current?.click();
+              }}
+            >
+              <ImagePlus aria-hidden="true" className="size-4" />
+              {t("wallpaperCustom")}
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

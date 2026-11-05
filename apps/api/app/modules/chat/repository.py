@@ -108,6 +108,14 @@ class ChatRepository:
     async def set_read_only(self, conversation: Conversation, value: bool) -> None:
         conversation.is_read_only = value
 
+    async def delete_conversation(self, conversation_id: UUID) -> None:
+        """Hard-delete a conversation; members and messages cascade from the DB."""
+        conversation = await self.get(conversation_id)
+        if conversation is None:
+            return
+        await self._db.delete(conversation)
+        await self._db.flush()
+
     async def list_for_user(
         self, user_id: UUID, *, before: tuple[datetime, UUID] | None, limit: int
     ) -> list[Conversation]:

@@ -28,7 +28,15 @@ function isIosDevice(): boolean {
   return /iphone|ipad|ipod/.test(ua) || iPadOs;
 }
 
-/** Header + banner CTA to install Fi Sikkati as a home-screen app (Android + iOS + desktop). */
+function isSafariBrowser(): boolean {
+  if (typeof window === "undefined") return false;
+  const ua = window.navigator.userAgent.toLowerCase();
+  const isSafari = /safari/.test(ua) && !/crios|fxios|edgios|chrome|android/.test(ua);
+  // iOS Chrome/Firefox still need the Share sheet path
+  return isSafari || isIosDevice();
+}
+
+/** Banner (mobile) + header (desktop) CTA to install Fi Sikkati as a home-screen app. */
 export function InstallAppButton({
   className,
   tone = "header",
@@ -39,16 +47,21 @@ export function InstallAppButton({
   const t = useTranslations("Pwa");
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
-  const [ios, setIos] = useState(false);
+  const [iosLike, setIosLike] = useState(false);
   const [showIosHelp, setShowIosHelp] = useState(false);
   const [bannerHidden, setBannerHidden] = useState(true);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     setInstalled(isStandaloneDisplay());
-    setIos(isIosDevice());
+    setIosLike(isIosDevice() || isSafariBrowser());
     try {
-      setBannerHidden(localStorage.getItem(DISMISS_KEY) === "1");
+      // On iPhone always re-show the banner until they install (ignore prior dismiss).
+      if (isIosDevice() && !isStandaloneDisplay()) {
+        setBannerHidden(false);
+      } else {
+        setBannerHidden(localStorage.getItem(DISMISS_KEY) === "1");
+      }
     } catch {
       setBannerHidden(false);
     }
@@ -75,8 +88,8 @@ export function InstallAppButton({
   if (!ready || installed) return null;
 
   const canNativeInstall = deferred !== null;
-  const canShowIos = ios;
-  if (!canNativeInstall && !canShowIos) return null;
+  // iOS never fires beforeinstallprompt — always offer the Share instructions there.
+  if (!canNativeInstall && !iosLike) return null;
 
   async function onInstall() {
     if (deferred) {
@@ -88,10 +101,15 @@ export function InstallAppButton({
       }
       return;
     }
-    if (ios) setShowIosHelp(true);
+    setShowIosHelp(true);
   }
 
   function dismissBanner() {
+    if (isIosDevice()) {
+      // Soft-hide for this session only on iOS so the path stays discoverable.
+      setBannerHidden(true);
+      return;
+    }
     try {
       localStorage.setItem(DISMISS_KEY, "1");
     } catch {
@@ -104,16 +122,11 @@ export function InstallAppButton({
     if (bannerHidden) return null;
     return (
       <>
-        <div
-          className={cn(
-            "border-border bg-brand text-brand-foreground border-b",
-            className,
-          )}
-        >
-          <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-3 py-2.5 sm:px-6">
+        <div className={cn("border-border bg-brand text-brand-foreground border-b", className)}>
+          <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-3 py-3 sm:px-6">
             <Smartphone aria-hidden="true" className="size-5 shrink-0" />
             <p className="min-w-0 flex-1 text-sm font-bold leading-snug sm:text-base">
-              {t("bannerBody")}
+              {iosLike && !canNativeInstall ? t("bannerBodyIos") : t("bannerBody")}
             </p>
             <Button
               type="button"
@@ -146,14 +159,14 @@ export function InstallAppButton({
         type="button"
         onClick={() => void onInstall()}
         className={cn(
-          "border-border-strong bg-brand text-brand-foreground hover:bg-brand-strong inline-flex h-11 max-w-[9.5rem] items-center gap-1.5 rounded-full border px-2.5 text-sm font-bold sm:max-w-none sm:gap-2 sm:px-3",
+          "border-border-strong bg-brand text-brand-foreground hover:bg-brand-strong inline-flex h-11 items-center gap-2 rounded-full border px-3 text-sm font-bold",
           className,
         )}
         aria-label={t("install")}
         title={t("install")}
       >
         <Download aria-hidden="true" className="size-4 shrink-0" />
-        <span className="truncate">{t("installShort")}</span>
+        <span>{t("installShort")}</span>
       </button>
       {showIosHelp ? <IosInstallSheet onClose={() => setShowIosHelp(false)} /> : null}
     </>
@@ -188,6 +201,7 @@ function IosInstallSheet({ onClose }: { onClose: () => void }) {
           </button>
         </div>
         <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{t("iosBody")}</p>
+        <p className="bg-brand-soft mt-3 rounded-xl px-3 py-2 text-sm font-bold">{t("iosSafariOnly")}</p>
         <ol className="mt-4 space-y-3 text-sm font-semibold">
           <li className="border-border flex items-start gap-3 rounded-xl border p-3">
             <span className="bg-brand text-brand-foreground flex size-8 shrink-0 items-center justify-center rounded-full font-extrabold">

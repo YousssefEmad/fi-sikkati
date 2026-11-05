@@ -229,3 +229,19 @@ async def clear_conversation(
         conversation_id, actor_id=principal.user_id, is_admin=principal.is_admin
     )
     return ClearConversationResponse(deleted_count=count)
+
+
+@router.delete(
+    "/{conversation_id}",
+    status_code=204,
+    operation_id="chat_admin_delete",
+    summary="Hard-delete a trip conversation (moderators; community protected)",
+)
+async def admin_delete_conversation(
+    conversation_id: UUID,
+    service: ChatServiceDep,
+    principal: Annotated[Principal, Depends(require_permission(Permission.MODERATION_ACTION))],
+) -> None:
+    await service.admin_delete_conversation(
+        conversation_id, actor_id=principal.user_id, is_admin=principal.is_admin
+    )

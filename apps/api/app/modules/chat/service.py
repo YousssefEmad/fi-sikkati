@@ -144,8 +144,10 @@ class ChatService:
                 await self.system(event.trip_id, SystemEvent.TRIP_STARTED)
             case TripCancelled():
                 await self.system(event.trip_id, SystemEvent.TRIP_CANCELLED, close=True)
+                await self.purge_trip_conversation(event.trip_id)
             case TripCompleted():
                 await self.system(event.trip_id, SystemEvent.TRIP_COMPLETED)
+                await self.purge_trip_conversation(event.trip_id)
             case _:
                 return
 
@@ -329,6 +331,36 @@ class ChatService:
         await self._require_member(conversation_id, actor_id, is_admin=True)
         return await self._repository.soft_delete_all_text(
             conversation_id, actor_id=actor_id, now=datetime.now(UTC)
+        )
+
+    async def purge_trip_conversation(self, trip_id: UUID) -> bool:
+        """Hard-delete a trip's private chat after the trip ends (community is never touched)."""
+        conversation = await self._repository.get_for_trip(trip_id)
+        if conversation is None:
+            return False
+        await self._repository.delete_conversation(conversation.id)
+        log.info(
+            "trip_conversation_purged",
+            trip_id=str(trip_id),
+            conversation_id=str(conversation.id),
+        )
+        return True
+
+    async def admin_delete_conversation(
+        self, conversation_id: UUID, *, actor_id: UUID, is_admin: bool
+    ) -> None:
+        if not is_admin:
+            raise ForbiddenError("Only moderators can delete a conversation.")
+        conversation = await self._repository.get(conversation_id)
+        if conversation is None:
+            raise NotFoundError("Conversation not found.")
+        if conversation.type is ConversationType.COMMUNITY:
+            raise ForbiddenError("Community chat cannot be deleted.")
+        await self._repository.delete_conversation(conversation_id)
+        log.info(
+            "conversation_admin_deleted",
+            conversation_id=str(conversation_id),
+            actor_id=str(actor_id),
         )
 
     async def close_completed(self, now: datetime | None = None) -> int:

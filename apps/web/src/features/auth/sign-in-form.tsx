@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { ApiRequestError, getMe, signIn } from "@/features/auth/api";
+import { AuthAlternatives } from "@/features/auth/auth-alternatives";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { useSession } from "@/features/auth/session-provider";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -85,6 +86,7 @@ export function SignInForm() {
       <Button type="submit" block disabled={form.formState.isSubmitting}>
         {form.formState.isSubmitting ? t("submitting") : t("signInSubmit")}
       </Button>
+      <AuthAlternatives mode="signIn" />
       <p className="text-muted-foreground text-center text-sm">
         {t.rich("needAccount", {
           link: (chunks) => (

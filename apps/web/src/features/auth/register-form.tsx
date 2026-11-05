@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { ApiRequestError, registerAccount } from "@/features/auth/api";
+import { AuthAlternatives } from "@/features/auth/auth-alternatives";
 import { onValidSubmit } from "@/features/auth/form-submit";
 import { adultCutoffDate, isMobileNumber } from "@/features/auth/validation";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -223,6 +224,7 @@ export function RegisterForm({
       <Button type="submit" block disabled={form.formState.isSubmitting}>
         {form.formState.isSubmitting ? t("submitting") : t("registerSubmit")}
       </Button>
+      <AuthAlternatives mode="register" />
       <p className="text-muted-foreground text-center text-sm">
         {t.rich("haveAccount", {
           link: (chunks) => (

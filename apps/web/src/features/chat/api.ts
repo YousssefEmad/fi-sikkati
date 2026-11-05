@@ -78,3 +78,9 @@ export async function clearConversation(
     body: JSON.stringify({}),
   });
 }
+
+export async function adminDeleteConversation(conversationId: string): Promise<void> {
+  await apiJson(`/api/v1/conversations/${conversationId}`, {
+    method: "DELETE",
+  });
+}
