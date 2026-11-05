@@ -17,7 +17,6 @@ import { Link } from "@/i18n/navigation";
 
 function ResultCard({ item }: { item: SearchTripItem }) {
   const t = useTranslations("Search");
-  const errorsT = useTranslations("Errors");
   return (
     <li className="border-border rounded-xl border p-5">
       <p className="text-lg font-bold">
@@ -46,6 +45,7 @@ function ResultCard({ item }: { item: SearchTripItem }) {
 
 function SearchForm() {
   const t = useTranslations("Search");
+  const errorsT = useTranslations("Errors");
   const [originQuery, setOriginQuery] = useState("");
   const [destQuery, setDestQuery] = useState("");
   const [origin, setOrigin] = useState<PickedPlace | null>(null);
