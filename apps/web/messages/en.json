@@ -21,6 +21,18 @@
     "account": "Account",
     "suggestEmpty": "No matches. Try another spelling."
   },
+  "Pwa": {
+    "install": "Install app",
+    "installShort": "Install app",
+    "bannerBody": "Install Fi Sikkati on your home screen — it opens like a real app.",
+    "dismiss": "Dismiss",
+    "iosTitle": "Install Fi Sikkati on iPhone",
+    "iosBody": "On iPhone Safari, install happens from the Share button.",
+    "iosStep1": "Tap the <share>Share</share> button in Safari (bottom or top).",
+    "iosStep2": "Choose “Add to Home Screen”.",
+    "iosStep3": "Tap “Add” — Fi Sikkati appears like any other app.",
+    "iosDone": "Got it"
+  },
   "Nav": {
     "app": "App",
     "findRide": "Search",
