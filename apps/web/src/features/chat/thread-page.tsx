@@ -76,7 +76,7 @@ function Thread({ conversationId }: { conversationId: string }) {
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState("");
   const [menuFor, setMenuFor] = useState<string | null>(null);
-  const [wallpaper, setWallpaper] = useState(PRESET_WALLPAPERS[0].style);
+  const [wallpaper, setWallpaper] = useState<string>(PRESET_WALLPAPERS[0].style);
   const [showWallpaper, setShowWallpaper] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const longPressTimer = useRef<number | null>(null);
