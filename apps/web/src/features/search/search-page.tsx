@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, TextInput } from "@/components/ui/field";
 import { SuggestInput } from "@/components/ui/suggest-input";
-import { ApiRequestError } from "@/features/auth/api";
 import { apiErrorMessage } from "@/lib/api/error-message";
 import { RequireAccount } from "@/features/auth/require-account";
 import { PlaceSuggest, type PickedPlace } from "@/features/places/place-suggest";
