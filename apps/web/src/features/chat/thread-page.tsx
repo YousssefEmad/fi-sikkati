@@ -369,7 +369,7 @@ function Thread({ conversationId }: { conversationId: string }) {
         </div>
 
         <form
-          className="border-border bg-background shrink-0 border-t px-3 py-2.5 sm:px-4"
+          className="border-border bg-background shrink-0 border-t px-3 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-4 sm:pb-4"
           onSubmit={(event) => {
             event.preventDefault();
             if (draft.trim()) send.mutate();
@@ -419,7 +419,7 @@ function Thread({ conversationId }: { conversationId: string }) {
 
       {showWallpaper ? (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 p-4 sm:items-center"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-5"
           role="dialog"
           aria-modal="true"
           onClick={() => {
@@ -427,7 +427,7 @@ function Thread({ conversationId }: { conversationId: string }) {
           }}
         >
           <div
-            className="bg-surface w-full max-w-md rounded-2xl p-5 shadow-lift"
+            className="bg-surface max-h-[min(85dvh,36rem)] w-full max-w-md overflow-y-auto rounded-2xl p-5 shadow-lift"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-3">
