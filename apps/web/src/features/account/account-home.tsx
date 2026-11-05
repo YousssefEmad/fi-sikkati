@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { Avatar } from "@/components/ui/avatar";
 import { StatusBadge, identityTone } from "@/components/ui/status-badge";
 import { PhoneForm } from "@/features/account/phone-form";
 import { PhotoForm } from "@/features/account/photo-form";
@@ -28,11 +29,37 @@ export function AccountHome() {
     account.identityVerificationStatus === "NOT_SUBMITTED" ||
     account.identityVerificationStatus === "REJECTED";
   const isDriver = account.roles.includes("DRIVER");
+  const profileName = account.displayName || account.fullName || t("title");
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-extrabold tracking-tight">{t("title")}</h1>
-      <p className="text-muted-foreground mt-2 text-base">{account.email}</p>
+      <header className="border-border from-brand-soft/40 to-surface flex flex-col items-center gap-4 rounded-3xl border bg-gradient-to-b px-5 py-8 text-center sm:flex-row sm:items-end sm:gap-6 sm:text-start">
+        <Avatar
+          name={profileName}
+          src={account.photoUrl}
+          className="border-surface size-28 shrink-0 border-4 shadow-lift sm:size-32"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="text-muted-foreground text-sm font-bold tracking-wide uppercase">
+            {t("profileHeader")}
+          </p>
+          <h1 className="mt-1 truncate text-3xl font-extrabold tracking-tight sm:text-4xl">
+            {profileName}
+          </h1>
+          {account.fullName && account.fullName !== account.displayName ? (
+            <p className="text-muted-foreground mt-1 text-base font-semibold">{account.fullName}</p>
+          ) : null}
+          <p className="text-muted-foreground mt-2 truncate text-sm sm:text-base">{account.email}</p>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+            <StatusBadge tone={identityTone(account.identityVerificationStatus)}>
+              {t(`verificationBadge.${account.identityVerificationStatus}`)}
+            </StatusBadge>
+            {account.phoneVerified ? (
+              <StatusBadge tone="success">{t("phoneVerifiedBadge")}</StatusBadge>
+            ) : null}
+          </div>
+        </div>
+      </header>
       {account.emailVerified ? null : (
         <p className="bg-brand-soft mt-4 rounded-xl px-4 py-3 text-base font-semibold">
           {t("verifyBanner")}

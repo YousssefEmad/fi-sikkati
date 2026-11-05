@@ -308,29 +308,42 @@ function Thread({ conversationId }: { conversationId: string }) {
                   }}
                 >
                   <div className="max-w-[82%] sm:max-w-[75%]">
-                    <div className={cn("mb-1 flex", mine ? "justify-end" : "justify-start")}>
-                      <p className="bg-surface text-foreground max-w-full truncate rounded-md px-2 py-0.5 text-[12px] font-extrabold shadow-sm">
+                    <div
+                      className={cn(
+                        "overflow-hidden rounded-2xl shadow-sm",
+                        mine ? "rounded-ee-md" : "rounded-es-md",
+                        item.deleted && "opacity-80",
+                      )}
+                    >
+                      <p
+                        className={cn(
+                          "truncate px-3 py-1 text-[11px] font-extrabold tracking-wide",
+                          mine
+                            ? "bg-primary/75 text-primary-foreground/95"
+                            : "bg-surface-muted text-muted-foreground",
+                        )}
+                      >
                         {item.senderDisplayName ??
                           (mine ? account?.displayName : t("unknownSender"))}
                       </p>
-                    </div>
-                    <div
-                      className={cn(
-                        "rounded-2xl px-3.5 py-2 text-[15px] leading-snug shadow-sm",
-                        item.deleted
-                          ? "bg-surface-muted/90 text-muted-foreground italic"
-                          : mine
-                            ? "bg-primary text-primary-foreground rounded-ee-md"
-                            : "bg-surface/95 text-foreground rounded-es-md",
-                      )}
-                    >
-                      {text}
+                      <div
+                        className={cn(
+                          "px-3.5 py-2.5 text-base leading-snug font-medium",
+                          item.deleted
+                            ? "bg-surface-muted text-muted-foreground italic"
+                            : mine
+                              ? "bg-primary text-primary-foreground"
+                              : "bg-surface text-foreground",
+                        )}
+                      >
+                        {text}
+                      </div>
                     </div>
                     {menuFor === item.id && canAct ? (
                       <div
                         className={cn(
                           "bg-surface border-border mt-1 inline-flex overflow-hidden rounded-xl border shadow-lift",
-                          mine ? "float-end" : "float-start",
+                          mine ? "ms-auto" : "me-auto",
                         )}
                         onClick={(event) => event.stopPropagation()}
                       >

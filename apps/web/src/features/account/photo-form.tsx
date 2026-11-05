@@ -39,8 +39,14 @@ export function PhotoForm({ photoUrl }: { photoUrl: string | null | undefined })
       {photoUrl ? (
         // Public media URL after re-encoding; not user-authored HTML.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={photoUrl} alt="" className="mt-3 size-24 rounded-full object-cover" />
-      ) : null}
+        <img
+          src={photoUrl}
+          alt=""
+          className="border-border mt-3 size-28 rounded-full border-4 object-cover shadow-card"
+        />
+      ) : (
+        <p className="text-muted-foreground mt-3 text-sm font-semibold">{t("photoEmpty")}</p>
+      )}
       <label htmlFor="profile-photo" className="mt-3 block text-sm font-semibold">
         {t("photo")}
       </label>
