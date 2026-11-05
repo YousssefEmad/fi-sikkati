@@ -113,6 +113,12 @@ class NotificationRepository:
         result = await self._db.execute(statement)
         return int(result.rowcount or 0) if isinstance(result, CursorResult) else 0
 
+    async def clear_all(self, user_id: UUID) -> int:
+        result = await self._db.execute(
+            delete(Notification).where(Notification.user_id == user_id)
+        )
+        return int(result.rowcount or 0) if isinstance(result, CursorResult) else 0
+
     async def preferences(self, user_id: UUID) -> list[NotificationPreference]:
         result = await self._db.execute(
             select(NotificationPreference).where(NotificationPreference.user_id == user_id)

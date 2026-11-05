@@ -24,3 +24,9 @@ export async function markNotificationsRead(ids?: string[]): Promise<void> {
     body: JSON.stringify(ids ? { ids } : {}),
   });
 }
+
+export async function clearAllNotifications(): Promise<{ deleted: number }> {
+  return apiJson<{ deleted: number }>("/api/v1/me/notifications", {
+    method: "DELETE",
+  });
+}

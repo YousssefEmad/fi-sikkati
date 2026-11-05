@@ -224,7 +224,7 @@ async def delete_messages(
     conversation_id: UUID,
     payload: MessageBulkDeleteRequest,
     service: ChatServiceDep,
-    principal: Annotated[Principal, Depends(require_permission(Permission.MODERATION_ACTION))],
+    principal: Annotated[Principal, Depends(require_permission(Permission.CHAT_SEND))],
 ) -> MessageBulkDeleteResponse:
     count = await service.remove_messages(
         conversation_id,

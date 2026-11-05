@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/features/auth/session-provider";
-import { enablePhoneAlerts, refreshPhoneAlerts } from "@/features/notifications/push";
+import {
+  enablePhoneAlerts,
+  isIosDevice,
+  isStandaloneApp,
+  refreshPhoneAlerts,
+} from "@/features/notifications/push";
 
-type PhoneState = "on" | "off" | "denied" | "unsupported";
+type PhoneState = "on" | "off" | "denied" | "unsupported" | "need_install";
 
 export function PhoneAlerts() {
   const t = useTranslations("Notifications");
@@ -20,28 +25,54 @@ export function PhoneAlerts() {
     const apply = (next: PhoneState) => {
       if (!cancelled) setState(next);
     };
-    if (!("Notification" in window) || !("PushManager" in window)) {
+    if (!("Notification" in window) || !("serviceWorker" in navigator)) {
       queueMicrotask(() => {
         apply("unsupported");
       });
-    } else if (Notification.permission === "denied") {
+      return () => {
+        cancelled = true;
+      };
+    }
+    if (isIosDevice() && !isStandaloneApp()) {
+      queueMicrotask(() => {
+        apply("need_install");
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+    if (!("PushManager" in window)) {
+      queueMicrotask(() => {
+        apply(isIosDevice() ? "need_install" : "unsupported");
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+    if (Notification.permission === "denied") {
       queueMicrotask(() => {
         apply("denied");
       });
-    } else if (Notification.permission !== "granted") {
+      return () => {
+        cancelled = true;
+      };
+    }
+    if (Notification.permission !== "granted") {
       queueMicrotask(() => {
         apply("off");
       });
-    } else {
-      void refreshPhoneAlerts()
-        .then((on) => {
-          apply(on ? "on" : "off");
-        })
-        .catch((error: unknown) => {
-          const message = error instanceof Error ? error.message : "";
-          apply(message.includes("push service") ? "unsupported" : "off");
-        });
+      return () => {
+        cancelled = true;
+      };
     }
+    void refreshPhoneAlerts()
+      .then((on) => {
+        apply(on ? "on" : "off");
+      })
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : "";
+        apply(message.includes("push service") ? "unsupported" : "off");
+      });
     return () => {
       cancelled = true;
     };
@@ -50,20 +81,23 @@ export function PhoneAlerts() {
   if (status !== "authenticated" || state === "pending") return null;
 
   return (
-    <div className="border-border bg-brand-soft mt-4 rounded-xl border px-4 py-3">
-      <p className="font-semibold">{t("phoneTitle")}</p>
-      <p className="text-muted-foreground mt-1 text-sm">{t("phoneBody")}</p>
+    <div className="border-border bg-brand-soft mt-3 rounded-xl border px-3 py-3">
+      <p className="text-sm font-semibold">{t("phoneTitle")}</p>
+      <p className="text-muted-foreground mt-1 text-xs leading-relaxed sm:text-sm">{t("phoneBody")}</p>
       {state === "on" ? <p className="mt-2 text-sm font-semibold">{t("phoneOn")}</p> : null}
       {state === "denied" ? <p className="mt-2 text-sm">{t("phoneDenied")}</p> : null}
       {state === "unsupported" ? <p className="mt-2 text-sm">{t("phoneUnsupported")}</p> : null}
+      {state === "need_install" ? <p className="mt-2 text-sm font-semibold">{t("phoneNeedInstall")}</p> : null}
       {state === "off" ? (
         <Button
           className="mt-3"
+          size="sm"
           variant="brand"
           onClick={() => {
             void enablePhoneAlerts().then((next) => {
               if (next === "on") setState("on");
               else if (next === "unsupported") setState("unsupported");
+              else if (next === "need_install") setState("need_install");
               else setState("denied");
             });
           }}
@@ -72,7 +106,7 @@ export function PhoneAlerts() {
         </Button>
       ) : null}
       {state === "on" || state === "off" ? (
-        <p className="text-muted-foreground mt-3 text-sm">{t("communityMuteHint")}</p>
+        <p className="text-muted-foreground mt-2 text-xs">{t("communityMuteHint")}</p>
       ) : null}
     </div>
   );

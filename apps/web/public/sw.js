@@ -1,5 +1,5 @@
 /* Fi Sikkati service worker: cache the installable shell only. No offline API claims. */
-const CACHE = "fi-sikkati-shell-v2";
+const CACHE = "fi-sikkati-shell-v3";
 const SHELL = ["/icons/icon-192.png", "/icons/icon-512.png", "/brand/logo.png"];
 
 self.addEventListener("install", (event) => {
@@ -17,10 +17,15 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  const data = event.data ? event.data.json() : {};
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = {};
+  }
   const title = typeof data.title === "string" ? data.title : "في سكتي";
   const body = typeof data.body === "string" ? data.body : "";
-  const url = typeof data.url === "string" ? data.url : "/";
+  const url = typeof data.url === "string" ? data.url : "/ar";
   const tag = typeof data.tag === "string" ? data.tag : "fi-sikkati";
   event.waitUntil(
     self.registration.showNotification(title, {
@@ -29,14 +34,32 @@ self.addEventListener("push", (event) => {
       badge: "/icons/icon-192.png",
       data: { url },
       tag,
+      renotify: true,
+      silent: false,
+      lang: "ar",
+      dir: "rtl",
+      vibrate: [120, 60, 120],
     }),
   );
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = event.notification.data?.url || "/";
-  event.waitUntil(self.clients.openWindow(url));
+  const target = event.notification.data?.url || "/ar";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ("focus" in client) {
+          client.navigate?.(target);
+          return client.focus();
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(target);
+      }
+      return undefined;
+    }),
+  );
 });
 
 self.addEventListener("fetch", (event) => {

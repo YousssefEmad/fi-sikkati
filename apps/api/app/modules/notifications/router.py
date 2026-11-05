@@ -12,6 +12,7 @@ from app.core.authz.principal import Principal
 from app.core.pagination import decode_cursor, encode_cursor
 from app.modules.notifications.dependencies import NotificationServiceDep
 from app.modules.notifications.schemas import (
+    ClearNotificationsResponse,
     MarkReadRequest,
     MarkReadResponse,
     NotificationListResponse,
@@ -87,6 +88,19 @@ async def mark_read(
     principal: Annotated[Principal, Depends(require_permission(Permission.NOTIFICATIONS_MANAGE))],
 ) -> MarkReadResponse:
     return MarkReadResponse(marked=await service.mark_read(principal.user_id, ids=payload.ids))
+
+
+@router.delete(
+    "",
+    response_model=ClearNotificationsResponse,
+    operation_id="notifications_clear_all",
+    summary="Delete every notification for the signed-in user",
+)
+async def clear_all_notifications(
+    service: NotificationServiceDep,
+    principal: Annotated[Principal, Depends(require_permission(Permission.NOTIFICATIONS_MANAGE))],
+) -> ClearNotificationsResponse:
+    return ClearNotificationsResponse(deleted=await service.clear_all(principal.user_id))
 
 
 @preferences_router.get(

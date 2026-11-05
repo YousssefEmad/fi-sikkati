@@ -88,6 +88,8 @@ async def _send_one(
             vapid_private_key=private_key,
             vapid_claims={"sub": subject},
             ttl=_HOLD_SECONDS,
+            # High urgency helps iOS/Android wake the device and play the system alert sound.
+            headers={"Urgency": "high", "Topic": message.get("tag", "fi-sikkati")[:32]},
         )
     except WebPushException as exc:
         if exc.status_code in _GONE:

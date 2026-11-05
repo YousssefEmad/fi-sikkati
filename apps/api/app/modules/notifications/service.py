@@ -258,6 +258,9 @@ class NotificationService:
             raise ValidationAppError(f"Mark at most {_MAX_MARK_READ} notifications per call.")
         return await self._repository.mark_read(user_id, ids=ids, now=datetime.now(UTC))
 
+    async def clear_all(self, user_id: UUID) -> int:
+        return await self._repository.clear_all(user_id)
+
     async def preferences(self, user_id: UUID) -> list[PreferenceView]:
         stored = {
             (row.type, row.channel): row.enabled

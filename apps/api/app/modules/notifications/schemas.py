@@ -39,6 +39,10 @@ class MarkReadResponse(ApiModel):
     marked: int
 
 
+class ClearNotificationsResponse(ApiModel):
+    deleted: int
+
+
 class PushSubscriptionRequest(ApiModel):
     endpoint: str = Field(min_length=8, max_length=2000)
     p256dh: str = Field(min_length=8, max_length=200)

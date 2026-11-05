@@ -10,8 +10,9 @@ import {
 
 import { cn } from "@/lib/utils";
 
+/** text-base (16px) avoids iOS Safari zoom-on-focus. */
 const controlClass =
-  "border-border bg-surface text-foreground min-h-11 w-full rounded-md border px-3 text-sm disabled:opacity-50";
+  "border-border bg-surface text-foreground min-h-11 w-full rounded-md border px-3 text-base disabled:opacity-50";
 
 export function Field({
   id,

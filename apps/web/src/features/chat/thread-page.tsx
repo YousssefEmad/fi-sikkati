@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell, BellOff, Eraser, ImagePlus, Mic, Trash2, X } from "lucide-react";
+import { Bell, BellOff, CheckSquare, Eraser, ImagePlus, Mic, Trash2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -14,6 +14,7 @@ import {
   adminDeleteConversation,
   clearConversation,
   deleteMessage,
+  deleteMessages,
   getConversation,
   listMessages,
   markConversationRead,
@@ -77,6 +78,8 @@ function Thread({ conversationId }: { conversationId: string }) {
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState("");
   const [menuFor, setMenuFor] = useState<string | null>(null);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
   const [wallpaper, setWallpaper] = useState<string>(PRESET_WALLPAPERS[0].style);
   const [showWallpaper, setShowWallpaper] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -134,6 +137,15 @@ function Thread({ conversationId }: { conversationId: string }) {
     mutationFn: (messageId: string) => deleteMessage(conversationId, messageId),
     onSuccess: async () => {
       setMenuFor(null);
+      await refreshMessages();
+    },
+  });
+
+  const removeSelected = useMutation({
+    mutationFn: () => deleteMessages(conversationId, selected),
+    onSuccess: async () => {
+      setSelected([]);
+      setSelectMode(false);
       await refreshMessages();
     },
   });
@@ -239,6 +251,35 @@ function Thread({ conversationId }: { conversationId: string }) {
             <Button
               type="button"
               size="sm"
+              variant={selectMode ? "brand" : "outline"}
+              onClick={() => {
+                setSelectMode((current) => !current);
+                setSelected([]);
+                setMenuFor(null);
+              }}
+            >
+              <CheckSquare aria-hidden="true" className="size-4" />
+              {selectMode ? t("cancelSelect") : t("selectMessages")}
+            </Button>
+            {selectMode && selected.length > 0 ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={removeSelected.isPending}
+                onClick={() => {
+                  if (window.confirm(t("confirmDeleteSelected", { count: selected.length }))) {
+                    removeSelected.mutate();
+                  }
+                }}
+              >
+                <Trash2 aria-hidden="true" className="size-4" />
+                {t("deleteSelected", { count: selected.length })}
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              size="sm"
               variant="outline"
               disabled={muteChat.isPending}
               title={trip.muted ? t("unmuteHint") : t("muteHint")}
@@ -318,22 +359,46 @@ function Thread({ conversationId }: { conversationId: string }) {
                 );
               }
 
+              const isSelected = selected.includes(item.id);
+
               return (
                 <div
                   key={item.id}
                   className={cn("flex items-end gap-2", mine ? "justify-end" : "justify-start")}
                   onPointerDown={() => {
+                    if (selectMode) return;
                     startLongPress(item.id, canAct);
                   }}
                   onPointerUp={cancelLongPress}
                   onPointerLeave={cancelLongPress}
                   onPointerCancel={cancelLongPress}
                   onContextMenu={(event) => {
-                    if (!canAct) return;
+                    if (!canAct || selectMode) return;
                     event.preventDefault();
                     setMenuFor(item.id);
                   }}
+                  onClick={() => {
+                    if (!selectMode || !canAct) return;
+                    setSelected((current) =>
+                      current.includes(item.id)
+                        ? current.filter((id) => id !== item.id)
+                        : [...current, item.id],
+                    );
+                  }}
                 >
+                  {selectMode && canAct ? (
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        "mb-2 inline-flex size-5 shrink-0 items-center justify-center rounded-md border-2",
+                        isSelected
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-surface",
+                      )}
+                    >
+                      {isSelected ? "✓" : null}
+                    </span>
+                  ) : null}
                   <div className="max-w-[82%] sm:max-w-[75%]">
                     <div
                       className={cn(
@@ -427,13 +492,13 @@ function Thread({ conversationId }: { conversationId: string }) {
             </label>
             <TextInput
               id="chat-body"
-              className="min-h-12 flex-1 rounded-full px-4"
+              className="min-h-12 flex-1 rounded-full px-4 text-base"
               placeholder={t("composer")}
               value={draft}
               onChange={(event) => {
                 setDraft(event.target.value);
               }}
-              disabled={trip.isReadOnly || send.isPending}
+              disabled={trip.isReadOnly || send.isPending || selectMode}
               autoComplete="off"
             />
             <Button

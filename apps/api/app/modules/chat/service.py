@@ -315,12 +315,30 @@ class ChatService:
         actor_id: UUID,
         is_admin: bool,
     ) -> int:
-        if not is_admin:
-            raise ForbiddenError("Only moderators can remove multiple messages.")
-        await self._require_member(conversation_id, actor_id, is_admin=True)
+        await self._require_member(conversation_id, actor_id, is_admin=is_admin)
+        if is_admin:
+            return await self._repository.soft_delete_ids(
+                conversation_id,
+                message_ids,
+                actor_id=actor_id,
+                now=datetime.now(UTC),
+            )
+        # Members may bulk-delete only their own messages.
+        own_ids: list[UUID] = []
+        for message_id in message_ids:
+            message = await self._repository.get_message(message_id)
+            if (
+                message is not None
+                and message.conversation_id == conversation_id
+                and message.sender_id == actor_id
+                and message.deleted_at is None
+            ):
+                own_ids.append(message_id)
+        if not own_ids:
+            return 0
         return await self._repository.soft_delete_ids(
             conversation_id,
-            message_ids,
+            own_ids,
             actor_id=actor_id,
             now=datetime.now(UTC),
         )

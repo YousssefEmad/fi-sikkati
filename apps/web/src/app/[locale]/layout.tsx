@@ -23,6 +23,9 @@ export const viewport: Viewport = {
   themeColor: "#1A1C16",
   colorScheme: "light",
   viewportFit: "cover",
+  // Stop iOS Safari from zooming into inputs (also keep inputs at ≥16px in CSS).
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export async function generateMetadata({
