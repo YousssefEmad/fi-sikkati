@@ -17,6 +17,7 @@ from app.modules.chat.models import (
     ConversationMember,
     ConversationType,
     Message,
+    MessageKind,
 )
 from app.modules.trips.models import Trip
 from app.modules.users.models import UserProfile
@@ -214,6 +215,42 @@ class ChatRepository:
     async def soft_delete(self, message: Message, *, actor_id: UUID, now: datetime) -> None:
         message.deleted_at = now
         message.deleted_by = actor_id
+
+    async def soft_delete_ids(
+        self,
+        conversation_id: UUID,
+        message_ids: Sequence[UUID],
+        *,
+        actor_id: UUID,
+        now: datetime,
+    ) -> int:
+        if not message_ids:
+            return 0
+        result = await self._db.execute(
+            update(Message)
+            .where(
+                Message.conversation_id == conversation_id,
+                Message.id.in_(tuple(message_ids)),
+                Message.deleted_at.is_(None),
+                Message.kind == MessageKind.TEXT,
+            )
+            .values(deleted_at=now, deleted_by=actor_id)
+        )
+        return int(result.rowcount or 0) if isinstance(result, CursorResult) else 0
+
+    async def soft_delete_all_text(
+        self, conversation_id: UUID, *, actor_id: UUID, now: datetime
+    ) -> int:
+        result = await self._db.execute(
+            update(Message)
+            .where(
+                Message.conversation_id == conversation_id,
+                Message.deleted_at.is_(None),
+                Message.kind == MessageKind.TEXT,
+            )
+            .values(deleted_at=now, deleted_by=actor_id)
+        )
+        return int(result.rowcount or 0) if isinstance(result, CursorResult) else 0
 
     async def display_names(self, user_ids: Sequence[UUID]) -> dict[UUID, str]:
         if not user_ids:

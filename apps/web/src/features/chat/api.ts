@@ -36,7 +36,8 @@ export async function getConversation(id: string): Promise<Conversation> {
 
 export async function listMessages(id: string): Promise<ChatMessage[]> {
   const body = await apiJson<{ items: ChatMessage[] }>(`/api/v1/conversations/${id}/messages`);
-  return body.items;
+  // API returns newest-first; WhatsApp-style UI needs oldest → newest.
+  return [...body.items].reverse();
 }
 
 export async function sendMessage(id: string, body: string): Promise<ChatMessage> {
@@ -50,5 +51,30 @@ export async function markConversationRead(id: string, messageId?: string): Prom
   await apiJson(`/api/v1/conversations/${id}/read`, {
     method: "POST",
     body: JSON.stringify({ messageId: messageId ?? null }),
+  });
+}
+
+export async function deleteMessage(conversationId: string, messageId: string): Promise<ChatMessage> {
+  return apiJson<ChatMessage>(`/api/v1/conversations/${conversationId}/messages/${messageId}`, {
+    method: "DELETE",
+  });
+}
+
+export async function deleteMessages(
+  conversationId: string,
+  messageIds: string[],
+): Promise<{ deletedCount: number }> {
+  return apiJson(`/api/v1/conversations/${conversationId}/messages/delete`, {
+    method: "POST",
+    body: JSON.stringify({ messageIds }),
+  });
+}
+
+export async function clearConversation(
+  conversationId: string,
+): Promise<{ deletedCount: number }> {
+  return apiJson(`/api/v1/conversations/${conversationId}/clear`, {
+    method: "POST",
+    body: JSON.stringify({}),
   });
 }

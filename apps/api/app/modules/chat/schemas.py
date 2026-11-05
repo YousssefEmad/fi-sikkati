@@ -54,3 +54,15 @@ class MessageCreate(ApiModel):
 
 class MarkReadRequest(ApiModel):
     message_id: UUID | None = None
+
+
+class MessageBulkDeleteRequest(ApiModel):
+    message_ids: Annotated[list[UUID], Field(min_length=1, max_length=100)]
+
+
+class ClearConversationResponse(ApiModel):
+    deleted_count: int
+
+
+class MessageBulkDeleteResponse(ApiModel):
+    deleted_count: int

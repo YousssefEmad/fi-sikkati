@@ -14,9 +14,12 @@ from app.core.config import Settings, get_settings
 from app.core.pagination import decode_cursor, encode_cursor
 from app.modules.chat.dependencies import ChatServiceDep
 from app.modules.chat.schemas import (
+    ClearConversationResponse,
     ConversationListResponse,
     ConversationResponse,
     MarkReadRequest,
+    MessageBulkDeleteRequest,
+    MessageBulkDeleteResponse,
     MessageCreate,
     MessageListResponse,
     MessageResponse,
@@ -166,3 +169,63 @@ async def mark_read(
     await service.mark_read(
         conversation_id, viewer_id=principal.user_id, message_id=payload.message_id
     )
+
+
+@router.delete(
+    "/{conversation_id}/messages/{message_id}",
+    response_model=MessageResponse,
+    operation_id="chat_delete_message",
+    summary="Soft-delete one message (author or moderator)",
+)
+async def delete_message(
+    conversation_id: UUID,
+    message_id: UUID,
+    service: ChatServiceDep,
+    principal: Annotated[Principal, Depends(require_permission(Permission.CHAT_SEND))],
+) -> MessageResponse:
+    return _message(
+        await service.remove_message(
+            message_id,
+            actor_id=principal.user_id,
+            is_admin=principal.is_admin,
+            conversation_id=conversation_id,
+        )
+    )
+
+
+@router.post(
+    "/{conversation_id}/messages/delete",
+    response_model=MessageBulkDeleteResponse,
+    operation_id="chat_delete_messages",
+    summary="Soft-delete selected messages (moderators)",
+)
+async def delete_messages(
+    conversation_id: UUID,
+    payload: MessageBulkDeleteRequest,
+    service: ChatServiceDep,
+    principal: Annotated[Principal, Depends(require_permission(Permission.MODERATION_ACTION))],
+) -> MessageBulkDeleteResponse:
+    count = await service.remove_messages(
+        conversation_id,
+        list(payload.message_ids),
+        actor_id=principal.user_id,
+        is_admin=principal.is_admin,
+    )
+    return MessageBulkDeleteResponse(deleted_count=count)
+
+
+@router.post(
+    "/{conversation_id}/clear",
+    response_model=ClearConversationResponse,
+    operation_id="chat_clear",
+    summary="Clear all user messages in a conversation (moderators)",
+)
+async def clear_conversation(
+    conversation_id: UUID,
+    service: ChatServiceDep,
+    principal: Annotated[Principal, Depends(require_permission(Permission.MODERATION_ACTION))],
+) -> ClearConversationResponse:
+    count = await service.clear_conversation(
+        conversation_id, actor_id=principal.user_id, is_admin=principal.is_admin
+    )
+    return ClearConversationResponse(deleted_count=count)

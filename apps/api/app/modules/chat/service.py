@@ -284,10 +284,17 @@ class ChatService:
         await self._repository.mark_read(conversation_id, viewer_id, target)
 
     async def remove_message(
-        self, message_id: UUID, *, actor_id: UUID, is_admin: bool
+        self,
+        message_id: UUID,
+        *,
+        actor_id: UUID,
+        is_admin: bool,
+        conversation_id: UUID | None = None,
     ) -> MessageView:
         message = await self._repository.get_message(message_id)
         if message is None:
+            raise NotFoundError("Message not found.")
+        if conversation_id is not None and message.conversation_id != conversation_id:
             raise NotFoundError("Message not found.")
         if not is_admin and message.sender_id != actor_id:
             raise ForbiddenError("You cannot remove this message.")
@@ -295,6 +302,34 @@ class ChatService:
             await self._repository.soft_delete(message, actor_id=actor_id, now=datetime.now(UTC))
         views = await self._message_views([message])
         return views[0]
+
+    async def remove_messages(
+        self,
+        conversation_id: UUID,
+        message_ids: list[UUID],
+        *,
+        actor_id: UUID,
+        is_admin: bool,
+    ) -> int:
+        if not is_admin:
+            raise ForbiddenError("Only moderators can remove multiple messages.")
+        await self._require_member(conversation_id, actor_id, is_admin=True)
+        return await self._repository.soft_delete_ids(
+            conversation_id,
+            message_ids,
+            actor_id=actor_id,
+            now=datetime.now(UTC),
+        )
+
+    async def clear_conversation(
+        self, conversation_id: UUID, *, actor_id: UUID, is_admin: bool
+    ) -> int:
+        if not is_admin:
+            raise ForbiddenError("Only moderators can clear a conversation.")
+        await self._require_member(conversation_id, actor_id, is_admin=True)
+        return await self._repository.soft_delete_all_text(
+            conversation_id, actor_id=actor_id, now=datetime.now(UTC)
+        )
 
     async def close_completed(self, now: datetime | None = None) -> int:
         moment = now or datetime.now(UTC)
