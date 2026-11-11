@@ -14,14 +14,48 @@ export async function apiJson<T>(path: string, init: RequestInit = {}): Promise<
   if (csrf && method !== "GET" && method !== "HEAD") {
     headers.set("X-CSRF-Token", csrf);
   }
-  const response = await fetch(path, { ...init, headers, credentials: "include" });
+  let response: Response;
+  try {
+    response = await fetch(path, { ...init, headers, credentials: "include" });
+  } catch {
+    throw new ApiRequestError(
+      asProblem(
+        {
+          type: "about:blank",
+          title: "Service unavailable",
+          status: 503,
+          code: "SERVICE_UNAVAILABLE",
+          detail: null,
+          errors: null,
+          request_id: null,
+        },
+        "Service unavailable",
+      ),
+    );
+  }
   if (response.status === 204) {
     return undefined as T;
   }
   const raw = await response.text();
-  const data: unknown = raw ? JSON.parse(raw) : null;
+  let data: unknown = null;
+  if (raw) {
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      data = null;
+    }
+  }
   if (!response.ok) {
-    throw new ApiRequestError(asProblem(data, "Request failed."));
+    const fallbackCode =
+      response.status === 502 || response.status === 503 || response.status === 504
+        ? "SERVICE_UNAVAILABLE"
+        : "UNKNOWN";
+    throw new ApiRequestError(
+      asProblem(data, "Request failed.", {
+        status: response.status,
+        code: fallbackCode,
+      }),
+    );
   }
   return data as T;
 }

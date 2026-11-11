@@ -20,7 +20,21 @@ export class ApiRequestError extends Error {
 }
 
 function throwIfProblem(error: unknown, fallback: string): never {
-  throw new ApiRequestError(asProblem(error, fallback));
+  const status =
+    typeof error === "object" &&
+    error !== null &&
+    "status" in error &&
+    typeof (error as { status?: unknown }).status === "number"
+      ? (error as { status: number }).status
+      : undefined;
+  const networkDown =
+    error instanceof TypeError ||
+    status === 502 ||
+    status === 503 ||
+    status === 504;
+  throw new ApiRequestError(
+    asProblem(error, fallback, networkDown ? { status: status ?? 503, code: "SERVICE_UNAVAILABLE" } : undefined),
+  );
 }
 
 function unwrap<T>(data: T | undefined, error: unknown, fallback: string): T {

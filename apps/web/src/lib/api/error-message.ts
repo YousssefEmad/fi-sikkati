@@ -28,5 +28,13 @@ export function apiErrorMessage(error: unknown, t: ErrorsTranslator): string {
     return t("VALIDATION_ERROR");
   }
 
+  if (
+    error.problem.status === 502 ||
+    error.problem.status === 503 ||
+    error.problem.status === 504
+  ) {
+    return t("SERVICE_UNAVAILABLE");
+  }
+
   return t("generic");
 }
