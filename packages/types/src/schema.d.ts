@@ -778,6 +778,24 @@ export interface paths {
         get: operations["chat_get"];
         put?: never;
         post?: never;
+        /** Hard-delete a trip conversation (moderators; community protected) */
+        delete: operations["chat_admin_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/clear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Clear all user messages in a conversation (moderators) */
+        post: operations["chat_clear"];
         delete?: never;
         options?: never;
         head?: never;
@@ -796,6 +814,57 @@ export interface paths {
         put?: never;
         /** Send a message */
         post: operations["chat_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/messages/{message_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Soft-delete one message (author or moderator) */
+        delete: operations["chat_delete_message"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/messages/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Soft-delete selected messages (moderators) */
+        post: operations["chat_delete_messages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/conversations/{conversation_id}/mute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Mute or unmute notifications for this conversation */
+        put: operations["chat_mute"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1058,7 +1127,8 @@ export interface paths {
         get: operations["notifications_list"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Delete every notification for the signed-in user */
+        delete: operations["notifications_clear_all"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1613,6 +1683,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/trips/browse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Upcoming published trips for discovery
+         * @description Home feed: approximate trip cards anyone can scroll before searching.
+         */
+        get: operations["trips_browse"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/{user_id}/public-profile": {
         parameters: {
             query?: never;
@@ -1974,6 +2064,8 @@ export interface components {
             createdAt: string;
             /** Displayname */
             displayName: string;
+            /** Email */
+            email: string;
             /** Emailverified */
             emailVerified: boolean;
             /**
@@ -2006,6 +2098,10 @@ export interface components {
             createdAt: string;
             /** Displayname */
             displayName: string;
+            /** Email */
+            email: string;
+            /** Emailverified */
+            emailVerified: boolean;
             /**
              * Id
              * Format: uuid
@@ -2241,6 +2337,16 @@ export interface components {
             /** Newpassword */
             newPassword: string;
         };
+        /** ClearConversationResponse */
+        ClearConversationResponse: {
+            /** Deletedcount */
+            deletedCount: number;
+        };
+        /** ClearNotificationsResponse */
+        ClearNotificationsResponse: {
+            /** Deleted */
+            deleted: number;
+        };
         /** ConversationListResponse */
         ConversationListResponse: {
             /** Items */
@@ -2266,6 +2372,11 @@ export interface components {
             memberIds: string[];
             /** Membernames */
             memberNames: string[];
+            /**
+             * Muted
+             * @default false
+             */
+            muted: boolean;
             /** Originlabel */
             originLabel: string | null;
             /** Tripid */
@@ -2554,6 +2665,16 @@ export interface components {
          * @enum {string}
          */
         MatchKind: "EXACT" | "ON_ROUTE";
+        /** MessageBulkDeleteRequest */
+        MessageBulkDeleteRequest: {
+            /** Messageids */
+            messageIds: string[];
+        };
+        /** MessageBulkDeleteResponse */
+        MessageBulkDeleteResponse: {
+            /** Deletedcount */
+            deletedCount: number;
+        };
         /** MessageCreate */
         MessageCreate: {
             /** Body */
@@ -2610,6 +2731,11 @@ export interface components {
          * @enum {string}
          */
         ModerationActionType: "WARN" | "REMOVE_CONTENT" | "SUSPEND_USER" | "RESTORE_USER" | "CANCEL_TRIP" | "REVOKE_DRIVER";
+        /** MuteConversationRequest */
+        MuteConversationRequest: {
+            /** Muted */
+            muted: boolean;
+        };
         /**
          * NotificationChannel
          * @enum {string}
@@ -2769,6 +2895,10 @@ export interface components {
             defaultTimezone: string;
             /** Deletiongracedays */
             deletionGraceDays: number;
+            /** Emaildeliveryenabled */
+            emailDeliveryEnabled: boolean;
+            /** Emailverificationrequired */
+            emailVerificationRequired: boolean;
             /**
              * Environment
              * @enum {string}
@@ -3587,6 +3717,8 @@ export type SchemaBodyVerificationUploadLicence = components['schemas']['Body_ve
 export type SchemaCallContactListResponse = components['schemas']['CallContactListResponse'];
 export type SchemaCallContactResponse = components['schemas']['CallContactResponse'];
 export type SchemaChangePasswordRequest = components['schemas']['ChangePasswordRequest'];
+export type SchemaClearConversationResponse = components['schemas']['ClearConversationResponse'];
+export type SchemaClearNotificationsResponse = components['schemas']['ClearNotificationsResponse'];
 export type SchemaConversationListResponse = components['schemas']['ConversationListResponse'];
 export type SchemaConversationResponse = components['schemas']['ConversationResponse'];
 export type SchemaDeleteAccountResponse = components['schemas']['DeleteAccountResponse'];
@@ -3614,11 +3746,14 @@ export type SchemaLoginRequest = components['schemas']['LoginRequest'];
 export type SchemaMapPoint = components['schemas']['MapPoint'];
 export type SchemaMarkReadResponse = components['schemas']['MarkReadResponse'];
 export type SchemaMatchKind = components['schemas']['MatchKind'];
+export type SchemaMessageBulkDeleteRequest = components['schemas']['MessageBulkDeleteRequest'];
+export type SchemaMessageBulkDeleteResponse = components['schemas']['MessageBulkDeleteResponse'];
 export type SchemaMessageCreate = components['schemas']['MessageCreate'];
 export type SchemaMessageKind = components['schemas']['MessageKind'];
 export type SchemaMessageListResponse = components['schemas']['MessageListResponse'];
 export type SchemaMessageResponse = components['schemas']['MessageResponse'];
 export type SchemaModerationActionType = components['schemas']['ModerationActionType'];
+export type SchemaMuteConversationRequest = components['schemas']['MuteConversationRequest'];
 export type SchemaNotificationChannel = components['schemas']['NotificationChannel'];
 export type SchemaNotificationListResponse = components['schemas']['NotificationListResponse'];
 export type SchemaNotificationResponse = components['schemas']['NotificationResponse'];
@@ -5151,6 +5286,66 @@ export interface operations {
             };
         };
     };
+    chat_admin_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_clear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClearConversationResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
     chat_list_messages: {
         parameters: {
             query?: {
@@ -5207,6 +5402,108 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_delete_message: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+                message_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_delete_messages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MessageBulkDeleteRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageBulkDeleteResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    chat_mute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MuteConversationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationResponse"];
                 };
             };
             /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
@@ -5799,6 +6096,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NotificationListResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    notifications_clear_all: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClearNotificationsResponse"];
                 };
             };
             /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
@@ -7004,6 +7330,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TripResponse"];
+                };
+            };
+            /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["Problem"];
+                };
+            };
+        };
+    };
+    trips_browse: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TripListResponse"];
                 };
             };
             /** @description Error (RFC 9457 Problem Details with machine-readable `code`) */

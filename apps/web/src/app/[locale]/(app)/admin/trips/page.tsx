@@ -1,5 +1,5 @@
-import { AdminListPage } from "@/features/admin/list-page";
+import { AdminTripsPage } from "@/features/admin/trips-page";
 
 export default function Page() {
-  return <AdminListPage titleKey="navTrips" path="/api/v1/admin/trips" />;
+  return <AdminTripsPage />;
 }

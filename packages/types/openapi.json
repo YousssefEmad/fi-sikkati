@@ -762,6 +762,10 @@
             "title": "Displayname",
             "type": "string"
           },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
           "emailVerified": {
             "title": "Emailverified",
             "type": "boolean"
@@ -809,6 +813,8 @@
         "required": [
           "id",
           "displayName",
+          "email",
+          "emailVerified",
           "status",
           "identityVerificationStatus",
           "roles",
@@ -816,7 +822,6 @@
           "createdAt",
           "lastLoginAt",
           "locale",
-          "emailVerified",
           "memberSince"
         ],
         "title": "AdminUserDetailResponse",
@@ -844,6 +849,14 @@
           "displayName": {
             "title": "Displayname",
             "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "emailVerified": {
+            "title": "Emailverified",
+            "type": "boolean"
           },
           "id": {
             "format": "uuid",
@@ -879,6 +892,8 @@
         "required": [
           "id",
           "displayName",
+          "email",
+          "emailVerified",
           "status",
           "identityVerificationStatus",
           "roles",
@@ -1457,6 +1472,34 @@
         "title": "ChangePasswordRequest",
         "type": "object"
       },
+      "ClearConversationResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "deletedCount": {
+            "title": "Deletedcount",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deletedCount"
+        ],
+        "title": "ClearConversationResponse",
+        "type": "object"
+      },
+      "ClearNotificationsResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "deleted": {
+            "title": "Deleted",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deleted"
+        ],
+        "title": "ClearNotificationsResponse",
+        "type": "object"
+      },
       "ConversationListResponse": {
         "additionalProperties": false,
         "properties": {
@@ -1545,6 +1588,11 @@
             },
             "title": "Membernames",
             "type": "array"
+          },
+          "muted": {
+            "default": false,
+            "title": "Muted",
+            "type": "boolean"
           },
           "originLabel": {
             "anyOf": [
@@ -2320,6 +2368,40 @@
         "title": "MatchKind",
         "type": "string"
       },
+      "MessageBulkDeleteRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "messageIds": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Messageids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "messageIds"
+        ],
+        "title": "MessageBulkDeleteRequest",
+        "type": "object"
+      },
+      "MessageBulkDeleteResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "deletedCount": {
+            "title": "Deletedcount",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "deletedCount"
+        ],
+        "title": "MessageBulkDeleteResponse",
+        "type": "object"
+      },
       "MessageCreate": {
         "additionalProperties": false,
         "properties": {
@@ -2468,6 +2550,20 @@
         ],
         "title": "ModerationActionType",
         "type": "string"
+      },
+      "MuteConversationRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "muted": {
+            "title": "Muted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "muted"
+        ],
+        "title": "MuteConversationRequest",
+        "type": "object"
       },
       "NotificationChannel": {
         "enum": [
@@ -2929,6 +3025,14 @@
             "title": "Deletiongracedays",
             "type": "integer"
           },
+          "emailDeliveryEnabled": {
+            "title": "Emaildeliveryenabled",
+            "type": "boolean"
+          },
+          "emailVerificationRequired": {
+            "title": "Emailverificationrequired",
+            "type": "boolean"
+          },
           "environment": {
             "enum": [
               "development",
@@ -3053,7 +3157,9 @@
           "vapidPublicKey",
           "matchingCorridorWidthMeters",
           "matchingStopProximityMeters",
-          "matchingDefaultTimeWindowMinutes"
+          "matchingDefaultTimeWindowMinutes",
+          "emailDeliveryEnabled",
+          "emailVerificationRequired"
         ],
         "title": "PublicConfig",
         "type": "object"
@@ -7318,6 +7424,40 @@
       }
     },
     "/api/v1/conversations/{conversation_id}": {
+      "delete": {
+        "operationId": "chat_admin_delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Conversation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Hard-delete a trip conversation (moderators; community protected)",
+        "tags": [
+          "chat"
+        ]
+      },
       "get": {
         "operationId": "chat_get",
         "parameters": [
@@ -7355,6 +7495,49 @@
           }
         },
         "summary": "Read one conversation",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/clear": {
+      "post": {
+        "operationId": "chat_clear",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Conversation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClearConversationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Clear all user messages in a conversation (moderators)",
         "tags": [
           "chat"
         ]
@@ -7477,6 +7660,165 @@
           }
         },
         "summary": "Send a message",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/messages/delete": {
+      "post": {
+        "operationId": "chat_delete_messages",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Conversation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageBulkDeleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageBulkDeleteResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Soft-delete selected messages (moderators)",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/messages/{message_id}": {
+      "delete": {
+        "operationId": "chat_delete_message",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Conversation Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "message_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Message Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Soft-delete one message (author or moderator)",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/mute": {
+      "put": {
+        "operationId": "chat_mute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "conversation_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Conversation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MuteConversationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Mute or unmute notifications for this conversation",
         "tags": [
           "chat"
         ]
@@ -8237,6 +8579,35 @@
       }
     },
     "/api/v1/me/notifications": {
+      "delete": {
+        "operationId": "notifications_clear_all",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClearNotificationsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Delete every notification for the signed-in user",
+        "tags": [
+          "notifications"
+        ]
+      },
       "get": {
         "operationId": "notifications_list",
         "parameters": [
@@ -9637,6 +10008,52 @@
           }
         },
         "summary": "Create a draft trip",
+        "tags": [
+          "trips"
+        ]
+      }
+    },
+    "/api/v1/trips/browse": {
+      "get": {
+        "description": "Home feed: approximate trip cards anyone can scroll before searching.",
+        "operationId": "trips_browse",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 12,
+              "maximum": 30,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Error (RFC 9457 Problem Details with machine-readable `code`)"
+          }
+        },
+        "summary": "Upcoming published trips for discovery",
         "tags": [
           "trips"
         ]

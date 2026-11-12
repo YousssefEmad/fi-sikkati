@@ -96,3 +96,67 @@ export async function documentDownloadUrl(fileId: string): Promise<string> {
   );
   return unwrap(data, error, "Could not open the document.").url;
 }
+
+export type AdminUserListItem = Schemas["AdminUserListItem"];
+
+export type AdminUserListResponse = {
+  items: AdminUserListItem[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+};
+
+export type AdminOverview = {
+  usersTotal: number;
+  usersActive7d: number;
+  drivers: number;
+  tripsTotal: number;
+  tripsCompleted: number;
+  tripsCancelled: number;
+  joinRequestsTotal: number;
+  joinRequestsMatched: number;
+  reportsOpen: number;
+};
+
+export async function fetchAdminOverview(): Promise<AdminOverview> {
+  return apiJson<AdminOverview>("/api/v1/admin/analytics/overview");
+}
+
+export async function listAdminUsers(params: {
+  q?: string;
+  status?: string;
+  role?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<AdminUserListResponse> {
+  const search = new URLSearchParams();
+  if (params.q) search.set("q", params.q);
+  if (params.status) search.set("status", params.status);
+  if (params.role) search.set("role", params.role);
+  if (params.page) search.set("page", String(params.page));
+  if (params.pageSize) search.set("page_size", String(params.pageSize));
+  const suffix = search.size > 0 ? `?${search.toString()}` : "";
+  return apiJson<AdminUserListResponse>(`/api/v1/admin/users${suffix}`);
+}
+
+export async function suspendAdminUser(userId: string, reason: string): Promise<void> {
+  await apiJson(`/api/v1/admin/users/${userId}/suspend`, {
+    method: "POST",
+    body: JSON.stringify({ reason }),
+  });
+}
+
+export async function restoreAdminUser(userId: string, reason: string): Promise<void> {
+  await apiJson(`/api/v1/admin/users/${userId}/restore`, {
+    method: "POST",
+    body: JSON.stringify({ reason }),
+  });
+}
+
+export async function deactivateAdminUser(userId: string, reason: string): Promise<void> {
+  await apiJson(`/api/v1/admin/users/${userId}/deactivate`, {
+    method: "POST",
+    body: JSON.stringify({ reason }),
+  });
+}

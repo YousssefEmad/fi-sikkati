@@ -20,6 +20,8 @@ Reason = Annotated[str, Field(min_length=8, max_length=500)]
 class AdminUserListItem(ApiModel):
     id: UUID
     display_name: str
+    email: str
+    email_verified: bool
     status: AccountStatus
     identity_verification_status: IdentityVerificationStatus
     roles: list[Role]
@@ -38,7 +40,6 @@ class AdminUserListResponse(ApiModel):
 
 class AdminUserDetailResponse(AdminUserListItem):
     locale: str
-    email_verified: bool
     member_since: datetime
 
 

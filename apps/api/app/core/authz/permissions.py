@@ -196,21 +196,21 @@ _ADMIN_ONLY: Final[frozenset[Permission]] = frozenset(
         Permission.MODERATION_ACTION,
         Permission.ADMIN_USERS_READ,
         Permission.ADMIN_USERS_MODERATE,
+        Permission.ADMIN_USERS_DEACTIVATE,
         Permission.ADMIN_TRIPS_READ,
         Permission.ADMIN_ANALYTICS_READ,
+        Permission.ADMIN_PII_READ,
     }
 )
 
 # Platform owner only (the developer). Never grantable through the HTTP API.
 _SUPER_ADMIN_ONLY: Final[frozenset[Permission]] = frozenset(
     {
-        Permission.ADMIN_USERS_DEACTIVATE,
         Permission.ADMIN_ROLES_MANAGE,
         Permission.ADMIN_SETTINGS_READ,
         Permission.ADMIN_SETTINGS_WRITE,
         Permission.ADMIN_FLAGS_MANAGE,
         Permission.ADMIN_AUDIT_READ,
-        Permission.ADMIN_PII_READ,
     }
 )
 

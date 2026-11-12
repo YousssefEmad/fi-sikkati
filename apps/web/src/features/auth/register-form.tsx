@@ -28,11 +28,13 @@ export function RegisterForm({
   minimumAgeYears,
   termsVersion,
   privacyVersion,
+  emailVerificationRequired = true,
 }: {
   passwordMinLength: number;
   minimumAgeYears: number;
   termsVersion: string;
   privacyVersion: string;
+  emailVerificationRequired?: boolean;
 }) {
   const t = useTranslations("Auth");
   const errorsT = useTranslations("Errors");
@@ -96,7 +98,11 @@ export function RegisterForm({
         acceptedTermsVersion: termsVersion,
         acceptedPrivacyVersion: privacyVersion,
       });
-      router.push("/auth/check-email");
+      if (emailVerificationRequired) {
+        router.push("/auth/check-email");
+      } else {
+        router.push("/auth/sign-in?registered=1");
+      }
     } catch (error) {
       if (error instanceof ApiRequestError && error.problem.code === "DISPLAY_NAME_TAKEN") {
         form.setError("displayName", { message: t("errors.displayNameTaken") });

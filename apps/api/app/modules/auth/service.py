@@ -174,6 +174,7 @@ class AuthService:
                     )
                 )
             return
+        await self._apply_bootstrap_roles(outcome.user_id, outcome.email)
         # Staging/dev without a real mailbox: mark verified immediately so testers are not stuck.
         if not self._settings.is_production and not self._settings.smtp_configured:
             await self._users.mark_email_verified(outcome.user_id)
@@ -337,6 +338,7 @@ class AuthService:
             await self._users.set_password_hash(credentials.user_id, self._passwords.hash(password))
 
         await self._users.record_login(credentials.user_id)
+        await self._apply_bootstrap_roles(credentials.user_id, email)
         issued = await self._start_session(credentials.user_id, facts)
         await self._audit.record(
             AuditAction.AUTH_LOGIN_SUCCESS,
@@ -670,6 +672,9 @@ class AuthService:
             )
 
         await self._independent_audit.in_own_transaction(work)
+
+    async def _apply_bootstrap_roles(self, user_id: UUID, email: str) -> None:
+        await self._users.apply_bootstrap_roles(user_id, email)
 
     def _hash(self, value: str) -> str:
         return keyed_hash(value, self._settings.auth_hash_secret.get_secret_value())

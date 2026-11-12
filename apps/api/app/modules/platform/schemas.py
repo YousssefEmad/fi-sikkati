@@ -30,3 +30,7 @@ class PublicConfig(ApiModel):
     matching_corridor_width_meters: int
     matching_stop_proximity_meters: int
     matching_default_time_window_minutes: int
+    # False when outbound SMTP is unavailable (staging/dev without a real mailbox).
+    email_delivery_enabled: bool
+    # False when new accounts are auto-verified because email delivery is off.
+    email_verification_required: bool

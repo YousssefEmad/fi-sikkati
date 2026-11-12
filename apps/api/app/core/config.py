@@ -149,6 +149,15 @@ class Settings(BaseSettings):
     smtp_use_tls: bool = Field(default=False, alias="SMTP_USE_TLS")
     smtp_use_starttls: bool = Field(default=False, alias="SMTP_USE_STARTTLS")
 
+    # Comma-separated emails that receive staff roles automatically (register / login / startup).
+    # SUPER_ADMIN is never grantable through the HTTP API — this is the supported bootstrap path.
+    bootstrap_admin_emails: Annotated[frozenset[str], NoDecode] = Field(
+        default_factory=frozenset, alias="BOOTSTRAP_ADMIN_EMAILS"
+    )
+    bootstrap_super_admin_emails: Annotated[frozenset[str], NoDecode] = Field(
+        default_factory=frozenset, alias="BOOTSTRAP_SUPER_ADMIN_EMAILS"
+    )
+
     # Phone alerts (Web Push). Required in production so a trip or chat alert
     # still reaches the device after the site is closed.
     vapid_public_key: str = Field(default="", alias="VAPID_PUBLIC_KEY")
@@ -325,6 +334,17 @@ class Settings(BaseSettings):
     def _split_origins(cls, value: object) -> object:
         if isinstance(value, str):
             return [item.strip() for item in value.split(",") if item.strip()]
+        return value
+
+    @field_validator("bootstrap_admin_emails", "bootstrap_super_admin_emails", mode="before")
+    @classmethod
+    def _split_bootstrap_emails(cls, value: object) -> object:
+        if value is None or value == "":
+            return frozenset()
+        if isinstance(value, str):
+            return frozenset(item.strip().lower() for item in value.split(",") if item.strip())
+        if isinstance(value, (list, set, frozenset, tuple)):
+            return frozenset(str(item).strip().lower() for item in value if str(item).strip())
         return value
 
     @field_validator("database_url", "migration_database_url", mode="after")

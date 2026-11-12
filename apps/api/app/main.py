@@ -152,6 +152,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         # (app/core/authz/ports.py).
         bind_identity_loader(app.state, make_identity_loader(settings))
         bind_session_revoker(app.state, make_session_revoker())
+        # Grant ADMIN / SUPER_ADMIN from BOOTSTRAP_*_EMAILS when those accounts already exist.
+        try:
+            from app.modules.users.bootstrap import sync_bootstrap_roles
+
+            async for session in database.session():
+                granted = await sync_bootstrap_roles(session, settings)
+                if granted:
+                    log.info("bootstrap_roles_synced", grants=granted)
+        except Exception:
+            log.exception("bootstrap_roles_sync_failed")
         log.info("startup", env=settings.app_env, version=settings.api_version)
         try:
             yield

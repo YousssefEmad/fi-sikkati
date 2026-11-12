@@ -205,6 +205,16 @@ class UserService:
     async def grant_role(self, user_id: UUID, role: Role, *, granted_by: UUID | None) -> None:
         await self._repository.grant_role(user_id, role, granted_by=granted_by)
 
+    async def apply_bootstrap_roles(self, user_id: UUID, email: str) -> None:
+        from app.modules.users.bootstrap import apply_bootstrap_roles_for_user
+
+        await apply_bootstrap_roles_for_user(
+            self._repository.session,
+            self._settings,
+            user_id=user_id,
+            email=email,
+        )
+
     async def set_photo(self, user_id: UUID, file_id: UUID) -> AccountView:
         user = await self.require_user(user_id)
         user.profile.photo_file_id = file_id

@@ -15,6 +15,7 @@ export default async function RegisterPage() {
         minimumAgeYears={config?.minimumAgeYears ?? 18}
         termsVersion={config?.termsVersion ?? "2026-10-01"}
         privacyVersion={config?.privacyVersion ?? "2026-10-01"}
+        emailVerificationRequired={config?.emailVerificationRequired ?? true}
       />
     </AuthShell>
   );

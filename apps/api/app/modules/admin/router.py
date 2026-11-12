@@ -69,6 +69,8 @@ def _user_item(user: User) -> AdminUserListItem:
     return AdminUserListItem(
         id=user.id,
         display_name=user.profile.display_name,
+        email=user.email,
+        email_verified=user.email_verified,
         status=user.status,
         identity_verification_status=user.identity_verification_status,
         roles=sorted(user.role_set, key=lambda role: role.value),
@@ -83,7 +85,6 @@ def _user_detail(user: User) -> AdminUserDetailResponse:
     return AdminUserDetailResponse(
         **item.model_dump(),
         locale=user.locale,
-        email_verified=user.email_verified,
         member_since=user.created_at,
     )
 

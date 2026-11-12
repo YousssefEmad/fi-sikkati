@@ -32,4 +32,6 @@ def build_public_config(settings: Settings) -> PublicConfig:
         matching_corridor_width_meters=settings.matching_corridor_width_meters,
         matching_stop_proximity_meters=settings.matching_stop_proximity_meters,
         matching_default_time_window_minutes=settings.matching_default_time_window_minutes,
+        email_delivery_enabled=settings.smtp_configured,
+        email_verification_required=settings.is_production or settings.smtp_configured,
     )

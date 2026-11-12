@@ -3,18 +3,26 @@
 Status: **DONE**. Community operators (the original WhatsApp-group owners) receive `ADMIN`.
 The platform owner — the developer who built the product — receives `SUPER_ADMIN` only.
 
-`ADMIN` can review verifications, vehicles, reports, users (no contact PII), trips and
-analytics. `SUPER_ADMIN` can additionally read contact PII, grant/revoke `ADMIN`/`DRIVER`,
-deactivate accounts, edit settings and feature flags, and read the audit log.
+`ADMIN` can review verifications, vehicles, reports, users (including contact email), trips,
+analytics, suspend/restore, and permanently deactivate accounts. `SUPER_ADMIN` can additionally
+grant/revoke `ADMIN`/`DRIVER`, edit settings and feature flags, and read the audit log.
 
 `SUPER_ADMIN` cannot be granted or revoked through the HTTP API.
 
-## Preconditions
+## Preferred path — environment bootstrap
 
-- The account already exists (register through the web UI).
-- You can run SQL as the migrator / DDL role (`MIGRATION_DATABASE_URL`).
+Set these Fly/API secrets (comma-separated emails), then register or sign in with that address.
+Roles are also synced on API startup for accounts that already exist.
 
-## Steps
+```
+BOOTSTRAP_ADMIN_EMAILS=ops@example.com
+BOOTSTRAP_SUPER_ADMIN_EMAILS=owner@example.com
+```
+
+## Fallback — SQL
+
+Preconditions: the account already exists (register through the web UI) and you can run SQL
+as the migrator / DDL role (`MIGRATION_DATABASE_URL`).
 
 ```
 INSERT INTO user_roles (user_id, role)
@@ -44,7 +52,7 @@ WHERE u.email = 'the-owner@example.com'
 ## Verification
 
 `SELECT u.email, r.role FROM users u JOIN user_roles r ON r.user_id = u.id WHERE u.email = '…';`
-shows both `PASSENGER` and `ADMIN`.
+shows both `PASSENGER` and `ADMIN` (and `SUPER_ADMIN` when bootstrapped as owner).
 
 ## Rollback
 
