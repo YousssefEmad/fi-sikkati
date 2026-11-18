@@ -1,0 +1,157 @@
+# Fi Sikkati backend on a single Oracle Always Free VM (API + worker + PostGIS + Redis + Caddy).
+# Web stays on Vercel. Point Vercel API_INTERNAL_URL at https://<public-ip-or-domain>
+#
+# From this directory on the VM:
+#   cp .env.example .env   # then edit secrets
+#   docker compose up -d --build
+
+name: fi-sikkati-oracle
+
+x-api-env: &api-env
+  APP_ENV: ${APP_ENV:-staging}
+  LOG_FORMAT: json
+  LOG_LEVEL: INFO
+  DATABASE_URL: postgresql+asyncpg://fisikkati_app:${POSTGRES_APP_PASSWORD}@postgres:5432/fisikkati
+  MIGRATION_DATABASE_URL: postgresql+asyncpg://fisikkati_migrator:${POSTGRES_MIGRATOR_PASSWORD}@postgres:5432/fisikkati
+  REDIS_URL: redis://redis:6379/0
+  CORS_ORIGINS: ${PUBLIC_WEB_URL}
+  PUBLIC_WEB_URL: ${PUBLIC_WEB_URL}
+  AUTH_JWT_ACTIVE_KID: ${AUTH_JWT_ACTIVE_KID}
+  AUTH_JWT_PRIVATE_KEY: ${AUTH_JWT_PRIVATE_KEY}
+  AUTH_PASSWORD_PEPPER: ${AUTH_PASSWORD_PEPPER}
+  AUTH_CSRF_SECRET: ${AUTH_CSRF_SECRET}
+  AUTH_HASH_SECRET: ${AUTH_HASH_SECRET}
+  EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-no-reply@fisikkati.app}
+  EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-Fi Sikkati}
+  SMTP_HOST: ${SMTP_HOST:-127.0.0.1}
+  SMTP_PORT: ${SMTP_PORT:-1025}
+  SMTP_USERNAME: ${SMTP_USERNAME:-}
+  SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+  VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:no-reply@fisikkati.app}
+  TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+  TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+  SMS_FROM: ${SMS_FROM:-}
+  LEGAL_TERMS_VERSION: ${LEGAL_TERMS_VERSION:-2026-10-01}
+  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-2026-10-01}
+  S3_ENDPOINT: ${S3_ENDPOINT:-http://127.0.0.1:9100}
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:-minio_dev}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:-minio_dev_password}
+  S3_PUBLIC_BASE_URL: ${S3_PUBLIC_BASE_URL:-http://127.0.0.1:9100/public-media}
+  BOOTSTRAP_ADMIN_EMAILS: ${BOOTSTRAP_ADMIN_EMAILS:-}
+  BOOTSTRAP_SUPER_ADMIN_EMAILS: ${BOOTSTRAP_SUPER_ADMIN_EMAILS:-}
+
+services:
+  postgres:
+    # Multi-arch image so Oracle Ampere (arm64) works; amd64 VMs work too.
+    image: ${POSTGIS_IMAGE:-imresamu/postgis:16-3.4}
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD}
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../compose/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fisikkati"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command:
+      [
+        "redis-server",
+        "--save",
+        "",
+        "--appendonly",
+        "no",
+        "--maxmemory",
+        "256mb",
+        "--maxmemory-policy",
+        "allkeys-lru",
+      ]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: ../../apps/api
+      dockerfile: Dockerfile
+      target: runtime
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      <<: *api-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    build:
+      context: ../../apps/api
+      dockerfile: Dockerfile
+      target: runtime
+    environment:
+      <<: *api-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health/live"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ../../apps/api
+      dockerfile: Dockerfile
+      target: runtime
+    command: ["python", "-m", "arq", "app.workers.main.WorkerSettings"]
+    environment:
+      <<: *api-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.9-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  caddy-data:

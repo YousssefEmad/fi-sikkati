@@ -1,0 +1,21 @@
+# API-only reverse proxy. Web stays on Vercel and rewrites /api to this host.
+{$SITE_ADDRESS: :80} {
+	encode gzip
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	handle /health/* {
+		reverse_proxy api:8000
+	}
+
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		respond "Fi Sikkati API. Use /health/ready or /api/v1/..." 200
+	}
+}
