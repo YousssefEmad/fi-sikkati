@@ -12,13 +12,15 @@ from app.core.config import Settings
 
 
 def create_redis(settings: Settings) -> Redis:
+    # Slightly higher timeouts for serverless + managed Redis (Upstash / Neon companions).
     client: Redis = Redis.from_url(
         str(settings.redis_url),
         encoding="utf-8",
         decode_responses=True,
-        socket_connect_timeout=2,
-        socket_timeout=2,
+        socket_connect_timeout=5,
+        socket_timeout=5,
         health_check_interval=30,
+        retry_on_timeout=True,
     )
     return client
 
